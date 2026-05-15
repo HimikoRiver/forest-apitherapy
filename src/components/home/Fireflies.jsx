@@ -7,7 +7,8 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 const FIREFLY_MODEL_PATH = "/models/firefly.optimized.glb";
 const WING_FLAP_SPEED = 34;
-const FIREFLIES_GROUP_OFFSET_X = 3.2;
+const FIREFLIES_GROUP_OFFSET_X = -3.2;
+const FIREFLIES_GROUP_OFFSET_Y = 0.8;
 
 const TAIL_LIGHT_POSITION = [0, -0.08, -0.68];
 const TAIL_AURA_POSITION = [0, -0.06, -0.64];
@@ -357,6 +358,7 @@ function FireflyModel({ config }) {
 
     const y =
       config.basePosition[1] +
+      FIREFLIES_GROUP_OFFSET_Y +
       Math.cos(time * 1.18) * config.radius[1] +
       Math.sin(time * 2.12) * 0.08;
 

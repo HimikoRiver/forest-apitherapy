@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Button from "@/components/ui/Button";
+import Fireflies from "./Fireflies";
 import HeroIntroPanel from "./HeroIntroPanel";
 import HeroMenu from "./HeroMenu";
 import ParallaxScene from "./ParallaxScene";
@@ -102,6 +103,8 @@ export default function HeroSection() {
     >
       <div className="sticky top-0 h-[100svh] min-h-[1160px] overflow-hidden">
         <ParallaxScene progress={progress} />
+
+        <Fireflies />
 
         <HeroMenu />
 

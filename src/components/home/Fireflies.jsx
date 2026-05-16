@@ -24,14 +24,6 @@ const firefliesConfig = [
     glowPower: 1.15,
   },
   {
-    scale: 0.28,
-    basePosition: [2.8, 1.35, -0.35],
-    radius: [0.52, 0.28, 0.18],
-    speed: 0.92,
-    phase: 1.6,
-    glowPower: 0.95,
-  },
-  {
     scale: 0.22,
     basePosition: [1.2, -0.2, -0.65],
     radius: [0.46, 0.24, 0.2],
@@ -46,14 +38,6 @@ const firefliesConfig = [
     speed: 0.82,
     phase: 4.1,
     glowPower: 1,
-  },
-  {
-    scale: 0.2,
-    basePosition: [3.9, -0.35, -0.8],
-    radius: [0.42, 0.22, 0.15],
-    speed: 1.18,
-    phase: 5.2,
-    glowPower: 0.78,
   },
 ];
 

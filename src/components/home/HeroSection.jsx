@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import Button from "@/components/ui/Button";
-import Fireflies from "./Fireflies";
+import HeroInsects from "./HeroInsects";
 import HeroIntroPanel from "./HeroIntroPanel";
 import HeroMenu from "./HeroMenu";
 import ParallaxScene from "./ParallaxScene";
@@ -62,11 +62,7 @@ export default function HeroSection() {
       if (!sectionRef.current) return;
 
       const rect = sectionRef.current.getBoundingClientRect();
-      const nextProgress = clamp(
-        -rect.top / PARALLAX_SCROLL_DISTANCE,
-        0,
-        1
-      );
+      const nextProgress = clamp(-rect.top / PARALLAX_SCROLL_DISTANCE, 0, 1);
 
       setProgress(nextProgress);
     };
@@ -104,7 +100,7 @@ export default function HeroSection() {
       <div className="sticky top-0 h-[100svh] min-h-[1160px] overflow-hidden">
         <ParallaxScene progress={progress} />
 
-        <Fireflies />
+        <HeroInsects />
 
         <HeroMenu />
 

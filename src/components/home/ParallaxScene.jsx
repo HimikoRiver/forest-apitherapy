@@ -6,9 +6,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/tree.webp",
     alt: "",
     className:
-      "right-[-4%] top-[9%] w-[38vw] max-w-[620px] min-w-[300px]",
-    y: -80,
-    scale: 1.02,
+      "right-[-4%] top-[9%] w-[38%] max-w-[620px] min-w-[300px]",
+    y: -110,
     zIndex: 1,
   },
   {
@@ -16,9 +15,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/hero-building5.webp",
     alt: "",
     className:
-      "left-[20.5%] top-[9.5%] w-[100vw] max-w-[1200px] min-w-[340px]",
-    y: -100,
-    scale: 1.02,
+      "left-[20.5%] top-[9.5%] w-full max-w-[1200px] min-w-[340px]",
+    y: -150,
     zIndex: 2,
     withShadow: true,
     wallShade: true,
@@ -28,9 +26,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/hill.webp",
     alt: "",
     className:
-      "left-[-5%] bottom-[25%] w-[58vw] max-w-[960px] min-w-[480px]",
-    y: -145,
-    scale: 1,
+      "left-[-5%] bottom-[25%] w-[58%] max-w-[960px] min-w-[480px]",
+    y: -210,
     zIndex: 3,
   },
   {
@@ -38,9 +35,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/hero-tree4.webp",
     alt: "",
     className:
-      "left-[-1.8%] top-[0%] w-[100vw] max-w-[1760px] min-w-[430px]",
-    y: -150,
-    scale: 1.035,
+      "left-[-1.8%] top-[0%] w-full max-w-[1760px] min-w-[430px]",
+    y: -270,
     zIndex: 8,
   },
   {
@@ -48,9 +44,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/hero-hives2.webp",
     alt: "",
     className:
-      "left-[35.5%] top-[45%] w-[100vw] max-w-[700px] min-w-[300px]",
-    y: -170,
-    scale: 1.01,
+      "left-[35.5%] top-[45%] w-full max-w-[700px] min-w-[300px]",
+    y: -320,
     zIndex: 7,
   },
   {
@@ -58,9 +53,8 @@ const parallaxLayers = [
     src: "/images/hero/layers/front2.webp",
     alt: "",
     className:
-      "left-[0%] bottom-[-20%] w-[100vw] max-w-none min-w-[900px]",
-    y: -220,
-    scale: 1.01,
+      "left-[0%] bottom-[-20%] w-full max-w-none min-w-[900px]",
+    y: -360,
     zIndex: 25,
   },
 ];
@@ -77,7 +71,7 @@ export default function ParallaxScene({ progress = 0 }) {
         sizes="100vw"
         className="absolute inset-0 z-0 select-none object-cover object-center"
         style={{
-          transform: `translate3d(0, ${progress * -26}px, 0) scale(1)`,
+          transform: `translate3d(0, ${progress * -45}px, 0)`,
           transformOrigin: "center center",
           willChange: "transform",
         }}
@@ -85,7 +79,6 @@ export default function ParallaxScene({ progress = 0 }) {
 
       {parallaxLayers.map((layer) => {
         const translateY = progress * layer.y;
-        const scale = 1 + progress * (layer.scale - 1);
 
         return (
           <div
@@ -93,7 +86,7 @@ export default function ParallaxScene({ progress = 0 }) {
             className={`absolute ${layer.className}`}
             style={{
               zIndex: layer.zIndex,
-              transform: `translate3d(0, ${translateY}px, 0) scale(${scale})`,
+              transform: `translate3d(0, ${translateY}px, 0)`,
               transformOrigin: "center center",
               willChange: "transform",
             }}
@@ -159,13 +152,21 @@ export default function ParallaxScene({ progress = 0 }) {
       <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,rgba(3,16,13,0.5)_0%,rgba(3,16,13,0.24)_36%,rgba(3,16,13,0.02)_100%)]" />
 
       <div
+        className="absolute inset-x-0 bottom-0 z-[24] h-[46%] bg-black"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 24%, rgba(0,0,0,0.98) 48%, #000 100%)",
+        }}
+      />
+
+      <div
         className="absolute inset-x-0 z-[26]"
         style={{
-          bottom: "5.6%",
-          height: "13%",
+          bottom: "0%",
+          height: "24%",
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.48) 36%, rgba(0,0,0,0.78) 70%, rgba(0,0,0,0.96) 100%)",
-          filter: "blur(7px)",
+            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.58) 28%, rgba(0,0,0,0.9) 62%, #000 100%)",
+          filter: "blur(4px)",
         }}
       />
 
@@ -173,8 +174,8 @@ export default function ParallaxScene({ progress = 0 }) {
         className="absolute inset-x-0 z-[27] bg-black"
         style={{
           bottom: "0%",
-          height: "7.4%",
-          boxShadow: "0 -12px 24px rgba(0, 0, 0, 0.72)",
+          height: "14%",
+          boxShadow: "0 -18px 34px rgba(0, 0, 0, 0.86)",
         }}
       />
     </div>

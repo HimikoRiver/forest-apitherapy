@@ -5,12 +5,20 @@ import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 
-const BEE_MODEL_PATH = "/models/bee.optimized.glb";
-const FIREFLY_MODEL_PATH = "/models/firefly.optimized.glb";
+const BEE_MODEL_PATH = "/models/bee.hero-quality.1024.glb";
+const FIREFLY_MODEL_PATH = "/models/firefly.hero-quality.512.glb";
 
+const HIVES_PARALLAX_Y = -320;
+
+const BEE_MODEL_TARGET_SIZE = 2.2;
 const BEE_GROUP_OFFSET_Y = -0.35;
 const BEE_WING_FLAP_SPEED = 42;
 const BEE_WINGS_POSITION = [0, 0.04, 0.14];
+
+const BEE_WING_WIDTH = 1.46;
+const BEE_WING_HEIGHT = 0.5;
+const BEE_WING_SPREAD = 0.74;
+const BEE_WING_ROOT_OFFSET = 0.15;
 
 const FIREFLY_WING_FLAP_SPEED = 34;
 const FIREFLIES_GROUP_OFFSET_X = -3.2;
@@ -92,6 +100,32 @@ function cloneMaterial(material) {
   }
 
   return material?.clone();
+}
+
+function normalizeModelSize(model, targetSize = 2.2) {
+  model.updateWorldMatrix(true, true);
+
+  const box = new THREE.Box3().setFromObject(model);
+  const size = new THREE.Vector3();
+  const center = new THREE.Vector3();
+
+  box.getSize(size);
+  box.getCenter(center);
+
+  const maxAxis = Math.max(size.x, size.y, size.z);
+
+  if (!maxAxis || !Number.isFinite(maxAxis)) {
+    return model;
+  }
+
+  const normalizedGroup = new THREE.Group();
+  const scale = targetSize / maxAxis;
+
+  model.position.sub(center);
+  normalizedGroup.scale.setScalar(scale);
+  normalizedGroup.add(model);
+
+  return normalizedGroup;
 }
 
 function createRadialTexture({
@@ -381,11 +415,13 @@ function BeeModel({ config, wingTexture }) {
           if ("roughness" in material) {
             material.roughness = Math.max(material.roughness ?? 0.55, 0.48);
           }
+
+          material.needsUpdate = true;
         });
       }
     });
 
-    return clone;
+    return normalizeModelSize(clone, BEE_MODEL_TARGET_SIZE);
   }, [gltf.scene]);
 
   useFrame(({ clock }) => {
@@ -449,10 +485,10 @@ function BeeModel({ config, wingTexture }) {
           wingTexture={wingTexture}
           flapSpeed={BEE_WING_FLAP_SPEED}
           wingPosition={BEE_WINGS_POSITION}
-          width={1.12}
-          height={0.38}
-          spread={0.56}
-          rootOffset={0.12}
+          width={BEE_WING_WIDTH}
+          height={BEE_WING_HEIGHT}
+          spread={BEE_WING_SPREAD}
+          rootOffset={BEE_WING_ROOT_OFFSET}
           opacityBase={0.28}
           opacityRange={0.26}
         />
@@ -501,6 +537,7 @@ function FireflyModel({
         materials.forEach((material) => {
           material.metalness = Math.min(material.metalness ?? 0.2, 0.35);
           material.roughness = Math.max(material.roughness ?? 0.5, 0.45);
+          material.needsUpdate = true;
         });
       }
     });
@@ -693,9 +730,18 @@ function HeroInsectsScene() {
   );
 }
 
-export default function HeroInsects() {
+export default function HeroInsects({ progress = 0 }) {
+  const translateY = progress * HIVES_PARALLAX_Y;
+
   return (
-    <div className="pointer-events-auto absolute inset-0 z-[22] hidden cursor-grab overflow-hidden active:cursor-grabbing lg:block">
+    <div
+      className="pointer-events-auto absolute left-0 top-0 z-[22] hidden h-[1160px] w-full cursor-grab overflow-hidden active:cursor-grabbing lg:block"
+      style={{
+        transform: `translate3d(0, ${translateY}px, 0)`,
+        transformOrigin: "center center",
+        willChange: "transform",
+      }}
+    >
       <Canvas
         orthographic
         camera={{

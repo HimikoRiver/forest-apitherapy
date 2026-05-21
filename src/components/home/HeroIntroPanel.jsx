@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TEXTURE_PATH = "/textures/suede-green.webp";
 
@@ -268,10 +268,31 @@ function PanelToggleButton({ isOpen, onClick }) {
 }
 
 export default function HeroIntroPanel() {
-  const [isOpen, setIsOpen] = useState(false);
+  const autoCloseTimeoutRef = useRef(null);
+
+  const [isOpen, setIsOpen] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
 
+  useEffect(() => {
+    autoCloseTimeoutRef.current = window.setTimeout(() => {
+      setHasInteracted(true);
+      setIsOpen(false);
+      autoCloseTimeoutRef.current = null;
+    }, 5000);
+
+    return () => {
+      if (autoCloseTimeoutRef.current) {
+        window.clearTimeout(autoCloseTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleTogglePanel = () => {
+    if (autoCloseTimeoutRef.current) {
+      window.clearTimeout(autoCloseTimeoutRef.current);
+      autoCloseTimeoutRef.current = null;
+    }
+
     setHasInteracted(true);
     setIsOpen((current) => !current);
   };

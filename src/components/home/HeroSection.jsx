@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
+import Footer from "@/components/Footer";
 import Button from "@/components/ui/Button";
+import CenterStorySection from "./CenterStorySection";
 import HeroInsects from "./HeroInsects";
 import HeroIntroPanel from "./HeroIntroPanel";
 import HeroMenu from "./HeroMenu";
 import ParallaxScene from "./ParallaxScene";
 
-const PARALLAX_SCROLL_DISTANCE = 1400;
+const PARALLAX_SCROLL_DISTANCE = 1600;
+const PROGRESS_UPDATE_THRESHOLD = 0.002;
 
 function BeeIcon({ className = "size-6" }) {
   return (
@@ -53,72 +55,94 @@ function clamp(value, min, max) {
 
 export default function HeroSection() {
   const sectionRef = useRef(null);
+  const progressRef = useRef(0);
+  const frameIdRef = useRef(null);
+
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let frameId = null;
-
     const updateProgress = () => {
+      frameIdRef.current = null;
+
       if (!sectionRef.current) return;
 
       const rect = sectionRef.current.getBoundingClientRect();
-      const nextProgress = clamp(-rect.top / PARALLAX_SCROLL_DISTANCE, 0, 1);
 
+      if (rect.bottom < 0 || rect.top > window.innerHeight) {
+        return;
+      }
+
+      const rawProgress = clamp(-rect.top / PARALLAX_SCROLL_DISTANCE, 0, 1);
+      const nextProgress = Math.round(rawProgress * 1000) / 1000;
+
+      if (
+        Math.abs(progressRef.current - nextProgress) <
+        PROGRESS_UPDATE_THRESHOLD
+      ) {
+        return;
+      }
+
+      progressRef.current = nextProgress;
       setProgress(nextProgress);
     };
 
-    const handleScroll = () => {
-      if (frameId) return;
+    const requestProgressUpdate = () => {
+      if (frameIdRef.current !== null) return;
 
-      frameId = requestAnimationFrame(() => {
-        updateProgress();
-        frameId = null;
-      });
+      frameIdRef.current = window.requestAnimationFrame(updateProgress);
     };
 
     updateProgress();
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    window.addEventListener("scroll", requestProgressUpdate, {
+      passive: true,
+    });
+    window.addEventListener("resize", requestProgressUpdate);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("scroll", requestProgressUpdate);
+      window.removeEventListener("resize", requestProgressUpdate);
 
-      if (frameId) {
-        cancelAnimationFrame(frameId);
+      if (frameIdRef.current !== null) {
+        window.cancelAnimationFrame(frameIdRef.current);
       }
     };
   }, []);
 
   return (
-    <section
-      id="home"
-      ref={sectionRef}
-      className="relative h-[280svh] overflow-visible bg-[#051f20]"
-    >
-      <div className="sticky top-0 h-[100svh] min-h-[1160px] overflow-hidden">
-        <ParallaxScene progress={progress} />
+    <section id="home" className="relative bg-black">
+      <div
+        ref={sectionRef}
+        className="relative h-[260svh] overflow-visible bg-[#051f20]"
+      >
+        <div className="sticky top-0 h-[132svh] overflow-hidden [contain:layout_paint]">
+          <div className="absolute left-0 top-0 h-[1160px] w-full overflow-hidden">
+            <ParallaxScene progress={progress} />
 
-        <HeroInsects />
+            <HeroInsects />
 
-        <HeroMenu />
+            <HeroMenu />
 
-        <HeroIntroPanel />
+            <HeroIntroPanel />
 
-        <div className="pointer-events-none absolute inset-0 z-40 -translate-y-[7%] overflow-hidden">
-          <div className="relative flex h-full items-center px-6 py-24 sm:px-10 lg:px-16">
-            <div className="pointer-events-auto max-w-4xl -translate-y-[120px] lg:pl-10">
-              <Button
-                className="relative top-69 min-w-[330px]"
-                icon={<BeeIcon />}
-              >
-                Записаться на консультацию
-              </Button>
+            <div className="pointer-events-none absolute inset-0 z-40 -translate-y-[7%] overflow-hidden">
+              <div className="relative flex h-full items-center px-6 py-24 sm:px-10 lg:px-16">
+                <div className="pointer-events-auto max-w-4xl -translate-y-[120px] lg:pl-10">
+                  <Button
+                    className="relative top-69 min-w-[330px]"
+                    icon={<BeeIcon />}
+                  >
+                    Записаться на консультацию
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <CenterStorySection />
+      <Footer />
     </section>
   );
 }

@@ -4,7 +4,7 @@ export default function StoryHomeImage() {
   return (
     <div className="story-home-image relative min-h-[clamp(360px,37vw,620px)] self-start">
       <Image
-        src="/images/beesHome.webp"
+        src="/images/beesHome1.webp"
         alt="Домик с пчёлами"
         fill
         draggable={false}

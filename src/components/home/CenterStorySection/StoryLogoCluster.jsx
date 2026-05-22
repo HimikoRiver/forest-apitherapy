@@ -3,11 +3,46 @@ import Image from "next/image";
 const ringText =
   "APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ • APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ • APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ •";
 
+const honeycombCells = Array.from({ length: 9 });
+
+function HoneycombRows() {
+  return (
+    <>
+      <div
+        className="story-honeycomb-row story-honeycomb-row-top"
+        aria-hidden="true"
+      >
+        {honeycombCells.map((_, index) => (
+          <span key={`top-${index}`} className="story-honeycomb-hit">
+            <span className="story-honeycomb-cell" />
+          </span>
+        ))}
+      </div>
+
+      <div
+        className="story-honeycomb-row story-honeycomb-row-bottom"
+        aria-hidden="true"
+      >
+        {honeycombCells.map((_, index) => (
+          <span key={`bottom-${index}`} className="story-honeycomb-hit">
+            <span className="story-honeycomb-cell" />
+          </span>
+        ))}
+      </div>
+    </>
+  );
+}
+
 export default function StoryLogoCluster({ isLogoVisible }) {
   return (
     <div className="story-logo-row relative flex min-h-[260px] items-center justify-center pb-4 pt-0 sm:min-h-[300px] lg:min-h-[330px]">
-      <div className="story-gold-line story-gold-line-left" />
-      <div className="story-gold-line story-gold-line-right" />
+      <div className="story-gold-line story-gold-line-left">
+        <HoneycombRows />
+      </div>
+
+      <div className="story-gold-line story-gold-line-right">
+        <HoneycombRows />
+      </div>
 
       <div className="story-cluster relative flex items-center justify-center">
         <svg
@@ -19,16 +54,27 @@ export default function StoryLogoCluster({ isLogoVisible }) {
             <linearGradient
               id="apidarb-story-ring-gold"
               x1="0"
-              y1="0"
+              y1="310"
               x2="620"
-              y2="0"
+              y2="310"
               gradientUnits="userSpaceOnUse"
             >
               <stop offset="0%" stopColor="#8c6425" />
-              <stop offset="22%" stopColor="#d8b66a" />
-              <stop offset="42%" stopColor="#fff0bd" />
-              <stop offset="62%" stopColor="#c99138" />
-              <stop offset="100%" stopColor="#f4d88f" />
+              <stop offset="16%" stopColor="#d8b66a" />
+              <stop offset="28%" stopColor="#fff4c7" />
+              <stop offset="39%" stopColor="#d8b66a" />
+              <stop offset="58%" stopColor="#8c6425" />
+              <stop offset="74%" stopColor="#f4d88f" />
+              <stop offset="100%" stopColor="#c99138" />
+
+              <animateTransform
+                attributeName="gradientTransform"
+                type="rotate"
+                from="360 310 310"
+                to="0 310 310"
+                dur="20s"
+                repeatCount="indefinite"
+              />
             </linearGradient>
 
             <path

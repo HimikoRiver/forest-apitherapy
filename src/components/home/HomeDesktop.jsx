@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Footer from "@/components/Footer";
-import Button from "@/components/ui/Button";
-import CenterStorySection from "./CenterStorySection";
-import HeroInsects from "./HeroInsects";
-import HeroIntroPanel from "./HeroIntroPanel";
-import HeroMenu from "./HeroMenu";
-import ParallaxScene from "./ParallaxScene";
+import FooterDesktop from "@/components/home/footer/FooterDesktop";
+import AboutDesktop from "@/components/home/about/AboutDesktop";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
+import HeroInsects from "@/components/home/hero/HeroInsects";
+import HeroIntroPanel from "@/components/home/hero/HeroIntroPanel";
+import HeroMenu from "@/components/home/hero-menu/HeroMenu";
+import ParallaxScene from "@/components/home/hero/ParallaxScene";
 
 const PARALLAX_SCROLL_DISTANCE = 1050;
 const PROGRESS_UPDATE_THRESHOLD = 0.002;
@@ -55,7 +55,7 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-export default function HeroSection() {
+export default function HomeDesktop() {
   const sectionRef = useRef(null);
   const progressRef = useRef(0);
   const frameIdRef = useRef(null);
@@ -147,12 +147,12 @@ export default function HeroSection() {
             >
               <div className="relative flex h-full items-center px-6 py-24 sm:px-10 lg:px-16">
                 <div className="pointer-events-auto max-w-4xl -translate-y-[120px] lg:pl-10">
-                  <Button
+                  <LuxuryButton
                     className="relative top-69 min-w-[330px]"
                     icon={<BeeIcon />}
                   >
                     Записаться на консультацию
-                  </Button>
+                  </LuxuryButton>
                 </div>
               </div>
             </div>
@@ -167,10 +167,10 @@ export default function HeroSection() {
           marginBottom: `-${centerStoryLift}px`,
         }}
       >
-        <CenterStorySection />
+        <AboutDesktop />
       </div>
 
-      <Footer />
+      <FooterDesktop />
     </section>
   );
 }

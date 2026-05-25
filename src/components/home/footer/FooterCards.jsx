@@ -3,72 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { homeContent } from "@/data/homeContent";
 
-const menuItems = [
-  {
-    label: "Главная",
-    href: "/",
-    key: "home",
-    icon: "/images/footer/cardIcons/home.webp",
-  },
-  {
-    label: "О специалисте",
-    href: "/specialist",
-    key: "specialist",
-    icon: "/images/footer/cardIcons/about.webp",
-  },
-  {
-    label: "Услуги",
-    href: "/services",
-    key: "services",
-    icon: "/images/footer/cardIcons/services.webp",
-  },
-  {
-    label: "Пчелопродукты",
-    href: "/products",
-    key: "products",
-    icon: "/images/footer/cardIcons/beeProducts.webp",
-  },
-  {
-    label: "Обучение",
-    href: "/training",
-    key: "training",
-    icon: "/images/footer/cardIcons/education.webp",
-  },
-  {
-    label: "Контакты",
-    href: "/contacts",
-    key: "contacts",
-    icon: "/images/footer/cardIcons/contacts.webp",
-  },
-];
-
-const contactItems = [
-  {
-    label: "Телефон",
-    value: "+7 (___) ___-__-__",
-    href: "tel:+7",
-    icon: "/images/footer/cardIcons/connection.webp",
-  },
-  {
-    label: "WhatsApp",
-    value: "Написать в WhatsApp",
-    href: "#",
-    icon: "/images/footer/WhatsApp.webp",
-  },
-  {
-    label: "Telegram",
-    value: "Открыть Telegram",
-    href: "#",
-    icon: "/images/footer/Telegram.webp",
-  },
-  {
-    label: "Mail",
-    value: "Написать на почту",
-    href: "#",
-    icon: "/images/footer/Mail.webp",
-  },
-];
+const menuItems = homeContent.menuItems;
+const contactItems = homeContent.contactItems;
 
 function getActiveNavItem(pathname) {
   if (pathname === "/") {

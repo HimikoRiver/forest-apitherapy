@@ -1,10 +1,12 @@
 import Image from "next/image";
-import FooterCards from "@/components/footer/FooterCards";
+import FooterCards from "@/components/home/footer/FooterCards";
+import { homeContent } from "@/data/homeContent";
 
-const tagline = "Природная гармония. Научный подход.";
-
-export default function Footer() {
+export default function FooterDesktop() {
   const year = new Date().getFullYear();
+  const tagline = homeContent.footer.tagline;
+  const disclaimer = homeContent.footer.disclaimer;
+  const copyright = homeContent.footer.copyright.replace("{year}", String(year));
 
   return (
     <footer
@@ -82,14 +84,11 @@ export default function Footer() {
 
           <div className="absolute bottom-[2%] left-[4.2%] right-[4.2%] z-10 grid grid-cols-[minmax(0,620px)_1fr] items-end gap-6 text-[clamp(0.5rem,0.58vw,0.64rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#c5b894]/78">
             <p className="m-0 justify-self-start text-left">
-              Instagram принадлежит компании Meta Platforms Inc., деятельность
-              которой признана экстремистской и запрещена на территории
-              Российской Федерации. Упоминание осуществляется исключительно в
-              информационных целях.
+              {disclaimer}
             </p>
 
             <p className="m-0 justify-self-end text-right">
-              © {year} Himiko River. Все права защищены.
+              {copyright}
             </p>
           </div>
         </div>

@@ -9,8 +9,10 @@ import HeroIntroPanel from "./HeroIntroPanel";
 import HeroMenu from "./HeroMenu";
 import ParallaxScene from "./ParallaxScene";
 
-const PARALLAX_SCROLL_DISTANCE = 1600;
+const PARALLAX_SCROLL_DISTANCE = 1050;
 const PROGRESS_UPDATE_THRESHOLD = 0.002;
+const CENTER_STORY_SCROLL_LIFT = 500;
+const HERO_UI_SCROLL_LIFT = 1050;
 
 function BeeIcon({ className = "size-6" }) {
   return (
@@ -59,6 +61,9 @@ export default function HeroSection() {
   const frameIdRef = useRef(null);
 
   const [progress, setProgress] = useState(0);
+
+  const centerStoryLift = Math.round(progress * CENTER_STORY_SCROLL_LIFT);
+  const heroUiTranslateY = Math.round(progress * -HERO_UI_SCROLL_LIFT);
 
   useEffect(() => {
     const updateProgress = () => {
@@ -113,9 +118,9 @@ export default function HeroSection() {
     <section id="home" className="relative bg-black">
       <div
         ref={sectionRef}
-        className="relative h-[260svh] overflow-visible bg-[#051f20]"
+        className="relative h-[210svh] overflow-visible bg-[#051f20]"
       >
-        <div className="sticky top-0 h-[132svh] overflow-hidden [contain:layout_paint]">
+        <div className="sticky top-0 h-[112svh] overflow-hidden">
           <div className="absolute left-0 top-0 h-[1160px] w-full overflow-hidden">
             <ParallaxScene progress={progress} />
 
@@ -123,9 +128,23 @@ export default function HeroSection() {
 
             <HeroMenu />
 
-            <HeroIntroPanel />
+            <div
+              className="absolute inset-0 z-30 pointer-events-none"
+              style={{
+                transform: `translate3d(0, ${heroUiTranslateY}px, 0)`,
+                willChange: "transform",
+              }}
+            >
+              <HeroIntroPanel />
+            </div>
 
-            <div className="pointer-events-none absolute inset-0 z-40 -translate-y-[7%] overflow-hidden">
+            <div
+              className="pointer-events-none absolute inset-0 z-40 -translate-y-[7%] overflow-hidden"
+              style={{
+                transform: `translate3d(0, ${heroUiTranslateY}px, 0) translateY(-7%)`,
+                willChange: "transform",
+              }}
+            >
               <div className="relative flex h-full items-center px-6 py-24 sm:px-10 lg:px-16">
                 <div className="pointer-events-auto max-w-4xl -translate-y-[120px] lg:pl-10">
                   <Button
@@ -141,7 +160,16 @@ export default function HeroSection() {
         </div>
       </div>
 
-      <CenterStorySection />
+      <div
+        className="relative z-50 will-change-transform"
+        style={{
+          transform: `translate3d(0, -${centerStoryLift}px, 0)`,
+          marginBottom: `-${centerStoryLift}px`,
+        }}
+      >
+        <CenterStorySection />
+      </div>
+
       <Footer />
     </section>
   );

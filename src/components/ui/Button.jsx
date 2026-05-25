@@ -6,7 +6,11 @@ export default function Button({
   ...props
 }) {
   return (
-    <button type={type} className={`luxury-button ${className}`} {...props}>
+    <button
+      type={type}
+      className={`luxury-button relative isolate ${className}`}
+      {...props}
+    >
       <span className="luxury-button__base" />
       <span className="luxury-button__texture" />
       <span className="luxury-button__velvet-light" />

@@ -7,7 +7,7 @@ const parallaxLayers = [
     alt: "",
     className:
       "right-[-4%] top-[9%] w-[38%] max-w-[620px] min-w-[300px]",
-    y: -110,
+    y: -80,
     zIndex: 1,
   },
   {
@@ -16,7 +16,7 @@ const parallaxLayers = [
     alt: "",
     className:
       "left-[20.5%] top-[9.5%] w-full max-w-[1200px] min-w-[340px]",
-    y: -150,
+    y: -120,
     zIndex: 2,
     withShadow: true,
     wallShade: true,
@@ -27,7 +27,7 @@ const parallaxLayers = [
     alt: "",
     className:
       "left-[-5%] bottom-[25%] w-[58%] max-w-[960px] min-w-[480px]",
-    y: -210,
+    y: -220,
     zIndex: 3,
   },
   {
@@ -36,7 +36,7 @@ const parallaxLayers = [
     alt: "",
     className:
       "left-[-1.8%] top-[0%] w-full max-w-[1760px] min-w-[430px]",
-    y: -270,
+    y: -520,
     zIndex: 8,
   },
   {
@@ -45,17 +45,17 @@ const parallaxLayers = [
     alt: "",
     className:
       "left-[35.5%] top-[45%] w-full max-w-[700px] min-w-[300px]",
-    y: -320,
+    y: -390,
     zIndex: 7,
   },
   {
     id: "front",
-    src: "/images/hero/layers/front2.webp",
+    src: "/images/hero/layers/front5.webp",
     alt: "",
     className:
-      "left-[0%] bottom-[-20%] w-full max-w-none min-w-[900px]",
-    y: -360,
-    zIndex: 25,
+      "left-[0%] bottom-[-28%] w-full max-w-none min-w-[900px]",
+    y: -720,
+    zIndex: 30,
   },
 ];
 
@@ -63,7 +63,7 @@ export default function ParallaxScene({ progress = 0 }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden bg-[#051f20]">
       <Image
-        src="/images/hero/hero-forest-main3.webp"
+        src="/images/hero/hero-forest-main6.webp"
         alt=""
         fill
         priority
@@ -71,7 +71,7 @@ export default function ParallaxScene({ progress = 0 }) {
         sizes="100vw"
         className="absolute inset-0 z-0 select-none object-cover object-center"
         style={{
-          transform: `translate3d(0, ${progress * -45}px, 0)`,
+          transform: `translate3d(0, ${progress * -25}px, 0)`,
           transformOrigin: "center center",
           willChange: "transform",
         }}
@@ -148,36 +148,6 @@ export default function ParallaxScene({ progress = 0 }) {
           </div>
         );
       })}
-
-      <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,rgba(3,16,13,0.5)_0%,rgba(3,16,13,0.24)_36%,rgba(3,16,13,0.02)_100%)]" />
-
-      <div
-        className="absolute inset-x-0 bottom-0 z-[24] h-[46%] bg-black"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.82) 24%, rgba(0,0,0,0.98) 48%, #000 100%)",
-        }}
-      />
-
-      <div
-        className="absolute inset-x-0 z-[26]"
-        style={{
-          bottom: "0%",
-          height: "24%",
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.58) 28%, rgba(0,0,0,0.9) 62%, #000 100%)",
-          filter: "blur(4px)",
-        }}
-      />
-
-      <div
-        className="absolute inset-x-0 z-[27] bg-black"
-        style={{
-          bottom: "0%",
-          height: "14%",
-          boxShadow: "0 -18px 34px rgba(0, 0, 0, 0.86)",
-        }}
-      />
     </div>
   );
 }

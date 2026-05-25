@@ -14,20 +14,26 @@ export default function Footer() {
       }}
     >
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 z-20 h-px w-full bg-gradient-to-r from-transparent via-[#d8b66a]/95 to-transparent shadow-[0_0_18px_rgba(216,182,106,0.58)]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-[1px] z-20 h-[18px] w-full bg-[linear-gradient(180deg,rgba(216,182,106,0.16)_0%,transparent_100%)]"
-      />
-
-      <div
         data-menu-hide-start
         aria-hidden="true"
         className="pointer-events-none absolute -top-64 left-0 h-px w-px"
       />
+
+      <div
+        aria-hidden="true"
+        className="relative z-20 mx-auto flex h-[clamp(96px,10vw,168px)] w-full max-w-[1680px] items-center px-6 sm:px-10 md:px-14 lg:px-20"
+      >
+        <div className="grid w-full grid-cols-[1fr_clamp(72px,8vw,140px)_1fr] items-center gap-[clamp(16px,2.2vw,38px)]">
+          <span className="h-px bg-gradient-to-r from-transparent via-[#d8b66a]/80 to-[#d8b66a]/28 shadow-[0_0_16px_rgba(216,182,106,0.34)]" />
+
+          <span className="relative flex items-center justify-center">
+            <span className="h-[7px] w-[7px] rounded-full bg-[#d8b66a] shadow-[0_0_14px_rgba(216,182,106,0.62)]" />
+            <span className="absolute h-[1px] w-full bg-gradient-to-r from-transparent via-[#d8b66a]/70 to-transparent" />
+          </span>
+
+          <span className="h-px bg-gradient-to-r from-[#d8b66a]/28 via-[#d8b66a]/80 to-transparent shadow-[0_0_16px_rgba(216,182,106,0.34)]" />
+        </div>
+      </div>
 
       <div className="relative mx-auto w-full max-w-[2048px]">
         <div className="relative aspect-[2048/884] w-full overflow-hidden">
@@ -65,11 +71,21 @@ export default function Footer() {
             <FooterCards />
           </div>
 
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-[7.4%] left-[4.2%] right-[4.2%] z-10 grid grid-cols-[1fr_clamp(110px,10vw,190px)_1fr] items-center gap-[clamp(18px,2vw,36px)]"
+          >
+            <span className="h-px bg-gradient-to-r from-transparent via-[#d8b66a]/82 to-[#d8b66a]/22 shadow-[0_0_14px_rgba(216,182,106,0.34)]" />
+            <span />
+            <span className="h-px bg-gradient-to-r from-[#d8b66a]/22 via-[#d8b66a]/82 to-transparent shadow-[0_0_14px_rgba(216,182,106,0.34)]" />
+          </div>
+
           <div className="absolute bottom-[2%] left-[4.2%] right-[4.2%] z-10 grid grid-cols-[minmax(0,620px)_1fr] items-end gap-6 text-[clamp(0.5rem,0.58vw,0.64rem)] font-medium leading-[1.35] tracking-[-0.025em] text-[#c5b894]/78">
             <p className="m-0 justify-self-start text-left">
               Instagram принадлежит компании Meta Platforms Inc., деятельность
               которой признана экстремистской и запрещена на территории
-              Российской Федерации. Упоминание осуществляется исключительно в информационных целях.
+              Российской Федерации. Упоминание осуществляется исключительно в
+              информационных целях.
             </p>
 
             <p className="m-0 justify-self-end text-right">
@@ -130,6 +146,12 @@ export default function Footer() {
             text-shadow:
               0 0 10px rgba(216, 182, 106, 0.32),
               0 0 22px rgba(216, 182, 106, 0.16);
+          }
+        }
+
+        @media (max-width: 767px) {
+          footer > div[aria-hidden="true"] {
+            height: clamp(72px, 18vw, 110px);
           }
         }
 

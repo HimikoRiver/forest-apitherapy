@@ -48,19 +48,17 @@ export default function CenterStorySection() {
   return (
     <section
       ref={sectionRef}
-      className={`center-story-section relative z-50 min-h-[100svh] overflow-hidden bg-black text-[#f3efe5] ${
+      className={`center-story-section relative z-50 min-h-[120svh] overflow-hidden bg-transparent text-[#f3efe5] ${
         isRingVisible ? "is-story-ring-visible" : ""
       }`}
     >
       <div
         data-menu-hide-start
         aria-hidden="true"
-        className="pointer-events-none absolute left-0 top-0 h-px w-px"
+        className="pointer-events-none absolute left-0 top-0 z-20 h-px w-px"
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_24%_34%,rgba(3,56,41,0.26),transparent_38%)]" />
-
-      <div className="relative mx-auto flex min-h-[100svh] w-full max-w-[1680px] flex-col px-6 pb-10 pt-6 sm:px-10 md:px-14 lg:px-20 lg:pt-8">
+      <div className="relative z-10 mx-auto flex min-h-[120svh] w-full max-w-[1680px] flex-col px-6 pb-8 pt-[clamp(320px,30svh,470px)] sm:px-10 md:px-14 lg:px-20 lg:pt-[clamp(350px,32svh,520px)]">
         <StoryLogoCluster isLogoVisible={isLogoVisible} />
 
         <div className="grid flex-1 items-start gap-10 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-18">

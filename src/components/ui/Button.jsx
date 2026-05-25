@@ -8,7 +8,7 @@ export default function Button({
   return (
     <button
       type={type}
-      className={`luxury-button relative isolate ${className}`}
+      className={`luxury-button relative isolate translate-y-[15px] ${className}`}
       {...props}
     >
       <span className="luxury-button__base" />

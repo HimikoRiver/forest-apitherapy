@@ -18,11 +18,7 @@ import { useBodyScrollLock } from "./useBodyScrollLock";
 import { useCrossAnimation } from "./useCrossAnimation";
 import { useFooterFade } from "./useFooterFade";
 
-import {
-  compactThresholds,
-  openRings,
-} from "./heroMenu.constants";
-
+import { compactThresholds, openRings } from "./heroMenu.constants";
 import { getCompactHoverDepth } from "./heroMenu.utils";
 
 const subscribeToClientReady = () => () => {};
@@ -41,13 +37,14 @@ export default function HeroMenu() {
     getServerSnapshot
   );
 
+  const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [compactHoverDepth, setCompactHoverDepth] = useState(0);
   const [hoveredOpenRing, setHoveredOpenRing] = useState(null);
   const [isInflating, setIsInflating] = useState(false);
 
   const { footerFadeProgress, footerFadeOpacity, menuHiddenByFooter } =
-    useFooterFade(isClientReady);
+    useFooterFade(isClientReady && isDesktopViewport);
 
   const { stopCrossAnimation, startCrossAnimation } = useCrossAnimation({
     crossGroupRef,
@@ -105,6 +102,30 @@ export default function HeroMenu() {
   useBodyScrollLock(isOpen, closeMenu);
 
   useEffect(() => {
+    if (!isClientReady) return;
+
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+
+    const updateViewportState = () => {
+      const nextIsDesktop = mediaQuery.matches;
+
+      setIsDesktopViewport(nextIsDesktop);
+
+      if (!nextIsDesktop) {
+        closeMenu();
+      }
+    };
+
+    updateViewportState();
+
+    mediaQuery.addEventListener("change", updateViewportState);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateViewportState);
+    };
+  }, [closeMenu, isClientReady]);
+
+  useEffect(() => {
     return () => {
       if (menuInflateTimeoutRef.current) {
         window.clearTimeout(menuInflateTimeoutRef.current);
@@ -150,7 +171,7 @@ export default function HeroMenu() {
       target.scrollIntoView({ behavior: "smooth", block: "start" });
       window.history.replaceState(null, "", href);
     } else {
-      window.location.hash = href;
+      window.history.replaceState(null, "", href);
     }
 
     closeMenu();
@@ -169,6 +190,10 @@ export default function HeroMenu() {
 
     openMenu();
   };
+
+  if (!isClientReady || !isDesktopViewport) {
+    return null;
+  }
 
   const menu = (
     <>
@@ -209,10 +234,6 @@ export default function HeroMenu() {
       </div>
     </>
   );
-
-  if (!isClientReady) {
-    return null;
-  }
 
   return createPortal(menu, document.body);
 }

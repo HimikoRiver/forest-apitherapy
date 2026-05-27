@@ -1,15 +1,46 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 const navItems = [
-  { id: "home", label: "Главная", href: "/" },
-  { id: "about", label: "О специалисте", href: "/specialist" },
-  { id: "services", label: "Услуги", href: "/services" },
-  { id: "products", label: "Пчелопродукты", href: "/products" },
-  { id: "education", label: "Обучение", href: "/training" },
-  { id: "contacts", label: "Контакты", href: "/contacts" },
+  {
+    id: "home",
+    label: "Главная",
+    href: "/",
+    icon: "/images/footer/cardIcons/home.webp",
+  },
+  {
+    id: "about",
+    label: "О специалисте",
+    href: "/specialist",
+    icon: "/images/footer/cardIcons/about.webp",
+  },
+  {
+    id: "services",
+    label: "Услуги",
+    href: "/services",
+    icon: "/images/footer/cardIcons/services.webp",
+  },
+  {
+    id: "products",
+    label: "Пчелопродукты",
+    href: "/products",
+    icon: "/images/footer/cardIcons/beeProducts.webp",
+  },
+  {
+    id: "education",
+    label: "Обучение",
+    href: "/training",
+    icon: "/images/footer/cardIcons/education.webp",
+  },
+  {
+    id: "contacts",
+    label: "Контакты",
+    href: "/contacts",
+    icon: "/images/footer/cardIcons/contacts.webp",
+  },
 ];
 
 const goldItems = new Set(["about", "products", "contacts"]);
@@ -57,48 +88,61 @@ export default function MobileHeroMenu() {
         className="mobile-hero-menu__button"
         onClick={() => setIsOpen((current) => !current)}
       >
-        {isOpen ? (
-          <span className="mobile-hero-menu__cross" aria-hidden="true" />
-        ) : (
-          <span className="mobile-hero-menu__burger" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </span>
-        )}
+        <span className="mobile-hero-menu__morph" aria-hidden="true">
+          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--top" />
+          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--middle" />
+          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--bottom" />
+        </span>
       </button>
 
-      <div
-        className="mobile-hero-menu__backdrop"
-        aria-hidden="true"
-        onClick={() => setIsOpen(false)}
-      />
+      {isOpen ? (
+        <>
+          <div
+            className="mobile-hero-menu__backdrop"
+            aria-hidden="true"
+            onClick={() => setIsOpen(false)}
+          />
 
-      <nav className="mobile-hero-menu__panel" aria-label="Мобильное меню">
-        <div className="mobile-hero-menu__panel-head">
-          <span className="mobile-hero-menu__panel-line" />
-          <span className="mobile-hero-menu__panel-dot" />
-          <span className="mobile-hero-menu__panel-line" />
-        </div>
+          <nav className="mobile-hero-menu__panel" aria-label="Мобильное меню">
+            <div className="mobile-hero-menu__panel-head">
+              <span className="mobile-hero-menu__panel-line" />
+              <span className="mobile-hero-menu__panel-dot" />
+              <span className="mobile-hero-menu__panel-line" />
+            </div>
 
-        <div className="mobile-hero-menu__list">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`mobile-hero-menu__link ${
-                goldItems.has(item.id) ? "mobile-hero-menu__link--gold" : ""
-              }`}
-              onClick={() => handleNavClick(item.href)}
-            >
-              <span>{item.label}</span>
-              <span className="mobile-hero-menu__arrow" aria-hidden="true">
-                ›
-              </span>
-            </button>
-          ))}
-        </div>
-      </nav>
+            <div className="mobile-hero-menu__list">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`mobile-hero-menu__link ${
+                    goldItems.has(item.id)
+                      ? "mobile-hero-menu__link--gold"
+                      : ""
+                  }`}
+                  onClick={() => handleNavClick(item.href)}
+                >
+                  <span className="mobile-hero-menu__icon" aria-hidden="true">
+                    <Image
+                      src={item.icon}
+                      alt=""
+                      width={38}
+                      height={38}
+                      className="mobile-hero-menu__icon-image"
+                    />
+                  </span>
+
+                  <span className="mobile-hero-menu__label">{item.label}</span>
+
+                  <span className="mobile-hero-menu__arrow" aria-hidden="true">
+                    ›
+                  </span>
+                </button>
+              ))}
+            </div>
+          </nav>
+        </>
+      ) : null}
 
       <style jsx>{`
         .mobile-hero-menu {
@@ -138,6 +182,9 @@ export default function MobileHeroMenu() {
             0 10px 22px rgba(0, 0, 0, 0.38),
             inset 0 0 16px rgba(216, 182, 106, 0.12),
             0 0 16px rgba(216, 182, 106, 0.24);
+          transform: translate3d(0, 0, 0);
+          opacity: 1;
+          visibility: visible;
           transition:
             transform 260ms ease,
             box-shadow 260ms ease;
@@ -195,17 +242,20 @@ export default function MobileHeroMenu() {
             0 0 24px rgba(216, 182, 106, 0.32);
         }
 
-        .mobile-hero-menu__burger {
+        .mobile-hero-menu__morph {
           position: relative;
           z-index: 2;
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
+          display: block;
+          width: 30px;
+          height: 24px;
         }
 
-        .mobile-hero-menu__burger span {
+        .mobile-hero-menu__morph-line {
+          position: absolute;
+          left: 50%;
+          top: 50%;
           display: block;
-          width: 25px;
+          width: 27px;
           height: 3px;
           border-radius: 999px;
           background: linear-gradient(
@@ -220,78 +270,57 @@ export default function MobileHeroMenu() {
           box-shadow:
             0 1px 3px rgba(0, 0, 0, 0.34),
             0 0 8px rgba(216, 182, 106, 0.24);
-          animation:
-            mobileHeroMenuGoldSoftShift 3.8s ease-in-out infinite alternate,
-            mobileHeroMenuLineGlow 3.2s ease-in-out infinite;
-        }
-
-        .mobile-hero-menu__burger span:nth-child(2) {
-          animation-delay: 0.18s;
-        }
-
-        .mobile-hero-menu__burger span:nth-child(3) {
-          animation-delay: 0.36s;
-        }
-
-        .mobile-hero-menu__cross {
-          position: relative;
-          z-index: 2;
-          width: 24px;
-          height: 24px;
-        }
-
-        .mobile-hero-menu__cross::before,
-        .mobile-hero-menu__cross::after {
-          content: "";
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          width: 30px;
-          height: 3px;
-          border-radius: 999px;
-          background: linear-gradient(
-            90deg,
-            #8a5d20 0%,
-            #d8b66a 24%,
-            #fff2c3 50%,
-            #c18a32 74%,
-            #f4d88f 100%
-          );
-          background-size: 190% 100%;
-          box-shadow:
-            0 1px 3px rgba(0, 0, 0, 0.32),
-            0 0 8px rgba(216, 182, 106, 0.24);
           transform-origin: center;
+          transition:
+            transform 520ms cubic-bezier(0.22, 1.2, 0.36, 1),
+            opacity 260ms ease,
+            width 420ms cubic-bezier(0.22, 1, 0.36, 1),
+            filter 320ms ease;
           animation:
             mobileHeroMenuGoldSoftShift 3.8s ease-in-out infinite alternate,
             mobileHeroMenuLineGlow 3.2s ease-in-out infinite;
         }
 
-        .mobile-hero-menu__cross::before {
-          transform: translate(-50%, -50%) rotate(45deg);
+        .mobile-hero-menu__morph-line--top {
+          transform: translate(-50%, -10px) rotate(0deg) scaleX(1);
         }
 
-        .mobile-hero-menu__cross::after {
-          transform: translate(-50%, -50%) rotate(-45deg);
-          animation-delay: 0.2s;
+        .mobile-hero-menu__morph-line--middle {
+          width: 23px;
+          transform: translate(-50%, -50%) rotate(0deg) scaleX(1);
+          opacity: 1;
+        }
+
+        .mobile-hero-menu__morph-line--bottom {
+          transform: translate(-50%, 7px) rotate(0deg) scaleX(1);
+        }
+
+        .mobile-hero-menu--open .mobile-hero-menu__morph-line {
+          width: 31px;
+          filter: brightness(1.12);
+        }
+
+        .mobile-hero-menu--open .mobile-hero-menu__morph-line--top {
+          transform: translate(-50%, -50%) rotate(45deg) scaleX(1.04);
+        }
+
+        .mobile-hero-menu--open .mobile-hero-menu__morph-line--middle {
+          transform: translate(-50%, -50%) rotate(0deg) scaleX(0.08);
+          opacity: 0;
+        }
+
+        .mobile-hero-menu--open .mobile-hero-menu__morph-line--bottom {
+          transform: translate(-50%, -50%) rotate(-45deg) scaleX(1.04);
         }
 
         .mobile-hero-menu__backdrop {
-          pointer-events: none;
+          pointer-events: auto;
           position: absolute;
           inset: 0;
           z-index: 81;
-          background: rgba(0, 0, 0, 0);
-          opacity: 0;
-          transition:
-            opacity 260ms ease,
-            background 260ms ease;
-        }
-
-        .mobile-hero-menu--open .mobile-hero-menu__backdrop {
-          pointer-events: auto;
           background: rgba(2, 13, 10, 0.22);
           opacity: 1;
+          animation: mobileHeroMenuBackdropIn 180ms ease both;
         }
 
         .mobile-hero-menu__panel {
@@ -319,14 +348,9 @@ export default function MobileHeroMenu() {
             inset 0 0 0 1px rgba(255, 235, 180, 0.1),
             0 0 22px rgba(216, 182, 106, 0.1);
           flex-direction: column;
-          transform: translateY(-16px);
           transform-origin: top center;
-          opacity: 0;
-          visibility: hidden;
-          transition:
-            opacity 220ms ease,
-            visibility 220ms ease,
-            transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+          animation: mobileHeroMenuPanelIn 260ms cubic-bezier(0.22, 1, 0.36, 1)
+            both;
         }
 
         .mobile-hero-menu__panel::before {
@@ -354,12 +378,6 @@ export default function MobileHeroMenu() {
           opacity: 0.82;
           filter: drop-shadow(0 0 5px rgba(216, 182, 106, 0.2));
           animation: mobileHeroMenuGoldBreath 4.8s ease-in-out infinite;
-        }
-
-        .mobile-hero-menu--open .mobile-hero-menu__panel {
-          transform: translateY(0);
-          opacity: 1;
-          visibility: visible;
         }
 
         .mobile-hero-menu__panel-head {
@@ -407,13 +425,13 @@ export default function MobileHeroMenu() {
         }
 
         .mobile-hero-menu__link {
-          display: flex;
-          min-height: 54px;
+          display: grid;
+          min-height: 56px;
           width: 100%;
+          grid-template-columns: 46px minmax(0, 1fr) 42px;
           align-items: center;
-          justify-content: space-between;
           margin: 0;
-          padding: 0 22px;
+          padding: 0 18px;
           border: 0;
           border-bottom: 1px solid rgba(216, 182, 106, 0.24);
           background: transparent;
@@ -434,11 +452,37 @@ export default function MobileHeroMenu() {
           border-bottom: 0;
         }
 
+        .mobile-hero-menu__icon {
+          position: relative;
+          display: grid;
+          width: 40px;
+          height: 40px;
+          place-items: center;
+          justify-self: start;
+          transform: translateY(-1px);
+        }
+
+        .mobile-hero-menu__icon-image {
+          display: block;
+          width: 38px;
+          height: 38px;
+          object-fit: contain;
+          filter:
+            drop-shadow(0 0 6px rgba(216, 182, 106, 0.26))
+            drop-shadow(0 1px 2px rgba(0, 0, 0, 0.22));
+        }
+
+        .mobile-hero-menu__label {
+          justify-self: start;
+          text-align: left;
+          white-space: nowrap;
+        }
+
         .mobile-hero-menu__link--gold {
           color: #e1bc63;
         }
 
-        .mobile-hero-menu__link--gold span:first-child {
+        .mobile-hero-menu__link--gold .mobile-hero-menu__label {
           background: linear-gradient(
             90deg,
             #8a5d20 0%,
@@ -460,6 +504,7 @@ export default function MobileHeroMenu() {
         }
 
         .mobile-hero-menu__arrow {
+          justify-self: end;
           color: #d8b66a;
           font-size: 1.9rem;
           font-weight: 400;
@@ -468,6 +513,28 @@ export default function MobileHeroMenu() {
             0 0 8px rgba(216, 182, 106, 0.26),
             0 1px 2px rgba(0, 0, 0, 0.24);
           transform: translateY(-1px);
+        }
+
+        @keyframes mobileHeroMenuPanelIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes mobileHeroMenuBackdropIn {
+          from {
+            opacity: 0;
+          }
+
+          to {
+            opacity: 1;
+          }
         }
 
         @keyframes mobileHeroMenuButtonGoldBreath {
@@ -550,10 +617,8 @@ export default function MobileHeroMenu() {
           .mobile-hero-menu__button::before,
           .mobile-hero-menu__button::after,
           .mobile-hero-menu__panel::before,
-          .mobile-hero-menu__burger span,
-          .mobile-hero-menu__cross::before,
-          .mobile-hero-menu__cross::after,
-          .mobile-hero-menu__link--gold span:first-child {
+          .mobile-hero-menu__morph-line,
+          .mobile-hero-menu__link--gold .mobile-hero-menu__label {
             animation: none;
           }
         }

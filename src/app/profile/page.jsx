@@ -1,18 +1,8 @@
-﻿import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import SignOutButton from "@/components/auth/SignOutButton";
-import { auth } from "@/lib/auth";
+﻿import SignOutButton from "@/components/auth/SignOutButton";
+import { requireUser } from "@/lib/auth-guards";
 
 export default async function ProfilePage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session?.user) {
-    redirect("/login");
-  }
-
-  const user = session.user;
+  const user = await requireUser();
 
   return (
     <main className="min-h-screen bg-[#030b0c] px-4 py-10 text-[#f3efe5]">

@@ -104,7 +104,7 @@ export default function HeroMenu() {
   useEffect(() => {
     if (!isClientReady) return;
 
-    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
 
     const updateViewportState = () => {
       const nextIsDesktop = mediaQuery.matches;

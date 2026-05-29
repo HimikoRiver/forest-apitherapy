@@ -515,6 +515,99 @@ export default function MobileHeroMenu() {
           transform: translateY(-1px);
         }
 
+        @media (min-width: 768px) and (max-width: 1279px) {
+          .mobile-hero-menu__button {
+            top: calc(env(safe-area-inset-top) + 24px);
+            right: 28px;
+            width: 82px;
+            height: 82px;
+            box-shadow:
+              0 16px 34px rgba(0, 0, 0, 0.42),
+              inset 0 0 22px rgba(216, 182, 106, 0.14),
+              0 0 24px rgba(216, 182, 106, 0.28);
+          }
+
+          .mobile-hero-menu__button::before {
+            padding: 2.5px;
+          }
+
+          .mobile-hero-menu__button::after {
+            inset: 11px;
+          }
+
+          .mobile-hero-menu__morph {
+            width: 42px;
+            height: 34px;
+          }
+
+          .mobile-hero-menu__morph-line {
+            width: 38px;
+            height: 4px;
+          }
+
+          .mobile-hero-menu__morph-line--top {
+            transform: translate(-50%, -13px) rotate(0deg) scaleX(1);
+          }
+
+          .mobile-hero-menu__morph-line--middle {
+            width: 32px;
+          }
+
+          .mobile-hero-menu__morph-line--bottom {
+            transform: translate(-50%, 9px) rotate(0deg) scaleX(1);
+          }
+
+          .mobile-hero-menu--open .mobile-hero-menu__morph-line {
+            width: 44px;
+          }
+
+          .mobile-hero-menu__panel {
+            border-radius: 0 0 46px 46px;
+          }
+
+          .mobile-hero-menu__panel::before {
+            padding: 2px;
+          }
+
+          .mobile-hero-menu__panel-head {
+            height: calc(env(safe-area-inset-top) + 118px);
+            min-height: 118px;
+            gap: 18px;
+            padding-bottom: 22px;
+          }
+
+          .mobile-hero-menu__panel-line {
+            width: 92px;
+          }
+
+          .mobile-hero-menu__panel-dot {
+            width: 9px;
+            height: 9px;
+          }
+
+          .mobile-hero-menu__link {
+            min-height: 82px;
+            grid-template-columns: 76px minmax(0, 1fr) 68px;
+            padding: 0 42px;
+            font-size: 1.3rem;
+            letter-spacing: -0.045em;
+          }
+
+          .mobile-hero-menu__icon {
+            width: 58px;
+            height: 58px;
+          }
+
+          .mobile-hero-menu__icon-image {
+            width: 54px;
+            height: 54px;
+          }
+
+          .mobile-hero-menu__arrow {
+            font-size: 2.55rem;
+          }
+        }
+
         @keyframes mobileHeroMenuPanelIn {
           from {
             opacity: 0;
@@ -623,7 +716,7 @@ export default function MobileHeroMenu() {
           }
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 1280px) {
           .mobile-hero-menu {
             display: none;
           }

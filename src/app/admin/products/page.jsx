@@ -297,7 +297,7 @@ export default async function AdminProductsPage() {
                     type="number"
                     min="0"
                     step="1"
-                    defaultValue="0"
+                    defaultValue="25"
                     required
                     className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
                   />

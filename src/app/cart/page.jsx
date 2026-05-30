@@ -196,13 +196,12 @@ export default async function CartPage() {
                 Оформление заказа подключим следующим этапом.
               </p>
 
-              <button
-                type="button"
-                disabled
-                className="mt-5 w-full cursor-not-allowed rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/20 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a]/54"
+              <Link
+                href="/checkout"
+                className="mt-5 inline-flex w-full justify-center rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition hover:brightness-110"
               >
                 Оформить заказ
-              </button>
+              </Link>
             </aside>
           </div>
         )}

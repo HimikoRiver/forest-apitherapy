@@ -1,5 +1,20 @@
 ﻿import Link from "next/link";
+import Image from "next/image";
 import { revalidatePath } from "next/cache";
+import {
+  Archive,
+  ArrowLeft,
+  CheckCircle2,
+  FilePenLine,
+  ImagePlus,
+  LayoutGrid,
+  PackageCheck,
+  PackagePlus,
+  PackageSearch,
+  RotateCcw,
+  Save,
+  Sparkles,
+} from "lucide-react";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
@@ -191,6 +206,134 @@ async function updateProductStatus(formData) {
   revalidatePath("/admin/products");
 }
 
+function StatusBadge({ status, isFeatured }) {
+  const statusLabels = {
+    ACTIVE: "Активен",
+    DRAFT: "Черновик",
+    ARCHIVED: "Архив",
+  };
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      <span className="inline-flex items-center rounded-full border border-[#d8b66a]/18 bg-[#d8b66a]/8 px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/88">
+        {statusLabels[status] || status}
+      </span>
+
+      {isFeatured && (
+        <span className="inline-flex items-center gap-1 rounded-full border border-[#d8b66a]/18 bg-[#d8b66a]/10 px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.2em] text-[#f3d98d]">
+          <Sparkles className="size-3" />
+          Featured
+        </span>
+      )}
+    </div>
+  );
+}
+
+function AdminTextField({
+  label,
+  name,
+  type = "text",
+  required = false,
+  defaultValue,
+  placeholder,
+  min,
+  step,
+}) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+        {label}
+      </span>
+
+      <input
+        name={name}
+        type={type}
+        required={required}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        min={min}
+        step={step}
+        className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
+      />
+    </label>
+  );
+}
+
+function AdminTextarea({ label, name, rows, defaultValue, placeholder }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+        {label}
+      </span>
+
+      <textarea
+        name={name}
+        rows={rows}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        className="w-full resize-none rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm leading-6 text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
+      />
+    </label>
+  );
+}
+
+function AdminSelect({ label, name, defaultValue, options }) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+        {label}
+      </span>
+
+      <select
+        name={name}
+        defaultValue={defaultValue}
+        className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
+      >
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function PrimaryButton({ children }) {
+  return (
+    <button
+      type="submit"
+      className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/48 bg-[#d8b66a] px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#07110f] shadow-[0_14px_38px_rgba(216,182,106,0.14)] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_20px_52px_rgba(216,182,106,0.2)]"
+    >
+      <Save className="size-4 transition duration-300 group-hover:scale-110" />
+      {children}
+    </button>
+  );
+}
+
+function StatusActionButton({ status, currentStatus, children, icon: Icon, danger }) {
+  return (
+    <form action={updateProductStatus}>
+      <input type="hidden" name="status" value={status} />
+
+      {children.hiddenInput}
+
+      <button
+        type="submit"
+        disabled={currentStatus === status}
+        className={`group inline-flex items-center justify-center gap-2 rounded-2xl border px-3.5 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.16em] transition duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-36 ${
+          danger
+            ? "border-red-300/22 bg-red-950/10 text-red-100 hover:border-red-300/56 hover:bg-red-400/10"
+            : "border-[#d8b66a]/20 bg-black/22 text-[#d8b66a] hover:border-[#d8b66a]/55 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
+        }`}
+      >
+        <Icon className="size-4 transition duration-300 group-hover:scale-110" />
+        {children.label}
+      </button>
+    </form>
+  );
+}
+
 export default async function AdminProductsPage() {
   await requireAdmin();
 
@@ -204,91 +347,97 @@ export default async function AdminProductsPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#030b0c] px-4 py-10 text-[#f3efe5]">
-      <section className="mx-auto w-full max-w-6xl">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.42em] text-[#d8b66a]">
-              Админка
-            </p>
+    <main className="min-h-screen px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-7xl">
+        <div className="mb-6 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/72 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
+          <div className="relative px-5 py-7 sm:px-7 lg:px-8">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(216,182,106,0.14),transparent_34%)]" />
 
-            <h1 className="m-0 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d] md:text-4xl">
-              Управление товарами
-            </h1>
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
+                  <PackageSearch className="size-4" />
+                  Административная панель
+                </div>
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Здесь можно добавить новый товар, отредактировать существующий,
-              загрузить фото или скрыть товар из публичного каталога.
-            </p>
-          </div>
+                <h1 className="m-0 max-w-3xl text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
+                  Управление товарами
+                </h1>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/admin"
-              className="inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-            >
-              Назад
-            </Link>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
+                  Добавляйте товары, загружайте фото, обновляйте остатки и
+                  управляйте видимостью в каталоге.
+                </p>
+              </div>
 
-            <Link
-              href="/products"
-              className="inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-            >
-              Каталог
-            </Link>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/admin"
+                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+                >
+                  <ArrowLeft className="size-4 transition group-hover:-translate-x-0.5" />
+                  Назад
+                </Link>
+
+                <Link
+                  href="/products"
+                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+                >
+                  <LayoutGrid className="size-4 transition group-hover:scale-110" />
+                  Каталог
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,420px)_1fr]">
           <form
             action={saveProduct}
-            className="h-fit rounded-[30px] border border-[#d8b66a]/18 bg-black/28 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)]"
+            className="h-fit overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/76 shadow-[0_24px_70px_rgba(0,0,0,0.44)]"
           >
-            <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-              Добавить товар
-            </h2>
+            <div className="border-b border-[#d8b66a]/12 px-5 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                  <PackagePlus className="size-5" />
+                </div>
 
-            <div className="mt-5 space-y-4">
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                  Название
-                </span>
+                <div>
+                  <p className="m-0 text-[0.66rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a]/78">
+                    Новый товар
+                  </p>
 
-                <input
-                  name="title"
-                  required
-                  className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  placeholder="Горный мёд"
-                />
-              </label>
+                  <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                    Добавить товар
+                  </h2>
+                </div>
+              </div>
+            </div>
 
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                  Slug
-                </span>
+            <div className="space-y-4 p-5">
+              <AdminTextField
+                label="Название"
+                name="title"
+                required
+                placeholder="Горный мёд"
+              />
 
-                <input
-                  name="slug"
-                  className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  placeholder="gornyy-med"
-                />
-              </label>
+              <AdminTextField
+                label="Slug"
+                name="slug"
+                placeholder="gornyy-med"
+              />
 
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                  Категория
-                </span>
-
-                <input
-                  name="categoryName"
-                  required
-                  defaultValue="Пчелопродукты"
-                  className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                />
-              </label>
+              <AdminTextField
+                label="Категория"
+                name="categoryName"
+                required
+                defaultValue="Пчелопродукты"
+              />
 
               <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                <span className="mb-2 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                  <ImagePlus className="size-4" />
                   Фото товара
                 </span>
 
@@ -296,106 +445,65 @@ export default async function AdminProductsPage() {
                   name="imageFile"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
-                  className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f]"
+                  className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] transition file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f] hover:border-[#d8b66a]/38"
                 />
               </label>
 
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                  Краткое описание
-                </span>
+              <AdminTextarea
+                label="Краткое описание"
+                name="shortDescription"
+                rows={3}
+                placeholder="Короткое описание для карточки"
+              />
 
-                <textarea
-                  name="shortDescription"
-                  rows={3}
-                  className="w-full resize-none rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm leading-6 text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  placeholder="Короткое описание для карточки"
-                />
-              </label>
-
-              <label className="block">
-                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                  Полное описание
-                </span>
-
-                <textarea
-                  name="description"
-                  rows={4}
-                  className="w-full resize-none rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm leading-6 text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  placeholder="Описание для будущей страницы товара"
-                />
-              </label>
+              <AdminTextarea
+                label="Полное описание"
+                name="description"
+                rows={4}
+                placeholder="Описание для будущей страницы товара"
+              />
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                    Цена ₽
-                  </span>
+                <AdminTextField
+                  label="Цена ₽"
+                  name="priceRubles"
+                  type="number"
+                  min="1"
+                  step="1"
+                  required
+                  placeholder="1200"
+                />
 
-                  <input
-                    name="priceRubles"
-                    type="number"
-                    min="1"
-                    step="1"
-                    required
-                    className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                    placeholder="1200"
-                  />
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                    Старая цена ₽
-                  </span>
-
-                  <input
-                    name="oldPriceRubles"
-                    type="number"
-                    min="1"
-                    step="1"
-                    className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                    placeholder="1500"
-                  />
-                </label>
+                <AdminTextField
+                  label="Старая цена ₽"
+                  name="oldPriceRubles"
+                  type="number"
+                  min="1"
+                  step="1"
+                  placeholder="1500"
+                />
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="block">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                    Остаток
-                  </span>
+                <AdminTextField
+                  label="Остаток"
+                  name="stock"
+                  type="number"
+                  min="0"
+                  step="1"
+                  required
+                  defaultValue="25"
+                />
 
-                  <input
-                    name="stock"
-                    type="number"
-                    min="0"
-                    step="1"
-                    defaultValue="25"
-                    required
-                    className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  />
-                </label>
-
-                <label className="block">
-                  <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                    Статус
-                  </span>
-
-                  <select
-                    name="status"
-                    defaultValue="ACTIVE"
-                    className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                  >
-                    {PRODUCT_STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {status}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <AdminSelect
+                  label="Статус"
+                  name="status"
+                  defaultValue="ACTIVE"
+                  options={PRODUCT_STATUSES}
+                />
               </div>
 
-              <label className="flex items-center gap-3 rounded-2xl border border-[#d8b66a]/14 bg-black/20 px-4 py-3 text-sm text-[#f3efe5]/82">
+              <label className="flex items-center gap-3 rounded-2xl border border-[#d8b66a]/12 bg-black/22 px-4 py-3 text-sm text-[#f3efe5]/82 transition hover:border-[#d8b66a]/30 hover:bg-black/32">
                 <input
                   name="isFeatured"
                   type="checkbox"
@@ -404,128 +512,156 @@ export default async function AdminProductsPage() {
                 Показывать выше остальных
               </label>
 
-              <button
-                type="submit"
-                className="w-full rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition hover:brightness-110"
-              >
-                Сохранить товар
-              </button>
+              <PrimaryButton>Сохранить товар</PrimaryButton>
             </div>
           </form>
 
-          <div className="rounded-[30px] border border-[#d8b66a]/18 bg-black/28 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-            <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-              Текущие товары
-            </h2>
+          <div className="overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/76 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
+            <div className="border-b border-[#d8b66a]/12 px-5 py-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                    <PackageCheck className="size-5" />
+                  </div>
+
+                  <div>
+                    <p className="m-0 text-[0.66rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a]/78">
+                      Каталог
+                    </p>
+
+                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                      Текущие товары
+                    </h2>
+                  </div>
+                </div>
+
+                <p className="m-0 rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1 text-xs text-[#f3efe5]/58">
+                  Всего: {products.length}
+                </p>
+              </div>
+            </div>
 
             {products.length === 0 ? (
-              <p className="mt-5 text-sm leading-7 text-[#f3efe5]/72">
+              <p className="p-5 text-sm leading-7 text-[#f3efe5]/72">
                 Пока товаров нет.
               </p>
             ) : (
-              <div className="mt-5 space-y-4">
+              <div className="space-y-4 p-5">
                 {products.map((product) => (
                   <article
                     key={product.id}
-                    className="rounded-3xl border border-[#d8b66a]/14 bg-black/22 p-4"
+                    className="group rounded-[28px] border border-[#d8b66a]/12 bg-black/24 p-4 transition duration-300 hover:border-[#d8b66a]/30 hover:bg-black/32 hover:shadow-[0_20px_54px_rgba(0,0,0,0.28)]"
                   >
-                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                      <div className="flex gap-4">
+                    <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                      <div className="flex min-w-0 gap-4">
                         {product.image ? (
-                          <img
+                          <Image
                             src={product.image}
                             alt={product.title}
-                            className="h-20 w-20 shrink-0 rounded-2xl object-cover"
+                            width={84}
+                            height={84}
+                            className="h-20 w-20 shrink-0 rounded-2xl border border-[#d8b66a]/12 object-cover"
                           />
                         ) : (
-                          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/14 bg-black/26 text-[0.62rem] uppercase tracking-[0.18em] text-[#f3efe5]/40">
+                          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/12 bg-black/28 text-center text-[0.58rem] font-bold uppercase tracking-[0.16em] text-[#f3efe5]/36">
                             Без фото
                           </div>
                         )}
 
-                        <div>
-                          <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
-                            {product.category?.name || "Без категории"} ·{" "}
-                            {product.status}
-                            {product.isFeatured ? " · FEATURED" : ""}
-                          </p>
+                        <div className="min-w-0">
+                          <StatusBadge
+                            status={product.status}
+                            isFeatured={product.isFeatured}
+                          />
 
-                          <h3 className="mt-2 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
+                          <h3 className="mt-3 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
                             {product.title}
                           </h3>
 
-                          <p className="mt-2 text-sm text-[#f3efe5]/62">
+                          <p className="mt-2 truncate text-sm text-[#f3efe5]/58">
                             /products/{product.slug}
+                          </p>
+
+                          <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[#d8b66a]/58">
+                            {product.category?.name || "Без категории"}
                           </p>
                         </div>
                       </div>
 
-                      <div className="text-left md:text-right">
-                        <p className="m-0 text-lg font-bold text-[#d8b66a]">
+                      <div className="shrink-0 text-left xl:text-right">
+                        <p className="m-0 text-xl font-bold text-[#d8b66a]">
                           {formatPriceFromKopecks(product.priceKopecks)}
                         </p>
 
-                        <p className="mt-1 text-sm text-[#f3efe5]/60">
+                        {product.oldPriceKopecks && (
+                          <p className="mt-1 text-sm text-[#f3efe5]/38 line-through">
+                            {formatPriceFromKopecks(product.oldPriceKopecks)}
+                          </p>
+                        )}
+
+                        <p className="mt-2 text-sm text-[#f3efe5]/62">
                           Остаток: {product.stock}
                         </p>
                       </div>
                     </div>
 
-                    <div className="mt-4 flex flex-wrap gap-3">
-                      <form action={updateProductStatus}>
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value={product.id}
-                        />
-                        <input type="hidden" name="status" value="ACTIVE" />
+                    <div className="mt-4 flex flex-wrap gap-2.5">
+                      <StatusActionButton
+                        status="ACTIVE"
+                        currentStatus={product.status}
+                        icon={CheckCircle2}
+                      >
+                        {{
+                          label: "Активировать",
+                          hiddenInput: (
+                            <input
+                              type="hidden"
+                              name="productId"
+                              value={product.id}
+                            />
+                          ),
+                        }}
+                      </StatusActionButton>
 
-                        <button
-                          type="submit"
-                          disabled={product.status === "ACTIVE"}
-                          className="rounded-2xl border border-[#d8b66a]/30 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d] disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          Активировать
-                        </button>
-                      </form>
+                      <StatusActionButton
+                        status="DRAFT"
+                        currentStatus={product.status}
+                        icon={RotateCcw}
+                      >
+                        {{
+                          label: "В черновик",
+                          hiddenInput: (
+                            <input
+                              type="hidden"
+                              name="productId"
+                              value={product.id}
+                            />
+                          ),
+                        }}
+                      </StatusActionButton>
 
-                      <form action={updateProductStatus}>
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value={product.id}
-                        />
-                        <input type="hidden" name="status" value="DRAFT" />
-
-                        <button
-                          type="submit"
-                          disabled={product.status === "DRAFT"}
-                          className="rounded-2xl border border-[#d8b66a]/30 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d] disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          В черновик
-                        </button>
-                      </form>
-
-                      <form action={updateProductStatus}>
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value={product.id}
-                        />
-                        <input type="hidden" name="status" value="ARCHIVED" />
-
-                        <button
-                          type="submit"
-                          disabled={product.status === "ARCHIVED"}
-                          className="rounded-2xl border border-red-400/24 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-red-100 transition hover:border-red-300/60 disabled:cursor-not-allowed disabled:opacity-40"
-                        >
-                          Архивировать
-                        </button>
-                      </form>
+                      <StatusActionButton
+                        status="ARCHIVED"
+                        currentStatus={product.status}
+                        icon={Archive}
+                        danger
+                      >
+                        {{
+                          label: "Архивировать",
+                          hiddenInput: (
+                            <input
+                              type="hidden"
+                              name="productId"
+                              value={product.id}
+                            />
+                          ),
+                        }}
+                      </StatusActionButton>
                     </div>
 
-                    <details className="mt-4 rounded-3xl border border-[#d8b66a]/12 bg-black/18 p-4">
-                      <summary className="cursor-pointer text-sm font-bold uppercase tracking-[0.2em] text-[#d8b66a]">
+                    <details className="mt-4 rounded-[24px] border border-[#d8b66a]/10 bg-black/18 p-4 transition open:border-[#d8b66a]/22 open:bg-black/26">
+                      <summary className="flex cursor-pointer list-none items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition hover:text-[#f3d98d]">
+                        <FilePenLine className="size-4" />
                         Редактировать
                       </summary>
 
@@ -543,50 +679,31 @@ export default async function AdminProductsPage() {
                         />
 
                         <div className="grid gap-4 md:grid-cols-2">
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Название
-                            </span>
+                          <AdminTextField
+                            label="Название"
+                            name="title"
+                            required
+                            defaultValue={product.title}
+                          />
 
-                            <input
-                              name="title"
-                              required
-                              defaultValue={product.title}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            />
-                          </label>
-
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Slug
-                            </span>
-
-                            <input
-                              name="slug"
-                              required
-                              defaultValue={product.slug}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            />
-                          </label>
+                          <AdminTextField
+                            label="Slug"
+                            name="slug"
+                            required
+                            defaultValue={product.slug}
+                          />
                         </div>
 
-                        <label className="block">
-                          <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                            Категория
-                          </span>
-
-                          <input
-                            name="categoryName"
-                            required
-                            defaultValue={
-                              product.category?.name || "Пчелопродукты"
-                            }
-                            className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                          />
-                        </label>
+                        <AdminTextField
+                          label="Категория"
+                          name="categoryName"
+                          required
+                          defaultValue={product.category?.name || "Пчелопродукты"}
+                        />
 
                         <label className="block">
-                          <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                          <span className="mb-2 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                            <ImagePlus className="size-4" />
                             Новое фото товара
                           </span>
 
@@ -594,7 +711,7 @@ export default async function AdminProductsPage() {
                             name="imageFile"
                             type="file"
                             accept="image/jpeg,image/png,image/webp"
-                            className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f]"
+                            className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] transition file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f] hover:border-[#d8b66a]/38"
                           />
 
                           {product.image && (
@@ -604,104 +721,61 @@ export default async function AdminProductsPage() {
                           )}
                         </label>
 
-                        <label className="block">
-                          <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                            Краткое описание
-                          </span>
+                        <AdminTextarea
+                          label="Краткое описание"
+                          name="shortDescription"
+                          rows={3}
+                          defaultValue={product.shortDescription || ""}
+                        />
 
-                          <textarea
-                            name="shortDescription"
-                            rows={3}
-                            defaultValue={product.shortDescription || ""}
-                            className="w-full resize-none rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm leading-6 text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                          />
-                        </label>
-
-                        <label className="block">
-                          <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                            Полное описание
-                          </span>
-
-                          <textarea
-                            name="description"
-                            rows={4}
-                            defaultValue={product.description || ""}
-                            className="w-full resize-none rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm leading-6 text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                          />
-                        </label>
+                        <AdminTextarea
+                          label="Полное описание"
+                          name="description"
+                          rows={4}
+                          defaultValue={product.description || ""}
+                        />
 
                         <div className="grid gap-4 md:grid-cols-4">
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Цена ₽
-                            </span>
+                          <AdminTextField
+                            label="Цена ₽"
+                            name="priceRubles"
+                            type="number"
+                            min="1"
+                            step="1"
+                            required
+                            defaultValue={kopecksToRubles(product.priceKopecks)}
+                          />
 
-                            <input
-                              name="priceRubles"
-                              type="number"
-                              min="1"
-                              step="1"
-                              required
-                              defaultValue={kopecksToRubles(
-                                product.priceKopecks
-                              )}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            />
-                          </label>
+                          <AdminTextField
+                            label="Старая цена ₽"
+                            name="oldPriceRubles"
+                            type="number"
+                            min="1"
+                            step="1"
+                            defaultValue={kopecksToRubles(
+                              product.oldPriceKopecks
+                            )}
+                          />
 
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Старая цена ₽
-                            </span>
+                          <AdminTextField
+                            label="Остаток"
+                            name="stock"
+                            type="number"
+                            min="0"
+                            step="1"
+                            required
+                            defaultValue={product.stock}
+                          />
 
-                            <input
-                              name="oldPriceRubles"
-                              type="number"
-                              min="1"
-                              step="1"
-                              defaultValue={kopecksToRubles(
-                                product.oldPriceKopecks
-                              )}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            />
-                          </label>
-
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Остаток
-                            </span>
-
-                            <input
-                              name="stock"
-                              type="number"
-                              min="0"
-                              step="1"
-                              required
-                              defaultValue={product.stock}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            />
-                          </label>
-
-                          <label className="block">
-                            <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
-                              Статус
-                            </span>
-
-                            <select
-                              name="status"
-                              defaultValue={product.status}
-                              className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
-                            >
-                              {PRODUCT_STATUSES.map((status) => (
-                                <option key={status} value={status}>
-                                  {status}
-                                </option>
-                              ))}
-                            </select>
-                          </label>
+                          <AdminSelect
+                            label="Статус"
+                            name="status"
+                            defaultValue={product.status}
+                            options={PRODUCT_STATUSES}
+                          />
                         </div>
 
-                        <label className="flex items-center gap-3 rounded-2xl border border-[#d8b66a]/14 bg-black/20 px-4 py-3 text-sm text-[#f3efe5]/82">
+                        <label className="flex items-center gap-3 rounded-2xl border border-[#d8b66a]/12 bg-black/22 px-4 py-3 text-sm text-[#f3efe5]/82 transition hover:border-[#d8b66a]/30 hover:bg-black/32">
                           <input
                             name="isFeatured"
                             type="checkbox"
@@ -711,12 +785,7 @@ export default async function AdminProductsPage() {
                           Показывать выше остальных
                         </label>
 
-                        <button
-                          type="submit"
-                          className="w-full rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition hover:brightness-110"
-                        >
-                          Сохранить изменения
-                        </button>
+                        <PrimaryButton>Сохранить изменения</PrimaryButton>
                       </form>
                     </details>
                   </article>

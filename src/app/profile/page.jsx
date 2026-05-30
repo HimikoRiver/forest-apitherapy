@@ -1,8 +1,57 @@
 ﻿import Link from "next/link";
+import {
+  ArrowRight,
+  ClipboardList,
+  Clock3,
+  LayoutDashboard,
+  LayoutGrid,
+  Mail,
+  PackageCheck,
+  ShieldCheck,
+  ShoppingCart,
+  UserRound,
+} from "lucide-react";
 import SignOutButton from "@/components/auth/SignOutButton";
 import { requireUser } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
+
+const ORDER_STATUS_LABELS = {
+  PENDING: "Новый",
+  PROCESSING: "В обработке",
+  COMPLETED: "Завершён",
+  CANCELED: "Отменён",
+};
+
+function formatOrderDate(date) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+function OrderStatusBadge({ status }) {
+  const statusStyles = {
+    PENDING: "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
+    PROCESSING: "border-blue-300/22 bg-blue-400/10 text-blue-100",
+    COMPLETED: "border-emerald-300/22 bg-emerald-400/10 text-emerald-100",
+    CANCELED: "border-red-300/22 bg-red-400/10 text-red-100",
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[0.64rem] font-bold uppercase tracking-[0.2em] ${
+        statusStyles[status] || statusStyles.PENDING
+      }`}
+    >
+      <Clock3 className="size-3.5" />
+      {ORDER_STATUS_LABELS[status] || status}
+    </span>
+  );
+}
 
 export default async function ProfilePage() {
   const sessionUser = await requireUser();
@@ -26,149 +75,203 @@ export default async function ProfilePage() {
     },
   });
 
+  const orders = user?.orders || [];
+
   return (
-    <main className="min-h-screen bg-[#030b0c] px-4 py-10 text-[#f3efe5]">
-      <section className="mx-auto w-full max-w-5xl">
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="mb-3 text-xs font-bold uppercase tracking-[0.42em] text-[#d8b66a]">
-              Личный кабинет
-            </p>
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-0 bg-center bg-no-repeat opacity-100"
+        style={{
+          backgroundImage: "url('/images/admin/admin-bees-bg.webp')",
+          backgroundSize: "100% 100%",
+        }}
+      />
 
-            <h1 className="m-0 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d] md:text-4xl">
-              Добро пожаловать
-            </h1>
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
+        <div className="mb-6 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
+          <div className="relative px-5 py-7 sm:px-7 lg:px-8">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(216,182,106,0.14),transparent_34%)]" />
 
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Здесь хранятся данные профиля, история заказов и быстрые переходы
-              к покупкам.
-            </p>
-          </div>
+            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
+                  <UserRound className="size-4" />
+                  Личный кабинет
+                </div>
 
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/products"
-              className="inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-            >
-              Каталог
-            </Link>
+                <h1 className="m-0 max-w-3xl text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
+                  Добро пожаловать
+                </h1>
 
-            <Link
-              href="/cart"
-              className="inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-            >
-              Корзина
-            </Link>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
+                  Здесь хранятся данные профиля, история заказов и быстрые
+                  переходы к покупкам.
+                </p>
+              </div>
 
-            {user?.role === "ADMIN" && (
-              <Link
-                href="/admin"
-                className="inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-              >
-                Админка
-              </Link>
-            )}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/products"
+                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+                >
+                  <LayoutGrid className="size-4 transition group-hover:scale-110" />
+                  Каталог
+                </Link>
+
+                <Link
+                  href="/cart"
+                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+                >
+                  <ShoppingCart className="size-4 transition group-hover:scale-110" />
+                  Корзина
+                </Link>
+
+                {user?.role === "ADMIN" && (
+                  <Link
+                    href="/admin"
+                    className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+                  >
+                    <ShieldCheck className="size-4 transition group-hover:scale-110" />
+                    Панель
+                  </Link>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
-          <aside className="h-fit rounded-[30px] border border-[#d8b66a]/18 bg-black/28 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-            <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
-              Пользователь
-            </p>
+        <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+          <aside className="h-fit overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
+            <div className="border-b border-[#d8b66a]/12 px-5 py-5">
+              <div className="flex items-center gap-3">
+                <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                  <UserRound className="size-5" />
+                </div>
 
-            <div className="mt-4 space-y-3 text-sm leading-6 text-[#f3efe5]/82">
-              <p className="m-0">
-                <span className="text-[#d8b66a]/82">Имя:</span>{" "}
-                {user?.name || "Не указано"}
-              </p>
+                <div>
+                  <p className="m-0 text-[0.66rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a]/78">
+                    Пользователь
+                  </p>
 
-              <p className="m-0">
-                <span className="text-[#d8b66a]/82">Email:</span>{" "}
-                {user?.email || sessionUser.email}
-              </p>
-
-              <p className="m-0">
-                <span className="text-[#d8b66a]/82">Роль:</span>{" "}
-                {user?.role || "USER"}
-              </p>
+                  <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                    Профиль
+                  </h2>
+                </div>
+              </div>
             </div>
 
-            <SignOutButton />
+            <div className="space-y-4 p-5">
+              <div className="rounded-[24px] border border-[#d8b66a]/10 bg-black/22 p-4">
+                <div className="space-y-3 text-sm leading-6 text-[#f3efe5]/82">
+                  <p className="m-0 flex items-start gap-2">
+                    <UserRound className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                    <span>
+                      <span className="text-[#d8b66a]/82">Имя:</span>{" "}
+                      {user?.name || "Не указано"}
+                    </span>
+                  </p>
+
+                  <p className="m-0 flex items-start gap-2">
+                    <Mail className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                    <span>
+                      <span className="text-[#d8b66a]/82">Email:</span>{" "}
+                      {user?.email || sessionUser.email}
+                    </span>
+                  </p>
+
+                  <p className="m-0 flex items-start gap-2">
+                    <LayoutDashboard className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                    <span>
+                      <span className="text-[#d8b66a]/82">Роль:</span>{" "}
+                      {user?.role || "USER"}
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <SignOutButton />
+            </div>
           </aside>
 
-          <section className="rounded-[30px] border border-[#d8b66a]/18 bg-black/28 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-            <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
-                  История заказов
+          <section className="overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
+            <div className="border-b border-[#d8b66a]/12 px-5 py-5">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                    <ClipboardList className="size-5" />
+                  </div>
+
+                  <div>
+                    <p className="m-0 text-[0.66rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a]/78">
+                      История заказов
+                    </p>
+
+                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                      Ваши заказы
+                    </h2>
+                  </div>
+                </div>
+
+                <p className="m-0 rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1 text-xs text-[#f3efe5]/58">
+                  Всего: {orders.length}
                 </p>
-
-                <h2 className="mt-2 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                  Ваши заказы
-                </h2>
               </div>
-
-              <p className="m-0 text-sm text-[#f3efe5]/54">
-                Всего: {user?.orders.length || 0}
-              </p>
             </div>
 
-            {!user?.orders.length ? (
-              <div className="mt-5 rounded-3xl border border-[#d8b66a]/14 bg-black/22 p-5">
-                <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-                  Заказов пока нет. Добавьте товар в корзину и оформите первый
-                  заказ.
-                </p>
+            {orders.length === 0 ? (
+              <div className="p-5">
+                <div className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
+                  <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
+                    Заказов пока нет. Добавьте товар в корзину и оформите первый
+                    заказ.
+                  </p>
 
-                <Link
-                  href="/products"
-                  className="mt-5 inline-flex rounded-2xl border border-[#d8b66a]/35 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition hover:border-[#d8b66a]/70 hover:text-[#f3d98d]"
-                >
-                  Смотреть товары
-                </Link>
+                  <Link
+                    href="/products"
+                    className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
+                  >
+                    Смотреть товары
+                    <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
+                  </Link>
+                </div>
               </div>
             ) : (
-              <div className="mt-5 space-y-4">
-                {user.orders.map((order) => (
+              <div className="space-y-4 p-5">
+                {orders.map((order) => (
                   <article
                     key={order.id}
-                    className="rounded-3xl border border-[#d8b66a]/14 bg-black/22 p-5"
+                    className="rounded-[28px] border border-[#d8b66a]/12 bg-black/24 p-5 transition duration-300 hover:border-[#d8b66a]/30 hover:bg-black/32 hover:shadow-[0_20px_54px_rgba(0,0,0,0.28)]"
                   >
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                       <div>
-                        <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
-                          {order.status}
-                        </p>
+                        <OrderStatusBadge status={order.status} />
 
-                        <h3 className="mt-2 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
-                          Заказ от{" "}
-                          {new Intl.DateTimeFormat("ru-RU", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }).format(order.createdAt)}
+                        <h3 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                          Заказ от {formatOrderDate(order.createdAt)}
                         </h3>
                       </div>
 
-                      <p className="m-0 text-xl font-bold text-[#d8b66a]">
+                      <p className="m-0 text-2xl font-bold tracking-[-0.04em] text-[#d8b66a]">
                         {formatPriceFromKopecks(order.totalKopecks)}
                       </p>
                     </div>
 
-                    <div className="mt-4 space-y-2">
+                    <div className="mt-5 space-y-2.5">
                       {order.items.map((item) => (
                         <div
                           key={item.id}
-                          className="flex items-center justify-between gap-4 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm"
+                          className="flex flex-col gap-2 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
                         >
-                          <span className="text-[#f3efe5]/78">
-                            {item.productTitle}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <PackageCheck className="size-4 shrink-0 text-[#d8b66a]/72" />
 
-                          <span className="shrink-0 text-[#f3efe5]/58">
+                            <span className="font-bold text-[#f3d98d]">
+                              {item.productTitle}
+                            </span>
+                          </div>
+
+                          <span className="shrink-0 text-[#f3efe5]/62">
                             {item.quantity} ×{" "}
                             {formatPriceFromKopecks(item.priceKopecks)}
                           </span>

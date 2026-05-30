@@ -4,6 +4,9 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
+import { saveProductImage } from "@/lib/upload-product-image";
+
+export const runtime = "nodejs";
 
 const PRODUCT_STATUSES = ["DRAFT", "ACTIVE", "ARCHIVED"];
 
@@ -14,6 +17,7 @@ const productSchema = z.object({
   categoryName: z.string().trim().min(2),
   shortDescription: z.string().trim().optional(),
   description: z.string().trim().optional(),
+  currentImage: z.string().trim().optional(),
   priceRubles: z.coerce.number().positive(),
   oldPriceRubles: z.coerce.number().positive().optional().or(z.literal("")),
   stock: z.coerce.number().int().min(0),
@@ -88,6 +92,7 @@ async function saveProduct(formData) {
   const rawTitle = String(formData.get("title") || "");
   const rawSlug = String(formData.get("slug") || "");
   const rawCategoryName = String(formData.get("categoryName") || "");
+  const imageFile = formData.get("imageFile");
 
   const parsed = productSchema.parse({
     productId: productId || undefined,
@@ -96,12 +101,16 @@ async function saveProduct(formData) {
     categoryName: rawCategoryName,
     shortDescription: String(formData.get("shortDescription") || ""),
     description: String(formData.get("description") || ""),
+    currentImage: String(formData.get("currentImage") || ""),
     priceRubles: formData.get("priceRubles"),
     oldPriceRubles: formData.get("oldPriceRubles") || "",
     stock: formData.get("stock"),
     status: formData.get("status"),
     isFeatured: formData.get("isFeatured") === "on",
   });
+
+  const uploadedImage = await saveProductImage(imageFile);
+  const image = uploadedImage || parsed.currentImage || null;
 
   const category = await prisma.category.upsert({
     where: {
@@ -121,6 +130,7 @@ async function saveProduct(formData) {
     slug: parsed.slug,
     shortDescription: parsed.shortDescription || null,
     description: parsed.description || null,
+    image,
     priceKopecks: rublesToKopecks(parsed.priceRubles),
     oldPriceKopecks: parsed.oldPriceRubles
       ? rublesToKopecks(parsed.oldPriceRubles)
@@ -207,8 +217,8 @@ export default async function AdminProductsPage() {
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Здесь можно добавить новый товар, отредактировать существующий или
-              скрыть его из публичного каталога.
+              Здесь можно добавить новый товар, отредактировать существующий,
+              загрузить фото или скрыть товар из публичного каталога.
             </p>
           </div>
 
@@ -274,6 +284,19 @@ export default async function AdminProductsPage() {
                   required
                   defaultValue="Пчелопродукты"
                   className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
+                />
+              </label>
+
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                  Фото товара
+                </span>
+
+                <input
+                  name="imageFile"
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f]"
                 />
               </label>
 
@@ -406,21 +429,35 @@ export default async function AdminProductsPage() {
                     key={product.id}
                     className="rounded-3xl border border-[#d8b66a]/14 bg-black/22 p-4"
                   >
-                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                      <div>
-                        <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
-                          {product.category?.name || "Без категории"} ·{" "}
-                          {product.status}
-                          {product.isFeatured ? " · FEATURED" : ""}
-                        </p>
+                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                      <div className="flex gap-4">
+                        {product.image ? (
+                          <img
+                            src={product.image}
+                            alt={product.title}
+                            className="h-20 w-20 shrink-0 rounded-2xl object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/14 bg-black/26 text-[0.62rem] uppercase tracking-[0.18em] text-[#f3efe5]/40">
+                            Без фото
+                          </div>
+                        )}
 
-                        <h3 className="mt-2 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
-                          {product.title}
-                        </h3>
+                        <div>
+                          <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
+                            {product.category?.name || "Без категории"} ·{" "}
+                            {product.status}
+                            {product.isFeatured ? " · FEATURED" : ""}
+                          </p>
 
-                        <p className="mt-2 text-sm text-[#f3efe5]/62">
-                          /products/{product.slug}
-                        </p>
+                          <h3 className="mt-2 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
+                            {product.title}
+                          </h3>
+
+                          <p className="mt-2 text-sm text-[#f3efe5]/62">
+                            /products/{product.slug}
+                          </p>
+                        </div>
                       </div>
 
                       <div className="text-left md:text-right">
@@ -499,6 +536,12 @@ export default async function AdminProductsPage() {
                           value={product.id}
                         />
 
+                        <input
+                          type="hidden"
+                          name="currentImage"
+                          value={product.image || ""}
+                        />
+
                         <div className="grid gap-4 md:grid-cols-2">
                           <label className="block">
                             <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
@@ -540,6 +583,25 @@ export default async function AdminProductsPage() {
                             }
                             className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition focus:border-[#d8b66a]/60"
                           />
+                        </label>
+
+                        <label className="block">
+                          <span className="mb-2 block text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
+                            Новое фото товара
+                          </span>
+
+                          <input
+                            name="imageFile"
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] file:mr-4 file:rounded-xl file:border-0 file:bg-[#d8b66a] file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-[0.16em] file:text-[#07110f]"
+                          />
+
+                          {product.image && (
+                            <span className="mt-2 block text-xs text-[#f3efe5]/46">
+                              Текущее фото сохранится, если не выбрать новое.
+                            </span>
+                          )}
                         </label>
 
                         <label className="block">

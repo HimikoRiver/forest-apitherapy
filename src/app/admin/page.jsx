@@ -1,4 +1,5 @@
-﻿import { requireAdmin } from "@/lib/auth-guards";
+﻿import Link from "next/link";
+import { requireAdmin } from "@/lib/auth-guards";
 
 export default async function AdminPage() {
   const user = await requireAdmin();
@@ -16,37 +17,64 @@ export default async function AdminPage() {
           </h1>
 
           <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-            Здесь позже будут товары, заказы, пользователи и настройки магазина.
+            Здесь собраны основные разделы управления товарами, заказами и
+            доступом администратора.
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-3">
-            <div className="rounded-3xl border border-[#d8b66a]/16 bg-black/24 p-5">
+            <Link
+              href="/admin/products"
+              className="group rounded-3xl border border-[#d8b66a]/16 bg-black/24 p-5 transition hover:border-[#d8b66a]/48 hover:bg-black/34"
+            >
               <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
                 Товары
               </p>
 
-              <p className="mt-3 text-sm leading-6 text-[#f3efe5]/72">
-                Добавление, редактирование и скрытие товаров.
-              </p>
-            </div>
+              <h2 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                Каталог
+              </h2>
 
-            <div className="rounded-3xl border border-[#d8b66a]/16 bg-black/24 p-5">
+              <p className="mt-3 text-sm leading-6 text-[#f3efe5]/72">
+                Добавление, обновление, скрытие и контроль остатков товаров.
+              </p>
+
+              <span className="mt-5 inline-flex text-sm font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition group-hover:text-[#f3d98d]">
+                Открыть
+              </span>
+            </Link>
+
+            <Link
+              href="/admin/orders"
+              className="group rounded-3xl border border-[#d8b66a]/16 bg-black/24 p-5 transition hover:border-[#d8b66a]/48 hover:bg-black/34"
+            >
               <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
                 Заказы
               </p>
 
+              <h2 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                Заявки
+              </h2>
+
               <p className="mt-3 text-sm leading-6 text-[#f3efe5]/72">
-                Просмотр заявок, статусов и состава заказов.
+                Просмотр заказов, контактов клиентов, состава и статусов.
               </p>
-            </div>
+
+              <span className="mt-5 inline-flex text-sm font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition group-hover:text-[#f3d98d]">
+                Открыть
+              </span>
+            </Link>
 
             <div className="rounded-3xl border border-[#d8b66a]/16 bg-black/24 p-5">
               <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
                 Доступ
               </p>
 
+              <h2 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                ADMIN
+              </h2>
+
               <p className="mt-3 text-sm leading-6 text-[#f3efe5]/72">
-                Страница доступна только пользователям с ролью ADMIN.
+                Страница доступна только пользователям с ролью администратора.
               </p>
             </div>
           </div>

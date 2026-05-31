@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import {
   ArrowRight,
@@ -153,35 +154,45 @@ export default async function CartPage() {
                   className="group rounded-[28px] border border-[#d8b66a]/18 bg-black/40 p-5 shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-black/48 hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
                 >
                   <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
-                    <div className="min-w-0">
-                      <div className="mb-4 flex items-start gap-4">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d] transition duration-300 group-hover:scale-105">
-                          <PackageCheck className="size-5" />
-                        </div>
-
-                        <div>
-                          {item.product.category?.name && (
-                            <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
-                              {item.product.category.name}
-                            </p>
-                          )}
-
-                          <h2 className="mt-2 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                            {item.product.title}
-                          </h2>
-                        </div>
+                    <div className="flex min-w-0 flex-col gap-4 sm:flex-row">
+                      <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/16 bg-black/28 sm:w-32">
+                        {item.product.image ? (
+                          <Image
+                            src={item.product.image}
+                            alt={item.product.title}
+                            fill
+                            sizes="128px"
+                            className="object-cover transition duration-500 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
+                            <PackageCheck className="size-6" />
+                          </div>
+                        )}
                       </div>
 
-                      {item.product.shortDescription && (
-                        <p className="mt-3 max-w-xl text-sm leading-7 text-[#f3efe5]/72">
-                          {item.product.shortDescription}
-                        </p>
-                      )}
+                      <div className="min-w-0">
+                        {item.product.category?.name && (
+                          <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/76">
+                            {item.product.category.name}
+                          </p>
+                        )}
 
-                      <p className="mt-4 flex items-center gap-2 text-lg font-bold text-[#d8b66a]">
-                        <BadgeRussianRuble className="size-5" />
-                        {formatPriceFromKopecks(item.product.priceKopecks)}
-                      </p>
+                        <h2 className="mt-2 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                          {item.product.title}
+                        </h2>
+
+                        {item.product.shortDescription && (
+                          <p className="mt-3 max-w-xl text-sm leading-7 text-[#f3efe5]/72">
+                            {item.product.shortDescription}
+                          </p>
+                        )}
+
+                        <p className="mt-4 flex items-center gap-2 text-lg font-bold text-[#d8b66a]">
+                          <BadgeRussianRuble className="size-5" />
+                          {formatPriceFromKopecks(item.product.priceKopecks)}
+                        </p>
+                      </div>
                     </div>
 
                     <div className="w-full md:w-[190px]">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -160,62 +161,80 @@ export default async function ProductsPage() {
               return (
                 <article
                   key={product.id}
-                  className="group flex min-h-[310px] flex-col rounded-[28px] border border-[#d8b66a]/18 bg-black/40 p-5 shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-black/48 hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
+                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-[28px] border border-[#d8b66a]/18 bg-black/40 shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-black/48 hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
                 >
-                  <div className="mb-4 flex items-start justify-between gap-4">
-                    <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d] transition duration-300 group-hover:scale-105">
-                      <PackageCheck className="size-5" />
-                    </div>
+                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-black/28">
+                    {product.image ? (
+                      <Image
+                        src={product.image}
+                        alt={product.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <div className="flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                          <PackageCheck className="size-6" />
+                        </div>
+                      </div>
+                    )}
 
                     {product.category?.name && (
-                      <p className="m-0 rounded-full border border-[#d8b66a]/14 bg-black/24 px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]/82">
+                      <p className="absolute left-4 top-4 m-0 rounded-full border border-[#d8b66a]/18 bg-black/58 px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a] backdrop-blur-sm">
                         {product.category.name}
                       </p>
                     )}
                   </div>
 
-                  <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                    {product.title}
-                  </h2>
+                  <div className="flex flex-1 flex-col p-5">
+                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                      {product.title}
+                    </h2>
 
-                  {product.shortDescription && (
-                    <p className="mt-3 text-sm leading-7 text-[#f3efe5]/72">
-                      {product.shortDescription}
-                    </p>
-                  )}
+                    {product.shortDescription && (
+                      <p className="mt-3 text-sm leading-7 text-[#f3efe5]/72">
+                        {product.shortDescription}
+                      </p>
+                    )}
 
-                  <div className="mt-auto pt-5">
-                    <div className="flex items-end justify-between gap-4">
-                      <div>
-                        {product.oldPriceKopecks && (
-                          <p className="m-0 text-sm text-[#f3efe5]/42 line-through">
-                            {formatPriceFromKopecks(product.oldPriceKopecks)}
+                    <div className="mt-auto pt-5">
+                      <div className="flex items-end justify-between gap-4">
+                        <div>
+                          {product.oldPriceKopecks && (
+                            <p className="m-0 text-sm text-[#f3efe5]/42 line-through">
+                              {formatPriceFromKopecks(product.oldPriceKopecks)}
+                            </p>
+                          )}
+
+                          <p className="m-0 flex items-center gap-2 text-xl font-bold text-[#d8b66a]">
+                            <BadgeRussianRuble className="size-5" />
+                            {formatPriceFromKopecks(product.priceKopecks)}
                           </p>
-                        )}
+                        </div>
 
-                        <p className="m-0 flex items-center gap-2 text-xl font-bold text-[#d8b66a]">
-                          <BadgeRussianRuble className="size-5" />
-                          {formatPriceFromKopecks(product.priceKopecks)}
+                        <p className="m-0 rounded-full border border-[#d8b66a]/18 bg-black/20 px-3 py-1 text-xs text-[#f3efe5]/66">
+                          Остаток: {product.stock}
                         </p>
                       </div>
 
-                      <p className="m-0 rounded-full border border-[#d8b66a]/18 bg-black/20 px-3 py-1 text-xs text-[#f3efe5]/66">
-                        Остаток: {product.stock}
-                      </p>
+                      <form action={addProductToCart} className="mt-5">
+                        <input
+                          type="hidden"
+                          name="productId"
+                          value={product.id}
+                        />
+
+                        <button
+                          type="submit"
+                          disabled={isOutOfStock}
+                          className="group/button inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44"
+                        >
+                          <ShoppingCart className="size-4 transition duration-300 group-hover/button:scale-110" />
+                          {isOutOfStock ? "Нет в наличии" : "В корзину"}
+                        </button>
+                      </form>
                     </div>
-
-                    <form action={addProductToCart} className="mt-5">
-                      <input type="hidden" name="productId" value={product.id} />
-
-                      <button
-                        type="submit"
-                        disabled={isOutOfStock}
-                        className="group/button inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44"
-                      >
-                        <ShoppingCart className="size-4 transition duration-300 group-hover/button:scale-110" />
-                        {isOutOfStock ? "Нет в наличии" : "В корзину"}
-                      </button>
-                    </form>
                   </div>
                 </article>
               );

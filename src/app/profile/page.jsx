@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   ClipboardList,
@@ -69,7 +70,15 @@ export default async function ProfilePage() {
           createdAt: "desc",
         },
         include: {
-          items: true,
+          items: {
+            include: {
+              product: {
+                select: {
+                  image: true,
+                },
+              },
+            },
+          },
         },
       },
     },
@@ -261,10 +270,24 @@ export default async function ProfilePage() {
                       {order.items.map((item) => (
                         <div
                           key={item.id}
-                          className="flex flex-col gap-2 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
+                          className="flex flex-col gap-3 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
                         >
-                          <div className="flex items-center gap-3">
-                            <PackageCheck className="size-4 shrink-0 text-[#d8b66a]/72" />
+                          <div className="flex min-w-0 items-center gap-3">
+                            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/14 bg-black/28">
+                              {item.product?.image ? (
+                                <Image
+                                  src={item.product.image}
+                                  alt={item.productTitle}
+                                  fill
+                                  sizes="64px"
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
+                                  <PackageCheck className="size-5" />
+                                </div>
+                              )}
+                            </div>
 
                             <span className="font-bold text-[#f3d98d]">
                               {item.productTitle}

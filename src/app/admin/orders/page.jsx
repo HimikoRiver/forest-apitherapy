@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import {
@@ -112,7 +113,15 @@ export default async function AdminOrdersPage() {
           email: true,
         },
       },
-      items: true,
+      items: {
+        include: {
+          product: {
+            select: {
+              image: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -274,18 +283,36 @@ export default async function AdminOrdersPage() {
                           {order.items.map((item) => (
                             <div
                               key={item.id}
-                              className="flex flex-col gap-2 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
+                              className="flex flex-col gap-3 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
                             >
-                              <div>
-                                <p className="m-0 font-bold text-[#f3d98d]">
-                                  {item.productTitle}
-                                </p>
+                              <div className="flex min-w-0 items-center gap-3">
+                                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/14 bg-black/28">
+                                  {item.product?.image ? (
+                                    <Image
+                                      src={item.product.image}
+                                      alt={item.productTitle}
+                                      fill
+                                      sizes="64px"
+                                      className="object-cover"
+                                    />
+                                  ) : (
+                                    <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
+                                      <PackageCheck className="size-5" />
+                                    </div>
+                                  )}
+                                </div>
 
-                                {item.productSlug && (
-                                  <p className="mt-1 text-xs text-[#f3efe5]/42">
-                                    /products/{item.productSlug}
+                                <div className="min-w-0">
+                                  <p className="m-0 font-bold text-[#f3d98d]">
+                                    {item.productTitle}
                                   </p>
-                                )}
+
+                                  {item.productSlug && (
+                                    <p className="mt-1 text-xs text-[#f3efe5]/42">
+                                      /products/{item.productSlug}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
 
                               <p className="m-0 shrink-0 text-[#f3efe5]/64">

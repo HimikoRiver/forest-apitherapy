@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
@@ -6,7 +7,6 @@ import {
   ArrowRight,
   BadgeRussianRuble,
   ClipboardList,
-  LayoutGrid,
   Mail,
   MapPin,
   MessageSquareText,
@@ -339,16 +339,35 @@ export default async function CheckoutPage() {
                     key={item.id}
                     className="rounded-3xl border border-[#d8b66a]/14 bg-black/24 p-4"
                   >
-                    <p className="m-0 flex items-center gap-2 text-sm font-bold text-[#f3d98d]">
-                      <PackageCheck className="size-4 shrink-0 text-[#d8b66a]/72" />
-                      {item.product.title}
-                    </p>
+                    <div className="flex gap-3">
+                      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/16 bg-black/28">
+                        {item.product.image ? (
+                          <Image
+                            src={item.product.image}
+                            alt={item.product.title}
+                            fill
+                            sizes="80px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
+                            <PackageCheck className="size-5" />
+                          </div>
+                        )}
+                      </div>
 
-                    <p className="mt-2 flex items-center gap-2 text-sm leading-6 text-[#f3efe5]/62">
-                      <BadgeRussianRuble className="size-4 shrink-0 text-[#d8b66a]/72" />
-                      {item.quantity} ×{" "}
-                      {formatPriceFromKopecks(item.product.priceKopecks)}
-                    </p>
+                      <div className="min-w-0 flex-1">
+                        <p className="m-0 text-sm font-bold text-[#f3d98d]">
+                          {item.product.title}
+                        </p>
+
+                        <p className="mt-2 flex items-center gap-2 text-sm leading-6 text-[#f3efe5]/62">
+                          <BadgeRussianRuble className="size-4 shrink-0 text-[#d8b66a]/72" />
+                          {item.quantity} ×{" "}
+                          {formatPriceFromKopecks(item.product.priceKopecks)}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 ))}
 

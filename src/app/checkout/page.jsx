@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { z } from "zod";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
+import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { requireUser } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -193,6 +194,8 @@ export default async function CheckoutPage() {
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-6xl">
+        <CabinetTopNav />
+
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#d8b66a]">

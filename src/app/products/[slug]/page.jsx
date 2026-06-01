@@ -2,13 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-import {
-  ArrowLeft,
-  BadgeRussianRuble,
-  PackageCheck,
-  ShoppingCart,
-} from "lucide-react";
+import { BadgeRussianRuble, PackageCheck, ShoppingCart } from "lucide-react";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
+import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { getCurrentSession } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -107,25 +103,7 @@ export default async function ProductPage({ params }) {
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-6xl">
-        <div className="mb-8 flex items-center justify-between gap-4">
-          <Link
-            href="/products"
-            aria-label="Назад в каталог"
-            title="Назад в каталог"
-            className="group inline-flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/35 bg-black/24 text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_14px_38px_rgba(216,182,106,0.14)]"
-          >
-            <ArrowLeft className="size-5 transition duration-300 group-hover:-translate-x-0.5" />
-          </Link>
-
-          <Link
-            href="/cart"
-            aria-label="Корзина"
-            title="Корзина"
-            className="group inline-flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/35 bg-black/24 text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_14px_38px_rgba(216,182,106,0.14)]"
-          >
-            <ShoppingCart className="size-5 transition duration-300 group-hover:scale-110" />
-          </Link>
-        </div>
+        <CabinetTopNav />
 
         <article className="overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_30px_90px_rgba(0,0,0,0.52)]">
           <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.82fr)]">

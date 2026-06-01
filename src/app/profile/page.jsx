@@ -5,14 +5,13 @@ import {
   ClipboardList,
   Clock3,
   LayoutDashboard,
-  LayoutGrid,
   Mail,
   PackageCheck,
-  ShieldCheck,
-  ShoppingCart,
   UserRound,
 } from "lucide-react";
 import SignOutButton from "@/components/auth/SignOutButton";
+import BeesPageBackground from "@/components/shared/BeesPageBackground";
+import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { requireUser } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -88,64 +87,29 @@ export default async function ProfilePage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 bg-center bg-no-repeat opacity-100"
-        style={{
-          backgroundImage: "url('/images/admin/admin-bees-bg.webp')",
-          backgroundSize: "100% 100%",
-        }}
-      />
+      <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
+        <CabinetTopNav showAdminLinks={user?.role === "ADMIN"} />
+
         <div className="mb-6 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
           <div className="relative px-5 py-7 sm:px-7 lg:px-8">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(216,182,106,0.14),transparent_34%)]" />
 
-            <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
-                  <UserRound className="size-4" />
-                  Личный кабинет
-                </div>
-
-                <h1 className="m-0 max-w-3xl text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
-                  Добро пожаловать
-                </h1>
-
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
-                  Здесь хранятся данные профиля, история заказов и быстрые
-                  переходы к покупкам.
-                </p>
+            <div className="relative">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
+                <UserRound className="size-4" />
+                Личный кабинет
               </div>
 
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/products"
-                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
-                >
-                  <LayoutGrid className="size-4 transition group-hover:scale-110" />
-                  Каталог
-                </Link>
+              <h1 className="m-0 max-w-3xl text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
+                Добро пожаловать
+              </h1>
 
-                <Link
-                  href="/cart"
-                  className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
-                >
-                  <ShoppingCart className="size-4 transition group-hover:scale-110" />
-                  Корзина
-                </Link>
-
-                {user?.role === "ADMIN" && (
-                  <Link
-                    href="/admin"
-                    className="group inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
-                  >
-                    <ShieldCheck className="size-4 transition group-hover:scale-110" />
-                    Панель
-                  </Link>
-                )}
-              </div>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
+                Здесь хранятся данные профиля, история заказов и быстрые
+                переходы к покупкам.
+              </p>
             </div>
           </div>
         </div>

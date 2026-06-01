@@ -157,13 +157,18 @@ export default async function ProductsPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => {
               const isOutOfStock = product.stock <= 0;
+              const productHref = `/products/${product.slug}`;
 
               return (
                 <article
                   key={product.id}
                   className="group flex min-h-[420px] flex-col overflow-hidden rounded-[28px] border border-[#d8b66a]/18 bg-black/40 shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-black/48 hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-black/28">
+                  <Link
+                    href={productHref}
+                    aria-label={`Открыть товар ${product.title}`}
+                    className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-black/28"
+                  >
                     {product.image ? (
                       <Image
                         src={product.image}
@@ -185,12 +190,17 @@ export default async function ProductsPage() {
                         {product.category.name}
                       </p>
                     )}
-                  </div>
+                  </Link>
 
                   <div className="flex flex-1 flex-col p-5">
-                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                      {product.title}
-                    </h2>
+                    <Link
+                      href={productHref}
+                      className="w-fit transition duration-300 hover:text-[#fff1b8]"
+                    >
+                      <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                        {product.title}
+                      </h2>
+                    </Link>
 
                     {product.shortDescription && (
                       <p className="mt-3 text-sm leading-7 text-[#f3efe5]/72">

@@ -14,21 +14,27 @@ import HeroMenuOverlay from "./HeroMenuOverlay";
 import { useBodyScrollLock } from "./useBodyScrollLock";
 import { useFooterFade } from "./useFooterFade";
 
-const HIVE_CLOSED_SRC = "/images/hero/hive.webp";
-const HIVE_OPEN_SRC = "/images/hero/hiveOpen1.webp";
+const HIVE_CLOSED_SRC = "/images/hero/hive1.webp";
+const HIVE_OPEN_SRC = "/images/hero/hiveOpen2.webp";
 
 const subscribeToClientReady = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
 const menuItems = [
-  { id: "home", label: "Главная", href: "#home", top: "31.8%" },
-  { id: "about", label: "О специалисте", href: "#about", top: "38.3%" },
-  { id: "services", label: "Услуги", href: "#services", top: "44.7%" },
-  { id: "products", label: "Пчелопродукты", href: "#products", top: "50.9%" },
-  { id: "education", label: "Обучение", href: "#education", top: "57.8%" },
-  { id: "contacts", label: "Контакты", href: "#contacts", top: "64.8%" },
-  { id: "login", label: "Вход", href: "/auth/login", top: "71%" },
+  { id: "home", label: "Главная", href: "#home", top: "39.3%", isArc: true },
+  {
+    id: "about",
+    label: "О специалисте",
+    href: "#about",
+    top: "45.3%",
+    isArc: true,
+  },
+  { id: "services", label: "Услуги", href: "#services", top: "50.7%" },
+  { id: "products", label: "Пчелопродукты", href: "#products", top: "57.9%" },
+  { id: "education", label: "Обучение", href: "#education", top: "65%" },
+  { id: "contacts", label: "Контакты", href: "#contacts", top: "70.8%" },
+  { id: "login", label: "Вход", href: "/login", top: "77%" },
 ];
 
 export default function HeroMenu() {
@@ -89,7 +95,6 @@ export default function HeroMenu() {
 
   const handleOpen = useCallback(() => {
     if (menuHiddenByFooter) return;
-
     setIsOpen(true);
   }, [menuHiddenByFooter]);
 
@@ -137,7 +142,7 @@ export default function HeroMenu() {
           aria-label="Открыть меню"
           onClick={handleOpen}
           disabled={menuHiddenByFooter}
-          className={`group pointer-events-auto fixed right-[-10px] top-[-20px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
+          className={`group pointer-events-auto fixed right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
             isOpen ? "pointer-events-none opacity-0" : "opacity-100"
           } ${
             menuHiddenByFooter
@@ -155,7 +160,7 @@ export default function HeroMenu() {
               className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300 group-hover:brightness-[1.07] group-hover:drop-shadow-[0_24px_44px_rgba(0,0,0,0.42)]"
             />
 
-            <span className="absolute left-[47.5%] top-[61.8%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
+            <span className="absolute left-[50.9%] top-[60%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
               <span className="hero-hive-menu-text">menu</span>
             </span>
           </span>
@@ -178,11 +183,13 @@ export default function HeroMenu() {
               className="pointer-events-none select-none object-contain drop-shadow-[0_20px_42px_rgba(0,0,0,0.34)]"
             />
 
+            <div className="hero-hive-falling-spark" aria-hidden="true" />
+
             <button
               type="button"
               aria-label="Закрыть меню"
               onClick={closeMenu}
-              className="hero-hive-close-button absolute left-[48.5%] top-[21.8%] z-[5] flex h-[38px] w-[38px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
+              className="hero-hive-close-button absolute left-[48%] top-[25.8%] z-[5] flex h-[38px] w-[38px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
             >
               <span className="hero-hive-close-bg" />
 
@@ -263,7 +270,51 @@ export default function HeroMenu() {
                   className="hero-hive-text-button absolute left-1/2 flex h-[42px] w-[300px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
                   style={{ top: item.top }}
                 >
-                  <span className="hero-hive-strip-text">{item.label}</span>
+                  {item.isArc ? (
+                    <svg
+                      className="hero-hive-arc-svg"
+                      viewBox="0 0 300 48"
+                      aria-hidden="true"
+                    >
+                      <defs>
+                        <linearGradient
+                          id={`heroHiveTextGold-${item.id}`}
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="0%"
+                        >
+                          <stop offset="0%" stopColor="#8f6420" />
+                          <stop offset="14%" stopColor="#d6a33c" />
+                          <stop offset="32%" stopColor="#fff1b5" />
+                          <stop offset="50%" stopColor="#d19b39" />
+                          <stop offset="68%" stopColor="#fff7cf" />
+                          <stop offset="84%" stopColor="#bd8228" />
+                          <stop offset="100%" stopColor="#8f6420" />
+                        </linearGradient>
+
+                        <path
+                          id={`heroHiveArcPath-${item.id}`}
+                          d="M34 29 Q150 24.5 266 29"
+                        />
+                      </defs>
+
+                      <text
+                        className="hero-hive-arc-text"
+                        fill={`url(#heroHiveTextGold-${item.id})`}
+                      >
+                        <textPath
+                          href={`#heroHiveArcPath-${item.id}`}
+                          startOffset="50%"
+                          textAnchor="middle"
+                        >
+                          {item.label}
+                        </textPath>
+                      </text>
+                    </svg>
+                  ) : (
+                    <span className="hero-hive-strip-text">{item.label}</span>
+                  )}
                 </button>
               ))}
             </nav>
@@ -278,6 +329,47 @@ export default function HeroMenu() {
 
         .group:hover .hero-hive-preview {
           animation: heroHiveSingleShake 620ms ease-in-out 1;
+        }
+
+        .hero-hive-falling-spark {
+          position: absolute;
+          left: 24.6%;
+          top: 79.1%;
+          z-index: 4;
+          width: 4px;
+          height: 4px;
+          pointer-events: none;
+          border-radius: 999px;
+          background: #fff8d8;
+          box-shadow:
+            0 0 4px rgba(255, 248, 216, 0.98),
+            0 0 8px rgba(255, 220, 120, 0.72),
+            0 0 14px rgba(232, 164, 44, 0.42);
+          opacity: 0;
+          transform: translate3d(0, -6px, 0) scale(1);
+          animation: heroHiveSparkFall 3s linear infinite;
+        }
+
+        .hero-hive-falling-spark::before,
+        .hero-hive-falling-spark::after {
+          content: "";
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          width: 4px;
+          height: 4px;
+          border-radius: 999px;
+          background: #fffefa;
+          transform: translate(-50%, -50%);
+          opacity: 0.95;
+          box-shadow:
+            0 0 5px rgba(255, 250, 210, 0.9),
+            0 0 9px rgba(255, 210, 90, 0.5);
+        }
+
+        .hero-hive-falling-spark::after {
+          transform: translate(-50%, -50%) rotate(45deg);
+          opacity: 0.7;
         }
 
         .hero-hive-close-button {
@@ -350,7 +442,8 @@ export default function HeroMenu() {
           cursor: pointer;
         }
 
-        .hero-hive-text-button:hover .hero-hive-strip-text {
+        .hero-hive-text-button:hover .hero-hive-strip-text,
+        .hero-hive-text-button:hover .hero-hive-arc-text {
           filter:
             drop-shadow(0 0 8px rgba(255, 229, 145, 0.62))
             drop-shadow(0 0 18px rgba(214, 167, 70, 0.36));
@@ -393,6 +486,24 @@ export default function HeroMenu() {
           font-size: 22px;
         }
 
+        .hero-hive-arc-svg {
+          display: block;
+          width: 300px;
+          height: 48px;
+          overflow: visible;
+          pointer-events: none;
+        }
+
+        .hero-hive-arc-text {
+          font-family: var(--font-comfortaa), Arial, Helvetica, sans-serif;
+          font-size: 22px;
+          font-weight: 500;
+          line-height: 1;
+          letter-spacing: 0.03em;
+          filter: drop-shadow(0 0 6px rgba(223, 174, 72, 0.42));
+          transition: filter 260ms ease;
+        }
+
         @keyframes heroHiveSingleShake {
           0% {
             transform: rotate(0deg);
@@ -411,6 +522,29 @@ export default function HeroMenu() {
           }
           100% {
             transform: rotate(0deg);
+          }
+        }
+
+        @keyframes heroHiveSparkFall {
+          0% {
+            opacity: 0;
+            transform: translate3d(0, -6px, 0) scale(1);
+          }
+          4% {
+            opacity: 1;
+            transform: translate3d(0, -2px, 0) scale(1);
+          }
+          18% {
+            opacity: 1;
+            transform: translate3d(0, 44px, 0) scale(1);
+          }
+          24% {
+            opacity: 0;
+            transform: translate3d(0, 52px, 0) scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: translate3d(0, 52px, 0) scale(1);
           }
         }
 

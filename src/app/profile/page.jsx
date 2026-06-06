@@ -212,17 +212,23 @@ export default async function ProfilePage() {
             ) : (
               <div className="space-y-4 p-5">
                 {orders.map((order) => (
-                  <article
+                  <Link
                     key={order.id}
-                    className="rounded-[28px] border border-[#d8b66a]/12 bg-black/24 p-5 transition duration-300 hover:border-[#d8b66a]/30 hover:bg-black/32 hover:shadow-[0_20px_54px_rgba(0,0,0,0.28)]"
+                    href={`/profile/orders/${order.id}`}
+                    className="group/order block rounded-[28px] border border-[#d8b66a]/12 bg-black/24 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/34 hover:bg-black/32 hover:shadow-[0_20px_54px_rgba(0,0,0,0.28)]"
                   >
                     <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                       <div>
                         <OrderStatusBadge status={order.status} />
 
-                        <h3 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                        <h3 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d] transition duration-300 group-hover/order:text-[#fff1b8]">
                           Заказ от {formatOrderDate(order.createdAt)}
                         </h3>
+
+                        <p className="mt-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a]/70">
+                          Подробнее
+                          <ArrowRight className="size-3.5 transition duration-300 group-hover/order:translate-x-0.5" />
+                        </p>
                       </div>
 
                       <p className="m-0 text-2xl font-bold tracking-[-0.04em] text-[#d8b66a]">
@@ -265,7 +271,7 @@ export default async function ProfilePage() {
                         </div>
                       ))}
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}

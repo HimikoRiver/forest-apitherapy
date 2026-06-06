@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Save,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth-guards";
@@ -187,7 +188,7 @@ async function updateProductStatus(formData) {
   const productId = String(formData.get("productId") || "");
   const status = String(formData.get("status") || "");
 
-  if (!PRODUCT_STATUSES.includes(status)) {
+  if (!productId || !PRODUCT_STATUSES.includes(status)) {
     return;
   }
 
@@ -201,6 +202,58 @@ async function updateProductStatus(formData) {
   });
 
   revalidatePath("/products");
+  revalidatePath("/cart");
+  revalidatePath("/checkout");
+  revalidatePath("/admin/products");
+}
+
+async function deleteProduct(formData) {
+  "use server";
+
+  await requireAdmin();
+
+  const productId = String(formData.get("productId") || "");
+
+  if (!productId) {
+    return;
+  }
+
+  const product = await prisma.product.findUnique({
+    where: {
+      id: productId,
+    },
+    select: {
+      slug: true,
+    },
+  });
+
+  if (!product) {
+    return;
+  }
+
+  await prisma.$transaction([
+    prisma.cartItem.deleteMany({
+      where: {
+        productId,
+      },
+    }),
+    prisma.orderItem.updateMany({
+      where: {
+        productId,
+      },
+      data: {
+        productId: null,
+      },
+    }),
+    prisma.product.delete({
+      where: {
+        id: productId,
+      },
+    }),
+  ]);
+
+  revalidatePath("/products");
+  revalidatePath(`/products/${product.slug}`);
   revalidatePath("/cart");
   revalidatePath("/checkout");
   revalidatePath("/admin/products");
@@ -331,6 +384,34 @@ function StatusActionButton({ status, currentStatus, children, icon: Icon, dange
         {children.label}
       </button>
     </form>
+  );
+}
+
+function DeleteProductBlock({ productId }) {
+  return (
+    <details className="mt-4 rounded-[24px] border border-red-300/12 bg-red-950/5 p-4 transition open:border-red-300/30 open:bg-red-950/10">
+      <summary className="flex cursor-pointer list-none items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-red-100/86 transition hover:text-red-100">
+        <Trash2 className="size-4" />
+        Удалить товар
+      </summary>
+
+      <form action={deleteProduct} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <input type="hidden" name="productId" value={productId} />
+
+        <p className="m-0 max-w-xl text-sm leading-6 text-[#f3efe5]/62">
+          Это действие полностью удалит товар из базы и очистит его из корзин.
+          В старых заказах сохранится текстовая история товара.
+        </p>
+
+        <button
+          type="submit"
+          className="group inline-flex shrink-0 items-center justify-center gap-2 rounded-2xl border border-red-300/34 bg-red-950/18 px-4 py-3 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-red-100 transition duration-300 hover:-translate-y-0.5 hover:border-red-300/70 hover:bg-red-500/16"
+        >
+          <Trash2 className="size-4 transition duration-300 group-hover:scale-110" />
+          Да, удалить
+        </button>
+      </form>
+    </details>
   );
 }
 
@@ -658,6 +739,8 @@ export default async function AdminProductsPage() {
                         }}
                       </StatusActionButton>
                     </div>
+
+                    <DeleteProductBlock productId={product.id} />
 
                     <details className="mt-4 rounded-[24px] border border-[#d8b66a]/10 bg-black/18 p-4 transition open:border-[#d8b66a]/22 open:bg-black/26">
                       <summary className="flex cursor-pointer list-none items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition hover:text-[#f3d98d]">

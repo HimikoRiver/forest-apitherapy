@@ -99,10 +99,10 @@ export default async function ProductPage({ params }) {
   const isOutOfStock = product.stock <= 0;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-10 text-[#f3efe5]">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto w-full max-w-6xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
         <article className="overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_30px_90px_rgba(0,0,0,0.52)]">

@@ -190,10 +190,10 @@ export default async function CheckoutPage() {
   }, 0);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-10 text-[#f3efe5]">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto w-full max-w-6xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">

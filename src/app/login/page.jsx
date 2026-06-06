@@ -1,5 +1,7 @@
 ﻿"use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -62,10 +64,25 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-10 text-[#f3efe5]">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-md items-center justify-center">
+      <Link
+        href="/"
+        aria-label="На главную"
+        className="group absolute left-4 top-4 z-20 inline-flex items-center justify-center transition duration-300 hover:-translate-y-0.5 sm:left-6 sm:top-6 lg:left-8 lg:top-8"
+      >
+        <Image
+          src="/images/logo.webp"
+          alt="APIDARB"
+          width={112}
+          height={112}
+          priority
+          className="h-20 w-20 rounded-full object-contain opacity-92 transition duration-300 group-hover:scale-105 group-hover:opacity-100 group-hover:drop-shadow-[0_0_22px_rgba(216,182,106,0.32)] sm:h-24 sm:w-24"
+        />
+      </Link>
+
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-64px)] w-full max-w-md items-center justify-center">
         <div className="w-full overflow-hidden rounded-[32px] border border-[#d8b66a]/20 bg-black/44 shadow-[0_28px_80px_rgba(0,0,0,0.5)]">
           <div className="relative border-b border-[#d8b66a]/12 px-5 py-7 text-center">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(216,182,106,0.14),transparent_42%)]" />

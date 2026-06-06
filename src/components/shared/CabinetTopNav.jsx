@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   ChevronDown,
   ClipboardList,
-  LayoutDashboard,
+  House,
   LayoutGrid,
   PackageCheck,
   ShieldCheck,
@@ -80,14 +80,22 @@ function NavLink({ href, label, icon: Icon, active }) {
 export default function CabinetTopNav({ showAdminLinks = false }) {
   const pathname = usePathname();
   const links = showAdminLinks ? [...baseLinks, ...adminLinks] : baseLinks;
+  const isHomeActive = pathname === "/";
 
   return (
     <nav className="relative z-20 mx-auto mb-5 w-full max-w-7xl">
       <div className="hidden items-center justify-between gap-4 rounded-[28px] border border-[#d8b66a]/16 bg-[#030b0c] px-4 py-3 shadow-[0_18px_54px_rgba(0,0,0,0.34)] lg:flex">
-        <div className="inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/16 bg-[#071b18] px-4 py-3 text-[0.68rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a]">
-          <LayoutDashboard className="size-4" />
-          Навигация
-        </div>
+        <Link
+          href="/"
+          className={`group inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-[0.68rem] font-bold uppercase tracking-[0.24em] transition duration-300 ${
+            isHomeActive
+              ? "border-[#d8b66a]/64 bg-[#d8b66a] text-[#07110f] shadow-[0_14px_34px_rgba(216,182,106,0.16)]"
+              : "border-[#d8b66a]/16 bg-[#071b18] text-[#d8b66a] hover:-translate-y-0.5 hover:border-[#d8b66a]/54 hover:bg-[#0a241f] hover:text-[#f3d98d] hover:shadow-[0_12px_34px_rgba(216,182,106,0.12)]"
+          }`}
+        >
+          <House className="size-4 shrink-0 transition duration-300 group-hover:scale-110" />
+          Главная
+        </Link>
 
         <div className="flex flex-wrap justify-end gap-2">
           {links.map((link) => (
@@ -103,7 +111,7 @@ export default function CabinetTopNav({ showAdminLinks = false }) {
       <details className="group rounded-[26px] border border-[#d8b66a]/16 bg-[#030b0c] shadow-[0_18px_54px_rgba(0,0,0,0.34)] lg:hidden">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-4 text-[0.72rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a] [&::-webkit-details-marker]:hidden">
           <span className="inline-flex items-center gap-2">
-            <LayoutDashboard className="size-4" />
+            <House className="size-4" />
             Меню
           </span>
 
@@ -111,6 +119,13 @@ export default function CabinetTopNav({ showAdminLinks = false }) {
         </summary>
 
         <div className="grid gap-2 border-t border-[#d8b66a]/12 px-4 pb-4 pt-3 sm:grid-cols-2">
+          <NavLink
+            href="/"
+            label="Главная"
+            icon={House}
+            active={isHomeActive}
+          />
+
           {links.map((link) => (
             <NavLink
               key={link.href}

@@ -104,10 +104,10 @@ export default async function ProductsPage() {
   });
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-6 text-[#f3efe5]">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto w-full max-w-6xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -212,8 +212,8 @@ export default async function ProductsPage() {
                     )}
 
                     <div className="mt-auto pt-5">
-                      <div className="flex items-end justify-between gap-4">
-                        <div>
+                      <div className="flex items-end justify-between gap-3">
+                        <div className="min-w-0">
                           {product.oldPriceKopecks && (
                             <p className="m-0 text-sm text-[#f3efe5]/42 line-through">
                               {formatPriceFromKopecks(product.oldPriceKopecks)}
@@ -224,29 +224,35 @@ export default async function ProductsPage() {
                             <BadgeRussianRuble className="size-5" />
                             {formatPriceFromKopecks(product.priceKopecks)}
                           </p>
+
+                          <p className="mt-2 inline-flex rounded-full border border-[#d8b66a]/14 bg-black/18 px-3 py-1 text-xs text-[#f3efe5]/58">
+                            Остаток: {product.stock}
+                          </p>
                         </div>
 
-                        <p className="m-0 rounded-full border border-[#d8b66a]/18 bg-[#030b0c] px-3 py-1 text-xs text-[#f3efe5]/66">
-                          Остаток: {product.stock}
-                        </p>
+                        <form action={addProductToCart} className="shrink-0">
+                          <input
+                            type="hidden"
+                            name="productId"
+                            value={product.id}
+                          />
+
+                          <button
+                            type="submit"
+                            disabled={isOutOfStock}
+                            aria-label={
+                              isOutOfStock
+                                ? `${product.title} нет в наличии`
+                                : `Добавить ${product.title} в корзину`
+                            }
+                            title={isOutOfStock ? "Нет в наличии" : "Купить"}
+                            className="group/button inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#d8b66a]/30 bg-[#d8b66a]/10 px-4 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#f3d98d] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a] hover:text-[#07110f] disabled:cursor-not-allowed disabled:border-[#d8b66a]/12 disabled:bg-[#d8b66a]/8 disabled:text-[#d8b66a]/36"
+                          >
+                            <ShoppingCart className="size-4 transition duration-300 group-hover/button:scale-110" />
+                            {isOutOfStock ? "Нет" : "Купить"}
+                          </button>
+                        </form>
                       </div>
-
-                      <form action={addProductToCart} className="mt-5">
-                        <input
-                          type="hidden"
-                          name="productId"
-                          value={product.id}
-                        />
-
-                        <button
-                          type="submit"
-                          disabled={isOutOfStock}
-                          className="group/button inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44"
-                        >
-                          <ShoppingCart className="size-4 transition duration-300 group-hover/button:scale-110" />
-                          {isOutOfStock ? "Нет в наличии" : "В корзину"}
-                        </button>
-                      </form>
                     </div>
                   </div>
                 </article>

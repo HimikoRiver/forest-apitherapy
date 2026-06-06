@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import {
   useCallback,
   useEffect,
@@ -10,6 +11,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import { authClient } from "@/lib/auth-client";
 import HeroMenuOverlay from "./HeroMenuOverlay";
 import { useBodyScrollLock } from "./useBodyScrollLock";
 import { useFooterFade } from "./useFooterFade";
@@ -21,23 +23,28 @@ const subscribeToClientReady = () => () => {};
 const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
-const menuItems = [
-  { id: "home", label: "Главная", href: "#home", top: "39.3%", isArc: true },
+const baseMenuItems = [
+  { id: "home", label: "Главная", href: "/", top: "39.3%", isArc: true },
   {
     id: "about",
     label: "О специалисте",
-    href: "#about",
+    href: "/#about",
     top: "45.3%",
     isArc: true,
   },
-  { id: "services", label: "Услуги", href: "#services", top: "50.7%" },
-  { id: "products", label: "Пчелопродукты", href: "#products", top: "57.9%" },
-  { id: "education", label: "Обучение", href: "#education", top: "65%" },
-  { id: "contacts", label: "Контакты", href: "#contacts", top: "70.8%" },
-  { id: "login", label: "Вход", href: "/login", top: "77%" },
+  { id: "services", label: "Услуги", href: "/#services", top: "50.7%" },
+  { id: "products", label: "Пчелопродукты", href: "/products", top: "57.9%" },
+  { id: "education", label: "Обучение", href: "/#education", top: "65%" },
+  { id: "contacts", label: "Контакты", href: "/#contacts", top: "70.8%" },
 ];
 
 export default function HeroMenu() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const { data: session } = authClient.useSession();
+
+  const isAuthenticated = Boolean(session?.user);
+
   const isClientReady = useSyncExternalStore(
     subscribeToClientReady,
     getClientSnapshot,
@@ -50,7 +57,18 @@ export default function HeroMenu() {
   const { footerFadeProgress, footerFadeOpacity, menuHiddenByFooter } =
     useFooterFade(isClientReady && isDesktopViewport);
 
-  const renderedItems = useMemo(() => menuItems, []);
+  const renderedItems = useMemo(
+    () => [
+      ...baseMenuItems,
+      {
+        id: "auth",
+        label: isAuthenticated ? "Кабинет" : "Вход",
+        href: isAuthenticated ? "/profile" : "/login",
+        top: "77%",
+      },
+    ],
+    [isAuthenticated]
+  );
 
   const closeMenu = useCallback(() => {
     setIsOpen(false);
@@ -100,24 +118,47 @@ export default function HeroMenu() {
 
   const handleNavClick = useCallback(
     (href) => {
-      if (href.startsWith("#")) {
-        const id = href.replace("#", "");
-        const target = document.getElementById(id);
+      closeMenu();
 
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          window.history.replaceState(null, "", href);
-        } else {
-          window.history.replaceState(null, "", href);
+      if (href === "/") {
+        if (pathname === "/") {
+          const homeTarget = document.getElementById("home");
+
+          if (homeTarget) {
+            homeTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+            window.history.replaceState(null, "", "/");
+            return;
+          }
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.history.replaceState(null, "", "/");
+          return;
         }
 
-        closeMenu();
+        router.push("/");
         return;
       }
 
-      window.location.href = href;
+      if (href.startsWith("/#")) {
+        const id = href.replace("/#", "");
+
+        if (pathname === "/") {
+          const target = document.getElementById(id);
+
+          if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            window.history.replaceState(null, "", href);
+            return;
+          }
+        }
+
+        router.push(href);
+        return;
+      }
+
+      router.push(href);
     },
-    [closeMenu]
+    [closeMenu, pathname, router]
   );
 
   if (!isClientReady || !isDesktopViewport) {
@@ -333,8 +374,8 @@ export default function HeroMenu() {
 
         .hero-hive-falling-spark {
           position: absolute;
-          left: 24.6%;
-          top: 79.1%;
+          left: 23.6%;
+          top: 76.1%;
           z-index: 4;
           width: 4px;
           height: 4px;

@@ -195,14 +195,16 @@ export default function AboutPage() {
         <AboutHeroSection />
       </section>
 
-      <section className="relative bg-[#020908] px-5 py-16 sm:px-8 lg:px-12 xl:px-[5vw]">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_0%,rgba(216,182,106,0.12),transparent_28%),radial-gradient(circle_at_88%_30%,rgba(34,91,54,0.26),transparent_34%)]" />
+      <section className="relative overflow-hidden bg-[#020908] px-5 py-16 sm:px-8 lg:px-12 xl:px-[5vw]">
+        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/suede-green.webp')] bg-cover bg-center opacity-55" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_0%,rgba(216,182,106,0.15),transparent_30%),radial-gradient(circle_at_88%_30%,rgba(34,91,54,0.34),transparent_36%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,9,8,0.92)_0%,rgba(2,9,8,0)_5%,rgba(2,9,8,0)_95%,rgba(2,9,8,0.92)_100%)]" />
 
-        <div className="relative mx-auto max-w-[1280px]">
+        <div className="relative z-10 mx-auto max-w-[1280px]">
           <div className="mb-10 flex items-center justify-center gap-5 text-[#d8b66a]">
             <span className="h-px w-32 bg-gradient-to-r from-transparent to-[#d8b66a]" />
             <p className="text-center text-[12px] font-bold uppercase tracking-[0.52em]">
-              Направления работы
+              Этапы лечения
             </p>
             <span className="h-px w-32 bg-gradient-to-l from-transparent to-[#d8b66a]" />
           </div>

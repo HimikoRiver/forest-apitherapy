@@ -6,7 +6,6 @@ import AboutDesktop from "@/components/home/about/AboutDesktop";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
 import HeroInsects from "@/components/home/hero/HeroInsects";
 import HeroIntroPanel from "@/components/home/hero/HeroIntroPanel";
-import HeroMenu from "@/components/home/hero-menu/HeroMenu";
 import ParallaxScene from "@/components/home/hero/ParallaxScene";
 
 const PARALLAX_SCROLL_DISTANCE = 1050;
@@ -125,8 +124,6 @@ export default function HomeDesktop() {
             <ParallaxScene progress={progress} />
 
             <HeroInsects />
-
-            <HeroMenu />
 
             <div
               className="absolute inset-0 z-30 pointer-events-none"

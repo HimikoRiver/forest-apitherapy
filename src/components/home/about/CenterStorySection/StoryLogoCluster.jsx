@@ -109,13 +109,13 @@ export default function StoryLogoCluster({ isLogoVisible }) {
           }`}
         >
           <Image
-            src="/images/logo.webp"
+            src="/images/logo1.webp"
             alt="APIDARB"
             fill
             priority
             draggable={false}
             sizes="(max-width: 768px) 170px, 260px"
-            className="select-none object-contain drop-shadow-[0_24px_36px_rgba(0,0,0,0.72)]"
+            className="select-none object-contain drop-shadow-[0_24px_36px_rgba(0,0,0,0.72)] scale-y-[0.94]"
           />
         </div>
       </div>

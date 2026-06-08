@@ -33,7 +33,7 @@ function getOrderedNavItems(pathname) {
 
 function FooterMobilePanel({ title, icon, children }) {
   return (
-    <section className="relative overflow-hidden rounded-[26px] border border-[#d8b66a]/24 bg-black/28 px-4 py-5 shadow-[0_18px_46px_rgba(0,0,0,0.42)] backdrop-blur-[2px]">
+    <section className="relative overflow-hidden rounded-[26px] border border-[#d8b66a]/22 bg-[#03110d]/42 px-4 py-5 shadow-[0_18px_46px_rgba(0,0,0,0.44)] backdrop-blur-[1.5px]">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(216,182,106,0.12),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0))]" />
       <div className="pointer-events-none absolute inset-[1px] rounded-[25px] border border-black/56" />
 
@@ -77,7 +77,7 @@ export default function FooterMobile() {
 
   return (
     <footer
-      className="relative overflow-hidden bg-black text-[#f3efe5]"
+      className="relative overflow-hidden bg-[#020908] text-[#f3efe5]"
       style={{
         fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
       }}
@@ -88,15 +88,8 @@ export default function FooterMobile() {
         className="pointer-events-none absolute -top-64 left-0 h-px w-px"
       />
 
-      <Image
-        src="/images/footer/footerFon222.webp"
-        alt=""
-        fill
-        sizes="100vw"
-        className="pointer-events-none select-none object-cover object-center opacity-[0.42]"
-      />
-
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(216,182,106,0.14),transparent_35%),linear-gradient(180deg,rgba(0,0,0,0.58)_0%,rgba(0,0,0,0.72)_48%,rgba(0,0,0,0.94)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(13,82,43,0.5),rgba(4,28,19,0.72)_42%,rgba(1,7,6,0.98)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.18)_28%,rgba(0,0,0,0.94)_100%)]" />
 
       <div className="relative z-10 mx-auto max-w-[440px] px-4 pb-8 pt-10">
         <div className="mb-7 flex flex-col items-center text-center">
@@ -130,8 +123,6 @@ export default function FooterMobile() {
                         : "border-[#d8b66a]/12 bg-black/12 text-[#f3efe5]/88 hover:border-[#d8b66a]/28 hover:text-[#f6d98d]"
                     }`}
                   >
-                    <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(216,182,106,0.16),transparent_68%)] opacity-0 transition duration-300 group-hover:opacity-100" />
-
                     <span className="relative z-10 block size-9 transition duration-300 group-hover:-translate-y-0.5 group-hover:brightness-125">
                       <Image
                         src={item.icon}

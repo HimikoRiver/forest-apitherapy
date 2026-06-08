@@ -73,7 +73,7 @@ export default function LoginPage() {
         className="group absolute left-4 top-4 z-20 inline-flex items-center justify-center transition duration-300 hover:-translate-y-0.5 sm:left-6 sm:top-6 lg:left-8 lg:top-8"
       >
         <Image
-          src="/images/logo.webp"
+          src="/images/logo1.webp"
           alt="APIDARB"
           width={112}
           height={112}

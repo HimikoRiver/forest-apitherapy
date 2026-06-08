@@ -4,7 +4,7 @@ export default function ApidarbLogo() {
   return (
     <div className="inline-flex items-center gap-3">
       <Image
-        src="/images/logo.webp"
+        src="/images/logo1.webp"
         alt="APIDARB"
         width={64}
         height={64}

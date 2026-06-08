@@ -28,14 +28,14 @@ const baseMenuItems = [
   {
     id: "about",
     label: "О специалисте",
-    href: "/#about",
+    href: "/about",
     top: "45.3%",
     isArc: true,
   },
-  { id: "services", label: "Услуги", href: "/#services", top: "50.7%" },
+  { id: "services", label: "Услуги", href: "/services", top: "50.7%" },
   { id: "products", label: "Пчелопродукты", href: "/products", top: "57.9%" },
-  { id: "education", label: "Обучение", href: "/#education", top: "65%" },
-  { id: "contacts", label: "Контакты", href: "/#contacts", top: "70.8%" },
+  { id: "training", label: "Обучение", href: "/training", top: "65%" },
+  { id: "contacts", label: "Контакты", href: "/contacts", top: "70.8%" },
 ];
 
 export default function HeroMenu() {
@@ -374,8 +374,8 @@ export default function HeroMenu() {
 
         .hero-hive-falling-spark {
           position: absolute;
-          left: 23.6%;
-          top: 76.1%;
+          left: 24.9%;
+          top: 79.1%;
           z-index: 4;
           width: 4px;
           height: 4px;

@@ -10,6 +10,28 @@ import {
 
 import { clamp } from "./heroMenu.utils";
 
+function getVisibleHideAnchor() {
+  const hideAnchors = Array.from(document.querySelectorAll(FOOTER_HIDE_SELECTOR));
+
+  return (
+    hideAnchors.find((hideAnchor) => {
+      const rects = hideAnchor.getClientRects();
+
+      if (rects.length === 0) {
+        return false;
+      }
+
+      const computedStyle = window.getComputedStyle(hideAnchor);
+
+      return (
+        computedStyle.display !== "none" &&
+        computedStyle.visibility !== "hidden" &&
+        computedStyle.opacity !== "0"
+      );
+    }) || null
+  );
+}
+
 export function useFooterFade(isClientReady) {
   const [footerFadeProgress, setFooterFadeProgress] = useState(0);
 
@@ -24,7 +46,7 @@ export function useFooterFade(isClientReady) {
     const updateFooterFade = () => {
       frameId = null;
 
-      const hideAnchor = document.querySelector(FOOTER_HIDE_SELECTOR);
+      const hideAnchor = getVisibleHideAnchor();
 
       if (!hideAnchor) {
         setFooterFadeProgress(0);

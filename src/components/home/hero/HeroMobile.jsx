@@ -3,7 +3,7 @@ import LuxuryButton from "@/components/home/shared/LuxuryButton";
 import MobileHeroMenu from "./MobileHeroMenu";
 
 const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
-const LOGO_IMAGE = "/images/logo.webp";
+const LOGO_IMAGE = "/images/logo1.webp";
 
 export default function HeroMobile() {
   return (

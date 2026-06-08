@@ -32,7 +32,7 @@ function getOrderedNavItems(pathname) {
 function FooterCardShell({ children, className = "" }) {
   return (
     <section
-      className={`relative z-10 flex h-full min-h-[clamp(24.55rem,27.12vw,27.45rem)] w-full max-w-[clamp(324px,22.3vw,425px)] flex-col overflow-hidden rounded-[clamp(1rem,1.44vw,1.68rem)] border border-[#d8b66a]/26 bg-transparent px-[clamp(1rem,1.4vw,1.64rem)] py-[clamp(1rem,1.4vw,1.64rem)] shadow-[0_0_30px_rgba(0,0,0,0.42)] backdrop-blur-[1px] ${className}`}
+      className={`relative z-10 flex h-[clamp(29rem,32vw,31.8rem)] w-full max-w-[clamp(324px,22.3vw,425px)] flex-col overflow-hidden rounded-[clamp(1rem,1.44vw,1.68rem)] border border-[#d8b66a]/26 bg-transparent px-[clamp(1rem,1.4vw,1.64rem)] py-[clamp(1rem,1.4vw,1.64rem)] shadow-[0_0_30px_rgba(0,0,0,0.42)] backdrop-blur-[1px] ${className}`}
     >
       <div className="pointer-events-none absolute inset-0 rounded-[inherit] bg-[radial-gradient(circle_at_50%_0%,rgba(216,182,106,0.07),transparent_35%),linear-gradient(180deg,rgba(0,0,0,0.17),rgba(0,0,0,0.06))]" />
       <div className="pointer-events-none absolute inset-[1px] rounded-[inherit] border border-[#050f0b]/68" />
@@ -91,19 +91,19 @@ function MenuCard() {
             <Link
               key={item.key}
               href={item.href}
-              className={`footer-card-row group relative grid min-h-[clamp(2.5rem,3.18vw,3.62rem)] grid-cols-[clamp(2.16rem,2.75vw,3.1rem)_1fr_clamp(0.82rem,0.96vw,1.1rem)] items-center gap-[clamp(0.68rem,0.9vw,1rem)] border-b border-[#d8b66a]/14 transition duration-300 ${
+              className={`footer-card-row group relative grid min-h-[clamp(2.5rem,3.18vw,3.62rem)] grid-cols-[clamp(2.7rem,3.35vw,3.75rem)_1fr_clamp(0.82rem,0.96vw,1.1rem)] items-center gap-[clamp(0.68rem,0.9vw,1rem)] border-b border-[#d8b66a]/14 transition duration-300 ${
                 isActive
                   ? "is-active text-[#ffe6a2]"
                   : "text-[#f3efe5]/90 hover:text-[#f6d98d]"
               }`}
             >
-              <span className="relative block size-[clamp(2rem,2.6vw,2.9rem)] transition duration-300 group-hover:-translate-y-0.5 group-hover:brightness-125">
+              <span className="relative block size-[clamp(2.55rem,3.2vw,3.55rem)] transition duration-300 group-hover:-translate-y-0.5 group-hover:brightness-125">
                 <Image
                   src={item.icon}
                   alt=""
                   fill
-                  sizes="46px"
-                  className="object-contain drop-shadow-[0_0_14px_rgba(216,182,106,0.18)]"
+                  sizes="58px"
+                  className="object-contain drop-shadow-[0_0_16px_rgba(216,182,106,0.22)]"
                 />
               </span>
 
@@ -166,12 +166,19 @@ function ContactCard() {
 export default function FooterCards() {
   return (
     <>
-      <div className="footer-cards-layout relative z-10 flex w-full items-stretch justify-center gap-[16px]">
-        <MenuCard />
-        <ContactCard />
+      <div className="footer-cards-scale relative z-10">
+        <div className="footer-cards-layout relative z-10 flex w-full items-stretch justify-center gap-[16px]">
+          <MenuCard />
+          <ContactCard />
+        </div>
       </div>
 
       <style jsx global>{`
+        .footer-cards-scale {
+          transform: scale(0.72);
+          transform-origin: top center;
+        }
+
         .footer-card-row::before {
           content: "";
           position: absolute;

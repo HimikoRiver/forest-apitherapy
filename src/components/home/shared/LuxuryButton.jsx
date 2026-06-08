@@ -1,13 +1,19 @@
-export default function Button({
+import Link from "next/link";
+
+export default function LuxuryButton({
   children,
   className = "",
   icon,
   type = "button",
+  href,
   ...props
 }) {
+  const isIconOnly = icon && !children;
+  const Component = href ? Link : "button";
+
   return (
-    <button
-      type={type}
+    <Component
+      {...(href ? { href } : { type })}
       className={`luxury-button relative isolate translate-y-[15px] ${className}`}
       {...props}
     >
@@ -18,10 +24,27 @@ export default function Button({
       <span className="luxury-button__shine" />
       <span className="luxury-button__border" />
 
-      <span className="luxury-button__content">
-        {icon ? <span className="luxury-button__icon">{icon}</span> : null}
-        <span className="luxury-button__label">{children}</span>
+      <span
+        className={`luxury-button__content ${
+          isIconOnly
+            ? "!absolute !inset-0 !flex !items-center !justify-center"
+            : ""
+        }`}
+      >
+        {icon ? (
+          <span
+            className={`luxury-button__icon ${
+              isIconOnly ? "!m-0 !flex !items-center !justify-center" : ""
+            }`}
+          >
+            {icon}
+          </span>
+        ) : null}
+
+        {children ? (
+          <span className="luxury-button__label">{children}</span>
+        ) : null}
       </span>
-    </button>
+    </Component>
   );
 }

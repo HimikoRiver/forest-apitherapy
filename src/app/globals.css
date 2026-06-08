@@ -19,8 +19,9 @@ body {
   min-height: 100vh;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-comfortaa), Arial, Helvetica, sans-serif;
 }
+
 
 button {
   font: inherit;
@@ -465,6 +466,13 @@ button {
   fill: #12362f !important;
 }
 
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
 @keyframes textGoldFlow {
   0% {
     background-position: 0% 50%;
@@ -504,3 +512,4 @@ button {
     filter: drop-shadow(0 0 11px rgba(255, 228, 156, 0.34));
   }
 }
+

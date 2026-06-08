@@ -25,7 +25,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={`${comfortaa.variable} h-full antialiased`}>
-      <body className="min-h-full bg-[#030b0c] text-[#f3efe5]">
+      <body className="font-comfortaa min-h-full bg-[#030b0c] text-[#f3efe5]">
         {children}
         <HeroMenu />
       </body>

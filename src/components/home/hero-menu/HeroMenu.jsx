@@ -178,12 +178,8 @@ export default function HeroMenu() {
             "opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
-        <button
-          type="button"
-          aria-label="Открыть меню"
-          onClick={handleOpen}
-          disabled={menuHiddenByFooter}
-          className={`group pointer-events-auto fixed right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
+        <div
+          className={`fixed right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
             isOpen ? "pointer-events-none opacity-0" : "opacity-100"
           } ${
             menuHiddenByFooter
@@ -191,21 +187,29 @@ export default function HeroMenu() {
               : ""
           }`}
         >
-          <span className="hero-hive-preview relative block h-full w-full">
+          <button
+            type="button"
+            aria-label="Открыть меню"
+            onClick={handleOpen}
+            disabled={menuHiddenByFooter}
+            className="hero-hive-hitbox absolute right-[10px] top-[142px] z-[5] h-[156px] w-[168px] border-0 bg-transparent p-0"
+          />
+
+          <span className="hero-hive-preview pointer-events-none absolute inset-0 block h-full w-full">
             <Image
               src={HIVE_CLOSED_SRC}
               alt=""
               fill
               priority
               sizes="250px"
-              className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300 group-hover:brightness-[1.07] group-hover:drop-shadow-[0_24px_44px_rgba(0,0,0,0.42)]"
+              className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300"
             />
 
             <span className="absolute left-[50.9%] top-[60%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
               <span className="hero-hive-menu-text">menu</span>
             </span>
           </span>
-        </button>
+        </div>
 
         <div
           className={`pointer-events-auto fixed right-[-8px] top-[-16px] z-[1003] h-[760px] w-[490px] origin-top-right transition duration-500 ${
@@ -364,12 +368,23 @@ export default function HeroMenu() {
       </div>
 
       <style jsx>{`
+        .hero-hive-hitbox {
+          cursor: pointer;
+          pointer-events: auto;
+          clip-path: ellipse(48% 47% at 54% 54%);
+        }
+
         .hero-hive-preview {
           transform-origin: 62% 10%;
         }
 
-        .group:hover .hero-hive-preview {
+        .hero-hive-hitbox:hover + .hero-hive-preview {
           animation: heroHiveSingleShake 620ms ease-in-out 1;
+        }
+
+        .hero-hive-hitbox:hover + .hero-hive-preview :global(img) {
+          filter: brightness(1.07)
+            drop-shadow(0 24px 44px rgba(0, 0, 0, 0.42));
         }
 
         .hero-hive-falling-spark {

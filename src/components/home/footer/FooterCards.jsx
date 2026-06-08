@@ -8,15 +8,37 @@ import { homeContent } from "@/data/homeContent";
 const menuItems = homeContent.menuItems;
 const contactItems = homeContent.contactItems;
 
+function getSafeHref(item) {
+  if (item.key === "about" || item.key === "specialist" || item.href === "/specialist") {
+    return "/about";
+  }
+
+  if (!item.href) {
+    return "/";
+  }
+
+  if (item.href.startsWith("/")) {
+    return item.href;
+  }
+
+  if (item.href.startsWith("#")) {
+    return `/${item.href}`;
+  }
+
+  return `/${item.href}`;
+}
+
 function getActiveNavItem(pathname) {
   if (pathname === "/") {
     return menuItems[0];
   }
 
   return (
-    menuItems.find(
-      (item) => item.href !== "/" && pathname.startsWith(item.href)
-    ) || menuItems[0]
+    menuItems.find((item) => {
+      const href = getSafeHref(item);
+
+      return href !== "/" && pathname.startsWith(href);
+    }) || menuItems[0]
   );
 }
 
@@ -86,11 +108,12 @@ function MenuCard() {
       >
         {orderedNavItems.map((item) => {
           const isActive = item.key === activeItem.key;
+          const href = getSafeHref(item);
 
           return (
             <Link
               key={item.key}
-              href={item.href}
+              href={href}
               className={`footer-card-row group relative grid min-h-[clamp(2.5rem,3.18vw,3.62rem)] grid-cols-[clamp(2.7rem,3.35vw,3.75rem)_1fr_clamp(0.82rem,0.96vw,1.1rem)] items-center gap-[clamp(0.68rem,0.9vw,1rem)] border-b border-[#d8b66a]/14 transition duration-300 ${
                 isActive
                   ? "is-active text-[#ffe6a2]"

@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  width="1024"
+  height="1024"
+  viewBox="0 0 1024 1024"
+  fill="none">
+
+  <defs>
+    <linearGradient id="goldFill" x1="230" y1="150" x2="800" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFF0A8"/>
+      <stop offset="0.34" stop-color="#F3C969"/>
+      <stop offset="0.7" stop-color="#DCA545"/>
+      <stop offset="1" stop-color="#B87422"/>
+    </linearGradient>
+
+    <linearGradient id="goldStroke" x1="250" y1="150" x2="780" y2="850" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFE9A0"/>
+      <stop offset="0.5" stop-color="#E0AE50"/>
+      <stop offset="1" stop-color="#A9681D"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <!-- ЛЕВОЕ ЛЁГКОЕ -->
+    <path
+      d="M448 344
+         C412 305 366 293 326 309
+         C255 338 199 426 179 535
+         C162 626 168 738 204 807
+         C219 836 242 849 264 833
+         C315 795 355 756 406 749
+         C446 744 472 732 480 702
+         C490 665 478 624 470 580
+         C463 541 467 493 476 451
+         C483 418 479 373 448 344Z"
+      fill="url(#goldFill)"
+      stroke="url(#goldStroke)"
+      stroke-width="10"
+      stroke-linejoin="round"
+    />
+
+    <!-- ПРАВОЕ ЛЁГКОЕ -->
+    <path
+      d="M576 344
+         C612 305 658 293 698 309
+         C769 338 825 426 845 535
+         C862 626 856 738 820 807
+         C805 836 782 849 760 833
+         C709 795 669 756 618 749
+         C578 744 552 732 544 702
+         C534 665 546 624 554 580
+         C561 541 557 493 548 451
+         C541 418 545 373 576 344Z"
+      fill="url(#goldFill)"
+      stroke="url(#goldStroke)"
+      stroke-width="10"
+      stroke-linejoin="round"
+    />
+
+    <!-- ОТДЕЛЬНЫЕ КОЛЬЦА ТРАХЕИ -->
+    <rect x="476" y="112" width="72" height="72" rx="30" fill="url(#goldFill)" stroke="url(#goldStroke)" stroke-width="8"/>
+    <rect x="476" y="196" width="72" height="56" rx="20" fill="url(#goldFill)" stroke="url(#goldStroke)" stroke-width="8"/>
+    <rect x="476" y="264" width="72" height="56" rx="20" fill="url(#goldFill)" stroke="url(#goldStroke)" stroke-width="8"/>
+    <rect x="476" y="332" width="72" height="56" rx="20" fill="url(#goldFill)" stroke="url(#goldStroke)" stroke-width="8"/>
+
+    <!-- НИЖНЯЯ ЧАСТЬ ТРАХЕИ И БИФУРКАЦИЯ -->
+    <path
+      d="M512 388
+         V430
+         M512 430
+         L446 484
+         M512 430
+         L578 484"
+      stroke="url(#goldFill)"
+      stroke-width="34"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- ЛЕВЫЙ БРОНХИАЛЬНЫЙ СТВОЛ -->
+    <path
+      d="M446 484
+         C414 510 387 532 356 548"
+      stroke="#9A5B17"
+      stroke-width="24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- ЛЕВЫЕ ВЕТВИ -->
+    <path d="M390 528 C360 505 332 486 303 472" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M380 536 C346 543 317 555 288 576" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M364 548 C337 575 318 606 305 642" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M341 570 C321 605 309 642 304 682" stroke="#9A5B17" stroke-width="14" stroke-linecap="round"/>
+    <path d="M324 602 C299 624 281 650 269 679" stroke="#9A5B17" stroke-width="12" stroke-linecap="round"/>
+
+    <!-- ПРАВЫЙ БРОНХИАЛЬНЫЙ СТВОЛ -->
+    <path
+      d="M578 484
+         C610 510 637 532 668 548"
+      stroke="#9A5B17"
+      stroke-width="24"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- ПРАВЫЕ ВЕТВИ -->
+    <path d="M634 528 C664 505 692 486 721 472" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M644 536 C678 543 707 555 736 576" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M660 548 C687 575 706 606 719 642" stroke="#9A5B17" stroke-width="16" stroke-linecap="round"/>
+    <path d="M683 570 C703 605 715 642 720 682" stroke="#9A5B17" stroke-width="14" stroke-linecap="round"/>
+    <path d="M700 602 C725 624 743 650 755 679" stroke="#9A5B17" stroke-width="12" stroke-linecap="round"/>
+  </g>
+</svg>

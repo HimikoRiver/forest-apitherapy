@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  width="1024"
+  height="1024"
+  viewBox="0 0 1024 1024"
+  fill="none">
+  <defs>
+    <linearGradient id="gold" x1="220" y1="170" x2="790" y2="860" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B9781F"/>
+      <stop offset="0.46" stop-color="#F2C966"/>
+      <stop offset="0.72" stop-color="#FFD985"/>
+      <stop offset="1" stop-color="#D8A647"/>
+    </linearGradient>
+
+    <filter id="softGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feColorMatrix
+        in="blur"
+        type="matrix"
+        values="
+          1 0 0 0 0.88
+          0 1 0 0 0.58
+          0 0 1 0 0.10
+          0 0 0 0.55 0"
+        result="goldBlur"
+      />
+      <feMerge>
+        <feMergeNode in="goldBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <path
+      d="
+        M512 829
+        C494 815 470 796 442 773
+        C387 728 327 677 280 624
+        C225 562 192 500 192 426
+        C192 317 276 234 382 234
+        C435 234 479 255 512 296
+        C545 255 589 234 642 234
+        C748 234 832 317 832 426
+        C832 500 799 562 744 624
+        C697 677 637 728 582 773
+        C554 796 530 815 512 829
+        Z
+      "
+      fill="url(#gold)"
+    />
+  </g>
+</svg>

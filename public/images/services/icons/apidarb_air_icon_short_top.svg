@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+  width="1024"
+  height="1024"
+  viewBox="0 0 512 512"
+  fill="none">
+  <defs>
+    <linearGradient id="gold" x1="72" y1="256" x2="430" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B9781F"/>
+      <stop offset="0.5" stop-color="#F2C966"/>
+      <stop offset="1" stop-color="#D8A647"/>
+    </linearGradient>
+  </defs>
+
+  <g
+    stroke="url(#gold)"
+    stroke-width="24"
+    stroke-linecap="round"
+    stroke-linejoin="round">
+
+    <!-- Короткая верхняя линия -->
+    <path d="
+      M92 166
+      H238
+      C270 166 292 147 292 120
+      C292 96 275 80 253 80
+      C230 80 214 96 214 117
+    "/>
+
+    <!-- Средняя линия -->
+    <path d="
+      M92 256
+      H332
+      C370 256 396 233 396 198
+      C396 163 372 140 340 140
+      C309 140 286 161 286 190
+    "/>
+
+    <!-- Нижняя линия -->
+    <path d="
+      M92 346
+      H298
+      C335 346 360 370 360 404
+      C360 437 337 460 306 460
+      C275 460 252 438 252 409
+    "/>
+  </g>
+</svg>

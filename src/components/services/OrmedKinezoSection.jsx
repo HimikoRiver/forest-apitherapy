@@ -36,7 +36,7 @@ function PlayIcon() {
   );
 }
 
-function OrmedVideo() {
+function KinezoVideo() {
   const videoRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
@@ -88,7 +88,7 @@ function OrmedVideo() {
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
-        poster="/videos/prev.webp"
+        poster="/videos/kinez.webp"
         preload="none"
         playsInline
         controls={hasStarted}
@@ -96,7 +96,7 @@ function OrmedVideo() {
         disablePictureInPicture
         onContextMenu={(event) => event.preventDefault()}
       >
-        <source src="/videos/services-vid1.mp4" type="video/mp4" />
+        <source src="/videos/services-vid2.mp4" type="video/mp4" />
 
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
@@ -138,7 +138,7 @@ function OrmedVideo() {
   );
 }
 
-export default function OrmedEquipmentSection() {
+export default function OrmedKinezoSection() {
   return (
     <section className="relative isolate overflow-hidden">
       <Image
@@ -156,7 +156,7 @@ export default function OrmedEquipmentSection() {
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[220px] bg-[linear-gradient(180deg,rgba(0,0,0,0.98)_0%,rgba(0,0,0,0.86)_18%,rgba(0,0,0,0.5)_48%,rgba(0,0,0,0.18)_76%,transparent_100%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[130px] bg-[linear-gradient(180deg,rgb(0,0,0)_0%,rgba(0,0,0,0.62)_32%,rgba(0,0,0,0.18)_74%,transparent_100%)] sm:h-[150px] lg:h-[170px]"
       />
 
       <div
@@ -179,7 +179,20 @@ export default function OrmedEquipmentSection() {
             />
           </div>
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start xl:gap-12">
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center xl:gap-12">
+            <div className="relative flex min-h-[260px] items-center justify-center sm:min-h-[340px] lg:min-h-[430px] lg:justify-start">
+              <div className="relative w-full max-w-[680px] lg:-translate-x-3">
+                <Image
+                  src="/images/services/kinez2.webp"
+                  alt="ОРМЕД-Кинезо"
+                  width={1448}
+                  height={1086}
+                  sizes="(max-width: 1023px) 100vw, 42vw"
+                  className="pointer-events-none h-auto w-full select-none object-contain mix-blend-screen drop-shadow-[0_20px_42px_rgba(0,0,0,0.48)]"
+                />
+              </div>
+            </div>
+
             <div className="min-w-0">
               <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
                 Оборудование
@@ -191,69 +204,43 @@ export default function OrmedEquipmentSection() {
                   fontFamily: "Georgia, 'Times New Roman', serif",
                 }}
               >
-                ORMED-Тракцион
+                ОРМЕД-Кинезо
               </h2>
 
               <div className="mt-5 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
 
               <div className="mt-6 max-w-[860px] space-y-5 text-[12px] font-medium leading-7 text-[#e8ddc8]/90 sm:text-[13px] lg:text-[14px]">
                 <p>
-                  В центре используется современная система ORMED для
-                  контролируемой работы с шейным и поясничным отделами
-                  позвоночника. Параметры воздействия регулируются специалистом
-                  с учётом состояния человека и задач восстановительной
-                  программы.
+                  «ОРМЕД-Кинезо» — установка для активно-пассивной механотерапии
+                  позвоночника. Аппарат используется для выполнения лечебных
+                  движений, направленных на восстановление функций
+                  опорно-двигательной системы и улучшение обменных процессов в
+                  тканях позвоночника.
                 </p>
 
                 <p>
-                  Дозированное вытяжение способствует снижению нагрузки на
-                  позвоночник, расслаблению перенапряжённых мышц и восстановлению
-                  естественной подвижности. Комфортная кушетка и мягкое тепловое
-                  воздействие помогают подготовить тело к процедуре.
+                  Воздействие охватывает межпозвонковые диски, суставы,
+                  связочный аппарат, сухожилия и мышцы.
                 </p>
 
                 <p>
-                  ORMED может применяться как самостоятельная методика или
-                  становиться частью комплексной программы вместе с другими
-                  процедурами центра.
+                  Во время процедуры оборудование плавно и дозированно изменяет
+                  углы сгибания и разгибания в шейном, грудном и поясничном
+                  отделах позвоночника. Движения сочетаются с мягким растяжением
+                  позвоночника и суставов.
                 </p>
-              </div>
-            </div>
-
-            <div className="relative flex min-h-[240px] items-start justify-center lg:min-h-[280px] lg:justify-end">
-              <div className="relative w-full max-w-[540px] translate-y-6 sm:translate-y-8 lg:max-w-[600px] lg:translate-y-12">
-                <Image
-                  src="/images/services/ormed.webp"
-                  alt="ORMED-Тракцион"
-                  width={1448}
-                  height={1086}
-                  sizes="(max-width: 1023px) 100vw, 40vw"
-                  className="h-auto w-full object-contain drop-shadow-[0_18px_38px_rgba(0,0,0,0.5)]"
-                />
               </div>
             </div>
           </div>
 
           <div className="relative z-10 my-8 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-10 lg:my-12" />
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-12">
-            <div className="min-w-0">
-              <div className="mb-4 px-5 sm:mb-5 sm:px-6">
-                <HoneycombRows mode="standalone" direction="top" />
-              </div>
-
-              <OrmedVideo />
-
-              <div className="mt-4 px-5 sm:mt-5 sm:px-6">
-                <HoneycombRows mode="standalone" direction="bottom" />
-              </div>
-            </div>
-
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center xl:gap-12">
             <div className="relative flex flex-col justify-center">
               <div className="mb-7">
                 <div className="flex items-center gap-4">
                   <h3 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
-                    Описание процедуры
+                    Особенности процедуры
                   </h3>
 
                   <div className="h-px flex-1 bg-gradient-to-r from-[#d7aa51]/65 to-transparent" />
@@ -261,17 +248,16 @@ export default function OrmedEquipmentSection() {
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
-                    Аппарат позволяет проводить дозированное вытяжение шейного и
-                    поясничного отделов позвоночника. Интенсивность и
-                    продолжительность воздействия подбираются специалистом
-                    индивидуально.
+                    Занятия проводятся в положении лёжа на спине, животе или
+                    боку. Движения выполняются аппаратом плавно и дозированно,
+                    поэтому активное напряжение мышц туловища практически не
+                    требуется.
                   </p>
 
                   <p>
-                    Инфракрасный подогрев поверхности кушетки способствует
-                    расслаблению мышц и подготовке тканей к вытяжению. Тепловое
-                    воздействие поддерживает местное кровообращение, помогает
-                    уменьшить напряжение и делает процедуру комфортнее.
+                    Такое воздействие позволяет последовательно работать с
+                    шейным, грудным и поясничным отделами, сочетая сгибание,
+                    разгибание и мягкое растяжение позвоночника и суставов.
                   </p>
                 </div>
               </div>
@@ -279,7 +265,7 @@ export default function OrmedEquipmentSection() {
               <div>
                 <div className="flex items-center gap-4">
                   <h3 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
-                    Показания и эффект
+                    Применение
                   </h3>
 
                   <div className="h-px flex-1 bg-gradient-to-r from-[#d7aa51]/65 to-transparent" />
@@ -287,19 +273,29 @@ export default function OrmedEquipmentSection() {
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
-                    Тракционная методика может использоваться в комплексных
-                    программах при протрузиях, межпозвонковых грыжах,
-                    дегенеративных изменениях позвоночника, нарушениях осанки,
-                    сколиозе и мышечном перенапряжении.
+                    Продуманная конструкция и износостойкие материалы позволяют
+                    использовать аппарат в регулярных программах лечения,
+                    реабилитации и восстановления подвижности позвоночника.
                   </p>
 
                   <p>
-                    Процедуры направлены на уменьшение избыточной нагрузки,
-                    поддержку подвижности позвоночника и профилактику
-                    дальнейшего развития нарушений. Возможность проведения курса
-                    определяется после консультации специалиста.
+                    «ОРМЕД-Кинезо» разработан НВП «Орбита» и предназначен для
+                    проведения контролируемой аппаратной кинезиотерапии под
+                    наблюдением специалиста.
                   </p>
                 </div>
+              </div>
+            </div>
+
+            <div className="min-w-0">
+              <div className="mb-4 px-5 sm:mb-5 sm:px-6">
+                <HoneycombRows mode="standalone" direction="top" />
+              </div>
+
+              <KinezoVideo />
+
+              <div className="mt-4 px-5 sm:mt-5 sm:px-6">
+                <HoneycombRows mode="standalone" direction="bottom" />
               </div>
             </div>
           </div>

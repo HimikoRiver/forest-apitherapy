@@ -1,47 +1,18 @@
 import Image from "next/image";
+import HoneycombRows from "./HoneycombRows";
 
 const ringText =
   "APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ • APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ • APIDARB • ЛЕЧЕНИЕ ПЧЁЛАМИ И ПЧЕЛОПРОДУКТАМИ •";
-
-const honeycombCells = Array.from({ length: 9 });
-
-function HoneycombRows() {
-  return (
-    <>
-      <div
-        className="story-honeycomb-row story-honeycomb-row-top"
-        aria-hidden="true"
-      >
-        {honeycombCells.map((_, index) => (
-          <span key={`top-${index}`} className="story-honeycomb-hit">
-            <span className="story-honeycomb-cell" />
-          </span>
-        ))}
-      </div>
-
-      <div
-        className="story-honeycomb-row story-honeycomb-row-bottom"
-        aria-hidden="true"
-      >
-        {honeycombCells.map((_, index) => (
-          <span key={`bottom-${index}`} className="story-honeycomb-hit">
-            <span className="story-honeycomb-cell" />
-          </span>
-        ))}
-      </div>
-    </>
-  );
-}
 
 export default function StoryLogoCluster({ isLogoVisible }) {
   return (
     <div className="story-logo-row relative flex min-h-[260px] items-center justify-center pb-4 pt-0 sm:min-h-[300px] lg:min-h-[330px]">
       <div className="story-gold-line story-gold-line-left">
-        <HoneycombRows />
+        <HoneycombRows mode="hero" />
       </div>
 
       <div className="story-gold-line story-gold-line-right">
-        <HoneycombRows />
+        <HoneycombRows mode="hero" />
       </div>
 
       <div className="story-cluster relative flex items-center justify-center">

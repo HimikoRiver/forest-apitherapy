@@ -4,7 +4,7 @@ import DecorativeDivider from "./shared/DecorativeDivider";
 
 export default function ApidomikHero() {
   return (
-    <section className="relative h-[100svh] min-h-[680px] overflow-hidden">
+    <section className="relative h-[100svh] min-h-[740px] overflow-hidden">
       <Image
         src="/images/services/fon1.webp"
         alt=""
@@ -16,7 +16,7 @@ export default function ApidomikHero() {
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(1,11,8,0.99)_0%,rgba(1,11,8,0.97)_22%,rgba(1,11,8,0.86)_39%,rgba(1,11,8,0.45)_59%,rgba(1,11,8,0.08)_100%)]" />
 
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.34)_0%,transparent_28%,transparent_58%,rgba(1,10,8,0.55)_78%,rgb(1,10,8)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.34)_0%,transparent_28%,transparent_58%,rgba(0,0,0,0.72)_78%,rgb(0,0,0)_100%)]" />
 
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1800px] flex-col px-5 py-[clamp(18px,2.6vh,30px)] sm:px-8 lg:px-14 xl:px-20">
         <header className="shrink-0">
@@ -36,10 +36,10 @@ export default function ApidomikHero() {
           </div>
         </header>
 
-        <div className="flex min-h-0 flex-1 items-center py-[clamp(24px,3.4vh,44px)]">
-          <div className="flex w-full max-w-[700px] flex-col gap-[clamp(22px,3vh,36px)]">
+        <div className="flex min-h-0 flex-1 items-center py-[clamp(28px,4vh,52px)]">
+          <div className="flex w-full max-w-[700px] flex-col gap-[clamp(28px,3.8vh,44px)]">
             <div>
-              <p className="mb-[clamp(12px,1.8vh,20px)] text-[clamp(10px,1.25vh,12px)] font-bold uppercase tracking-[0.42em] text-[#d8ad56]">
+              <p className="mb-[clamp(16px,2.2vh,24px)] text-[clamp(10px,1.25vh,12px)] font-bold uppercase tracking-[0.42em] text-[#d8ad56]">
                 Услуги
               </p>
 
@@ -53,7 +53,7 @@ export default function ApidomikHero() {
               </h1>
 
               <p
-                className="mt-[clamp(18px,2.5vh,30px)] max-w-[650px] text-[clamp(1.8rem,4.7vh,3.5rem)] leading-[1.1] text-[#e0b45b]"
+                className="mt-[clamp(24px,3.2vh,38px)] max-w-[650px] text-[clamp(1.8rem,4.7vh,3.5rem)] leading-[1.1] text-[#e0b45b]"
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
                 }}
@@ -66,11 +66,11 @@ export default function ApidomikHero() {
 
             <DecorativeDivider />
 
-            <div className="max-w-[640px] space-y-[clamp(20px,2.6vh,30px)] text-[clamp(13px,1.65vh,16px)] font-medium leading-[1.8] text-[#eee3cd]">
+            <div className="max-w-[640px] space-y-[clamp(26px,3.4vh,38px)] text-[clamp(13px,1.65vh,16px)] font-medium leading-[1.8] text-[#eee3cd]">
               <p>
-                Сон на пчелиных ульях, или по-другому — SPA-процедура на
-                пчёлах — научно доказанный и очень действенный способ
-                укрепления здоровья.
+                Сон на пчелиных ульях, или по-другому — SPA-процедура на пчёлах
+                — научно доказанный и очень действенный способ укрепления
+                здоровья.
               </p>
 
               <p>
@@ -80,7 +80,7 @@ export default function ApidomikHero() {
               </p>
             </div>
 
-            <div className="relative max-w-[640px] overflow-hidden rounded-[16px] border border-[#d2a54b]/75 px-[clamp(20px,2.2vw,28px)] py-[clamp(20px,2.6vh,28px)] shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <div className="relative max-w-[640px] overflow-hidden rounded-[16px] border border-[#d2a54b]/75 px-[clamp(20px,2.2vw,28px)] py-[clamp(22px,3vh,32px)] shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
               <Image
                 src="/images/services/fon22.webp"
                 alt=""

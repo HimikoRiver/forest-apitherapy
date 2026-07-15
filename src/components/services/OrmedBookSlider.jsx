@@ -1412,91 +1412,121 @@ export default function OrmedBookSlider() {
     : null;
 
   return (
-    <div className="relative mt-8 lg:mt-10">
-      <div className="relative mx-auto w-full max-w-[1650px] px-12 sm:px-16 lg:px-14">
-        <ClipDefs
-          pageLeftId={pageLeftId}
-          pageRightId={pageRightId}
-        />
-
-        <div className="absolute left-0 top-1/2 z-50 -translate-y-1/2">
-          <ChevronButton
-            direction="left"
-            onClick={() => startTurn("prev")}
-            disabled={Boolean(turnState)}
-          />
-        </div>
-
-        <div className="absolute right-0 top-1/2 z-50 -translate-y-1/2">
-          <ChevronButton
-            direction="right"
-            onClick={() => startTurn("next")}
-            disabled={Boolean(turnState)}
-          />
-        </div>
-
-        <div
-          className="relative mx-auto aspect-[3/2] w-full"
-          style={{
-            perspective: "2600px",
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <Image
-            src="/images/services/book-open.webp"
-            alt="Открытая книга с фотографиями центра"
-            fill
-            sizes="(max-width: 767px) 100vw, 90vw"
-            className="pointer-events-none select-none object-contain"
-          />
-
-          <StaticPage
-            photo={visibleLeft}
-            side="left"
-            clipId={pageLeftId}
-          />
-
-          <StaticPage
-            photo={visibleRight}
-            side="right"
-            clipId={pageRightId}
-          />
+    <section className="relative">
+      <div className="relative z-10 text-center">
+        <div className="mx-auto flex max-w-[900px] items-center justify-center gap-3 sm:gap-5">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#b98736]/55 to-[#d7aa51]/80" />
 
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute z-20"
-            style={{
-              left: "48.55%",
-              top: "19.2%",
-              width: "2.2%",
-              height: "61.5%",
-              background:
-                "linear-gradient(90deg,transparent 0%,rgba(41,20,4,0.18) 35%,rgba(24,11,2,0.28) 50%,rgba(83,47,15,0.08) 72%,transparent 100%)",
-              filter: "blur(1.4px)",
-            }}
+            className="h-[7px] w-[7px] rotate-45 border border-[#d7aa51]/80 bg-[#061a13] shadow-[0_0_12px_rgba(215,170,81,0.3)]"
           />
 
-          {turnState ? (
-            <TurningPageCanvas
-              direction={turnState.direction}
-              frontPhoto={turningFrontPhoto}
-              backPhoto={turningBackPhoto}
-              phase={turnState.phase}
-              onReady={handleTurningPageReady}
-              onComplete={finishTurnMotion}
-            />
-          ) : null}
+          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-[#b98736]/55 to-[#d7aa51]/80" />
         </div>
 
-        <div className="-mt-[7%] flex justify-center sm:-mt-[8%]">
-          <span
-            aria-live="polite"
-            className="relative z-50 inline-flex min-w-[82px] items-center justify-center rounded-full border border-[#a87933]/55 bg-[#03110d]/92 px-4 py-2 text-[11px] font-bold tracking-[0.18em] text-[#d8ad56] shadow-[0_8px_24px_rgba(0,0,0,0.4)] sm:text-[12px]"
+        <p className="mt-6 text-[9px] font-bold uppercase tracking-[0.45em] text-[#d7aa51]/70 sm:text-[10px]">
+          Центр, кабинеты и рабочие моменты
+        </p>
+
+        <h2
+          className="mt-3 text-[clamp(1.45rem,2.4vw,2.5rem)] font-normal uppercase leading-none tracking-[0.08em] text-[#e2b45b]"
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+          }}
+        >
+          Фотогалерея
+        </h2>
+
+        <div className="mx-auto mt-5 h-px w-20 bg-gradient-to-r from-transparent via-[#d8ad56]/75 to-transparent" />
+      </div>
+
+      <div className="relative -mt-[8%] sm:-mt-[10%] lg:-mt-[12%]">
+        <div className="relative mx-auto w-full max-w-[1650px] px-12 sm:px-16 lg:px-14">
+          <ClipDefs
+            pageLeftId={pageLeftId}
+            pageRightId={pageRightId}
+          />
+
+          <div className="absolute left-0 top-1/2 z-50 -translate-y-1/2">
+            <ChevronButton
+              direction="left"
+              onClick={() => startTurn("prev")}
+              disabled={Boolean(turnState)}
+            />
+          </div>
+
+          <div className="absolute right-0 top-1/2 z-50 -translate-y-1/2">
+            <ChevronButton
+              direction="right"
+              onClick={() => startTurn("next")}
+              disabled={Boolean(turnState)}
+            />
+          </div>
+
+          <div
+            className="relative mx-auto aspect-[3/2] w-full"
+            style={{
+              perspective: "2600px",
+              transformStyle: "preserve-3d",
+            }}
           >
-            {currentSpread + 1} / {spreads.length}
-          </span>
+            <Image
+              src="/images/services/book-open.webp"
+              alt="Открытая книга с фотографиями центра"
+              fill
+              sizes="(max-width: 767px) 100vw, 90vw"
+              className="pointer-events-none select-none object-contain"
+            />
+
+            <StaticPage
+              photo={visibleLeft}
+              side="left"
+              clipId={pageLeftId}
+            />
+
+            <StaticPage
+              photo={visibleRight}
+              side="right"
+              clipId={pageRightId}
+            />
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute z-20"
+              style={{
+                left: "48.55%",
+                top: "19.2%",
+                width: "2.2%",
+                height: "61.5%",
+                background:
+                  "linear-gradient(90deg,transparent 0%,rgba(41,20,4,0.18) 35%,rgba(24,11,2,0.28) 50%,rgba(83,47,15,0.08) 72%,transparent 100%)",
+                filter: "blur(1.4px)",
+              }}
+            />
+
+            {turnState ? (
+              <TurningPageCanvas
+                direction={turnState.direction}
+                frontPhoto={turningFrontPhoto}
+                backPhoto={turningBackPhoto}
+                phase={turnState.phase}
+                onReady={handleTurningPageReady}
+                onComplete={finishTurnMotion}
+              />
+            ) : null}
+          </div>
+
+          <div className="-mt-[7%] flex justify-center sm:-mt-[8%]">
+            <span
+              aria-live="polite"
+              className="relative z-50 inline-flex min-w-[82px] items-center justify-center rounded-full border border-[#a87933]/55 bg-[#03110d]/92 px-4 py-2 text-[11px] font-bold tracking-[0.18em] text-[#d8ad56] shadow-[0_8px_24px_rgba(0,0,0,0.4)] sm:text-[12px]"
+            >
+              {currentSpread + 1} / {spreads.length}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

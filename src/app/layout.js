@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 
 import HeroMenu from "@/components/home/hero-menu/HeroMenu";
+import RoutePageLogo from "@/components/shared/PageLogo";
 
 import "./globals.css";
 
@@ -25,7 +26,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ru" className={`${comfortaa.variable} h-full antialiased`}>
-      <body className="font-comfortaa min-h-full bg-[#030b0c] text-[#f3efe5]">
+      <body className="font-comfortaa relative min-h-full bg-[#030b0c] text-[#f3efe5]">
+        <RoutePageLogo />
         {children}
         <HeroMenu />
       </body>

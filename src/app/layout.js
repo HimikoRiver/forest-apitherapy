@@ -1,18 +1,12 @@
-import localFont from "next/font/local";
+import { Comfortaa } from "next/font/google";
 
 import HeroMenu from "@/components/home/hero-menu/HeroMenu";
 import RoutePageLogo from "@/components/shared/PageLogo";
 
 import "./globals.css";
 
-const comfortaa = localFont({
-  src: [
-    {
-      path: "./fonts/comfortaa/comfortaa-variable.ttf",
-      weight: "300 700",
-      style: "normal",
-    },
-  ],
+const comfortaa = Comfortaa({
+  subsets: ["cyrillic", "latin"],
   variable: "--font-comfortaa",
   display: "swap",
 });

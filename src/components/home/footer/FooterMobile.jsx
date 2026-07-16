@@ -73,7 +73,10 @@ export default function FooterMobile() {
   const year = new Date().getFullYear();
   const tagline = homeContent.footer.tagline;
   const disclaimer = homeContent.footer.disclaimer;
-  const copyright = homeContent.footer.copyright.replace("{year}", String(year));
+  const copyright = homeContent.footer.copyright.replace(
+    "{year}",
+    String(year)
+  );
 
   return (
     <footer
@@ -91,7 +94,28 @@ export default function FooterMobile() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(13,82,43,0.5),rgba(4,28,19,0.72)_42%,rgba(1,7,6,0.98)_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.18)_28%,rgba(0,0,0,0.94)_100%)]" />
 
-      <div className="relative z-10 mx-auto max-w-[440px] px-4 pb-8 pt-10">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[10px] bg-[linear-gradient(180deg,#000000_0%,rgba(0,0,0,0.9)_28%,rgba(0,0,0,0.55)_62%,rgba(0,0,0,0)_100%)]"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-30 px-4"
+      >
+        <div className="grid w-full grid-cols-[1fr_54px_1fr] items-center gap-3">
+          <span className="h-px bg-gradient-to-r from-transparent via-[#d8b66a]/78 to-[#d8b66a]/24 shadow-[0_0_12px_rgba(216,182,106,0.3)]" />
+
+          <span className="relative flex items-center justify-center">
+            <span className="h-[5px] w-[5px] rounded-full bg-[#d8b66a] shadow-[0_0_12px_rgba(216,182,106,0.6)]" />
+            <span className="absolute h-px w-full bg-gradient-to-r from-transparent via-[#d8b66a]/70 to-transparent" />
+          </span>
+
+          <span className="h-px bg-gradient-to-r from-[#d8b66a]/24 via-[#d8b66a]/78 to-transparent shadow-[0_0_12px_rgba(216,182,106,0.3)]" />
+        </div>
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-[440px] px-4 pb-8 pt-0">
         <div className="mb-7 flex flex-col items-center text-center">
           <ApidarbLogo />
 

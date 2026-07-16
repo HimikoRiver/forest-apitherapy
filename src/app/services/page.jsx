@@ -101,7 +101,7 @@ export default function ServicesPage() {
           </div>
         </div>
 
-        <div className="mx-auto w-full max-w-[1800px] px-4 sm:px-7 lg:px-10 xl:px-16">
+        <div className="mx-auto mb-5 w-full max-w-[1800px] px-4 sm:px-7 lg:px-10 xl:px-16">
           <div className="relative overflow-hidden rounded-[20px] border border-[#a57833]/60 bg-[linear-gradient(135deg,rgba(2,15,11,0.98),rgba(3,24,16,0.92))] shadow-[0_20px_50px_rgba(0,0,0,0.38)]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(24,89,56,0.12),transparent_36%),radial-gradient(circle_at_84%_50%,rgba(216,173,86,0.06),transparent_30%)]" />
 

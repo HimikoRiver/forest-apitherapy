@@ -43,7 +43,7 @@ export default function HomeDesktop() {
       const rawProgress = clamp(
         -rect.top / PARALLAX_SCROLL_DISTANCE,
         0,
-        1,
+        1
       );
 
       const nextProgress = Math.round(rawProgress * 1000) / 1000;
@@ -137,7 +137,12 @@ export default function HomeDesktop() {
         <AboutDesktop />
       </div>
 
-      <FooterDesktop />
+      <div
+        data-hero-menu-footer-anchor
+        className="relative"
+      >
+        <FooterDesktop />
+      </div>
     </section>
   );
 }

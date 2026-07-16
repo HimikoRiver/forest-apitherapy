@@ -1,41 +1,57 @@
 import { useEffect, useState } from "react";
 
-import {
-  FOOTER_FADE_END_DESKTOP,
-  FOOTER_FADE_END_MOBILE,
-  FOOTER_FADE_START_DESKTOP,
-  FOOTER_FADE_START_MOBILE,
-  FOOTER_HIDE_SELECTOR,
-} from "./heroMenu.constants";
-
 import { clamp } from "./heroMenu.utils";
 
-function getVisibleHideAnchor() {
-  const hideAnchors = Array.from(document.querySelectorAll(FOOTER_HIDE_SELECTOR));
+const HOME_FOOTER_ANCHOR_SELECTOR =
+  "[data-hero-menu-footer-anchor]";
+
+const FOOTER_FALLBACK_SELECTOR = "footer";
+
+const FOOTER_VISIBLE_BEFORE_FADE = 40;
+const FOOTER_FADE_DISTANCE = 240;
+
+function isElementRendered(element) {
+  if (!element || element.getClientRects().length === 0) {
+    return false;
+  }
+
+  const computedStyle = window.getComputedStyle(element);
 
   return (
-    hideAnchors.find((hideAnchor) => {
-      const rects = hideAnchor.getClientRects();
-
-      if (rects.length === 0) {
-        return false;
-      }
-
-      const computedStyle = window.getComputedStyle(hideAnchor);
-
-      return (
-        computedStyle.display !== "none" &&
-        computedStyle.visibility !== "hidden" &&
-        computedStyle.opacity !== "0"
-      );
-    }) || null
+    computedStyle.display !== "none" &&
+    computedStyle.visibility !== "hidden"
   );
+}
+
+function findRenderedElement(selector) {
+  const elements = Array.from(
+    document.querySelectorAll(selector)
+  );
+
+  return elements.find(isElementRendered) || null;
+}
+
+function getFooterAnchor() {
+  const homeFooterAnchor = findRenderedElement(
+    HOME_FOOTER_ANCHOR_SELECTOR
+  );
+
+  if (homeFooterAnchor) {
+    return homeFooterAnchor;
+  }
+
+  return findRenderedElement(FOOTER_FALLBACK_SELECTOR);
 }
 
 export function useFooterFade(isClientReady) {
   const [footerFadeProgress, setFooterFadeProgress] = useState(0);
 
-  const footerFadeOpacity = clamp(1 - footerFadeProgress, 0, 1);
+  const footerFadeOpacity = clamp(
+    1 - footerFadeProgress,
+    0,
+    1
+  );
+
   const menuHiddenByFooter = footerFadeProgress >= 0.94;
 
   useEffect(() => {
@@ -46,26 +62,27 @@ export function useFooterFade(isClientReady) {
     const updateFooterFade = () => {
       frameId = null;
 
-      const hideAnchor = getVisibleHideAnchor();
+      const footerAnchor = getFooterAnchor();
 
-      if (!hideAnchor) {
+      if (!footerAnchor) {
         setFooterFadeProgress(0);
         return;
       }
 
-      const anchorTop = hideAnchor.getBoundingClientRect().top;
-      const isMobile = window.innerWidth < 768;
+      const footerTop =
+        footerAnchor.getBoundingClientRect().top;
 
-      const fadeStart = isMobile
-        ? FOOTER_FADE_START_MOBILE
-        : FOOTER_FADE_START_DESKTOP;
+      const viewportHeight = window.innerHeight;
 
-      const fadeEnd = isMobile
-        ? FOOTER_FADE_END_MOBILE
-        : FOOTER_FADE_END_DESKTOP;
+      const fadeStart =
+        viewportHeight - FOOTER_VISIBLE_BEFORE_FADE;
+
+      const fadeEnd =
+        fadeStart - FOOTER_FADE_DISTANCE;
 
       const nextProgress = clamp(
-        (fadeStart - anchorTop) / (fadeStart - fadeEnd),
+        (fadeStart - footerTop) /
+          (fadeStart - fadeEnd),
         0,
         1
       );
@@ -79,23 +96,41 @@ export function useFooterFade(isClientReady) {
 
     const requestFooterFadeUpdate = () => {
       if (frameId !== null) return;
-      frameId = window.requestAnimationFrame(updateFooterFade);
+
+      frameId = window.requestAnimationFrame(
+        updateFooterFade
+      );
     };
 
     updateFooterFade();
 
-    window.addEventListener("scroll", requestFooterFadeUpdate, {
-      passive: true,
-    });
-    window.addEventListener("resize", requestFooterFadeUpdate);
+    window.addEventListener(
+      "scroll",
+      requestFooterFadeUpdate,
+      {
+        passive: true,
+      }
+    );
+
+    window.addEventListener(
+      "resize",
+      requestFooterFadeUpdate
+    );
 
     return () => {
       if (frameId !== null) {
         window.cancelAnimationFrame(frameId);
       }
 
-      window.removeEventListener("scroll", requestFooterFadeUpdate);
-      window.removeEventListener("resize", requestFooterFadeUpdate);
+      window.removeEventListener(
+        "scroll",
+        requestFooterFadeUpdate
+      );
+
+      window.removeEventListener(
+        "resize",
+        requestFooterFadeUpdate
+      );
     };
   }, [isClientReady]);
 

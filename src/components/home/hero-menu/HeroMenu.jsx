@@ -18,6 +18,7 @@ import { useFooterFade } from "./useFooterFade";
 
 const HIVE_CLOSED_SRC = "/images/hero/hive1.webp";
 const HIVE_OPEN_SRC = "/images/hero/hiveOpen2.webp";
+const TEXTURE_PATH = "/textures/suede-green.webp";
 
 const subscribeToClientReady = () => () => {};
 const getClientSnapshot = () => true;
@@ -33,10 +34,94 @@ const baseMenuItems = [
     isArc: true,
   },
   { id: "services", label: "Услуги", href: "/services", top: "50.7%" },
-  { id: "products", label: "Пчелопродукты", href: "/products", top: "57.9%" },
+  {
+    id: "products",
+    label: "Пчелопродукты",
+    href: "/products",
+    top: "57.9%",
+  },
   { id: "training", label: "Обучение", href: "/training", top: "65%" },
   { id: "contacts", label: "Контакты", href: "/contacts", top: "70.8%" },
 ];
+
+function MenuDockToggleButton({ isVisible, isDisabled, onClick }) {
+  return (
+    <button
+      type="button"
+      aria-label={isVisible ? "Скрыть меню" : "Показать меню"}
+      aria-expanded={isVisible}
+      onClick={onClick}
+      disabled={isDisabled}
+      className={`group pointer-events-auto absolute right-[-44px] top-1/2 z-[1004] h-[88px] w-[88px] -translate-y-1/2 rounded-full border border-[#d8b66a]/80 shadow-[0_12px_34px_rgba(0,0,0,0.45)] transition-[right,opacity,transform] duration-500 hover:right-[-38px] ${
+        isDisabled
+          ? "pointer-events-none translate-x-3 opacity-0"
+          : "translate-x-0 opacity-100"
+      }`}
+    >
+      <span className="absolute inset-0 rounded-full bg-[#063829]" />
+
+      <span
+        className="absolute inset-[3px] rounded-full opacity-95"
+        style={{
+          backgroundImage: `url(${TEXTURE_PATH})`,
+          backgroundSize: "220% auto",
+          backgroundPosition: "center",
+          filter: "saturate(1.15) contrast(1.08) brightness(0.78)",
+        }}
+      />
+
+      <span className="absolute inset-0 rounded-full border border-[#f0c76d]/75 shadow-[inset_0_0_14px_rgba(255,232,170,0.16),0_0_10px_rgba(216,182,106,0.18)] transition duration-500 group-hover:border-[#fff0b9]" />
+
+      <span className="absolute left-[13px] top-1/2 flex -translate-y-1/2 items-center justify-center drop-shadow-[0_0_9px_rgba(240,199,109,0.36)]">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 32 32"
+          className={`h-7 w-7 transition duration-500 ${
+            isVisible ? "rotate-0" : "rotate-180"
+          }`}
+          fill="none"
+        >
+          <defs>
+            <linearGradient
+              id="hero-menu-dock-toggle-arrow-gold"
+              x1="0"
+              y1="0"
+              x2="32"
+              y2="0"
+              gradientUnits="userSpaceOnUse"
+              spreadMethod="repeat"
+            >
+              <stop offset="0%" stopColor="#7e551d" />
+              <stop offset="18%" stopColor="#c28b37" />
+              <stop offset="34%" stopColor="#fff2c7" />
+              <stop offset="50%" stopColor="#aa6d25" />
+              <stop offset="68%" stopColor="#f4d88f" />
+              <stop offset="100%" stopColor="#7e551d" />
+
+              <animateTransform
+                attributeName="gradientTransform"
+                type="translate"
+                from="0 0"
+                to="32 0"
+                dur="2.8s"
+                calcMode="linear"
+                repeatCount="indefinite"
+              />
+            </linearGradient>
+          </defs>
+
+          <path
+            d="M12 7 21 16l-9 9"
+            stroke="url(#hero-menu-dock-toggle-arrow-gold)"
+            strokeWidth="2.35"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+    </button>
+  );
+}
 
 export default function HeroMenu() {
   const router = useRouter();
@@ -53,6 +138,8 @@ export default function HeroMenu() {
 
   const [isDesktopViewport, setIsDesktopViewport] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isDockVisible, setIsDockVisible] = useState(true);
+  const [hasDockInteracted, setHasDockInteracted] = useState(false);
 
   const { footerFadeProgress, footerFadeOpacity, menuHiddenByFooter } =
     useFooterFade(isClientReady && isDesktopViewport);
@@ -74,7 +161,7 @@ export default function HeroMenu() {
     setIsOpen(false);
   }, []);
 
-  useBodyScrollLock(isOpen, closeMenu);
+  useBodyScrollLock(isOpen && isDockVisible, closeMenu);
 
   useEffect(() => {
     if (!isClientReady) return;
@@ -112,9 +199,19 @@ export default function HeroMenu() {
   }, [closeMenu, footerFadeProgress, isOpen]);
 
   const handleOpen = useCallback(() => {
-    if (menuHiddenByFooter) return;
+    if (menuHiddenByFooter || !isDockVisible) return;
+
     setIsOpen(true);
-  }, [menuHiddenByFooter]);
+  }, [isDockVisible, menuHiddenByFooter]);
+
+  const handleToggleDock = useCallback(() => {
+    if (isDockVisible) {
+      closeMenu();
+    }
+
+    setHasDockInteracted(true);
+    setIsDockVisible((current) => !current);
+  }, [closeMenu, isDockVisible]);
 
   const handleNavClick = useCallback(
     (href) => {
@@ -125,12 +222,20 @@ export default function HeroMenu() {
           const homeTarget = document.getElementById("home");
 
           if (homeTarget) {
-            homeTarget.scrollIntoView({ behavior: "smooth", block: "start" });
+            homeTarget.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+
             window.history.replaceState(null, "", "/");
             return;
           }
 
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+
           window.history.replaceState(null, "", "/");
           return;
         }
@@ -146,7 +251,11 @@ export default function HeroMenu() {
           const target = document.getElementById(id);
 
           if (target) {
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            target.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+
             window.history.replaceState(null, "", href);
             return;
           }
@@ -167,7 +276,10 @@ export default function HeroMenu() {
 
   const menu = (
     <>
-      <HeroMenuOverlay isOpen={isOpen} onClose={closeMenu} />
+      <HeroMenuOverlay
+        isOpen={isOpen && isDockVisible}
+        onClose={closeMenu}
+      />
 
       <div
         className="pointer-events-none fixed inset-0 z-[999]"
@@ -178,200 +290,246 @@ export default function HeroMenu() {
             "opacity 320ms ease, transform 420ms cubic-bezier(0.22, 1, 0.36, 1)",
         }}
       >
-        <div
-          className={`fixed right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
-            isOpen ? "pointer-events-none opacity-0" : "opacity-100"
-          } ${
-            menuHiddenByFooter
-              ? "pointer-events-none -translate-y-5 opacity-0"
-              : ""
-          }`}
-        >
-          <button
-            type="button"
-            aria-label="Открыть меню"
-            onClick={handleOpen}
-            disabled={menuHiddenByFooter}
-            className="hero-hive-hitbox absolute right-[10px] top-[142px] z-[5] h-[156px] w-[168px] border-0 bg-transparent p-0"
-          />
-
-          <span className="hero-hive-preview pointer-events-none absolute inset-0 block h-full w-full">
-            <Image
-              src={HIVE_CLOSED_SRC}
-              alt=""
-              fill
-              priority
-              sizes="250px"
-              className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300"
-            />
-
-            <span className="absolute left-[50.9%] top-[60%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
-              <span className="hero-hive-menu-text">menu</span>
-            </span>
-          </span>
-        </div>
+        <MenuDockToggleButton
+          isVisible={isDockVisible}
+          isDisabled={menuHiddenByFooter}
+          onClick={handleToggleDock}
+        />
 
         <div
-          className={`pointer-events-auto fixed right-[-8px] top-[-16px] z-[1003] h-[760px] w-[490px] origin-top-right transition duration-500 ${
-            isOpen
-              ? "translate-y-0 scale-100 opacity-100"
-              : "pointer-events-none translate-y-6 scale-[0.94] opacity-0"
+          className={`hero-menu-dock pointer-events-none absolute inset-0 ${
+            isDockVisible
+              ? hasDockInteracted
+                ? "hero-menu-dock--open"
+                : ""
+              : "hero-menu-dock--closed"
           }`}
         >
-          <div className="relative h-full w-full">
-            <Image
-              src={HIVE_OPEN_SRC}
-              alt=""
-              fill
-              priority
-              sizes="490px"
-              className="pointer-events-none select-none object-contain drop-shadow-[0_20px_42px_rgba(0,0,0,0.34)]"
-            />
-
-            <div className="hero-hive-falling-spark" aria-hidden="true" />
-
+          <div
+            className={`absolute right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
+              isOpen ? "pointer-events-none opacity-0" : "opacity-100"
+            } ${
+              menuHiddenByFooter || !isDockVisible
+                ? "pointer-events-none"
+                : ""
+            }`}
+          >
             <button
               type="button"
-              aria-label="Закрыть меню"
-              onClick={closeMenu}
-              className="hero-hive-close-button absolute left-[48%] top-[25.8%] z-[5] flex h-[38px] w-[38px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
-            >
-              <span className="hero-hive-close-bg" />
+              aria-label="Открыть меню"
+              onClick={handleOpen}
+              disabled={menuHiddenByFooter || !isDockVisible}
+              className="hero-hive-hitbox absolute right-[10px] top-[142px] z-[5] h-[156px] w-[168px] border-0 bg-transparent p-0"
+            />
 
-              <svg
-                className="hero-hive-close-svg"
-                viewBox="0 0 64 64"
-                aria-hidden="true"
+            <span className="hero-hive-preview pointer-events-none absolute inset-0 block h-full w-full">
+              <Image
+                src={HIVE_CLOSED_SRC}
+                alt=""
+                fill
+                priority
+                sizes="250px"
+                className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300"
+              />
+
+              <span className="absolute left-[50.9%] top-[60%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
+                <span className="hero-hive-menu-text">menu</span>
+              </span>
+            </span>
+          </div>
+
+          <div
+            className={`pointer-events-auto absolute right-[-8px] top-[-16px] z-[1003] h-[760px] w-[490px] origin-top-right transition duration-500 ${
+              isOpen
+                ? "translate-y-0 scale-100 opacity-100"
+                : "pointer-events-none translate-y-6 scale-[0.94] opacity-0"
+            }`}
+          >
+            <div className="relative h-full w-full">
+              <Image
+                src={HIVE_OPEN_SRC}
+                alt=""
+                fill
+                priority
+                sizes="490px"
+                className="pointer-events-none select-none object-contain drop-shadow-[0_20px_42px_rgba(0,0,0,0.34)]"
+              />
+
+              <div className="hero-hive-falling-spark" aria-hidden="true" />
+
+              <button
+                type="button"
+                aria-label="Закрыть меню"
+                onClick={closeMenu}
+                className="hero-hive-close-button absolute left-[48%] top-[25.8%] z-[5] flex h-[38px] w-[38px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
               >
-                <defs>
-                  <linearGradient
-                    id="heroHiveCloseGold"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                  >
-                    <stop offset="0%" stopColor="#8f5f18" />
-                    <stop offset="22%" stopColor="#d9a33b" />
-                    <stop offset="45%" stopColor="#fff0ae" />
-                    <stop offset="68%" stopColor="#c98924" />
-                    <stop offset="100%" stopColor="#7d4d12" />
-                  </linearGradient>
-                </defs>
+                <span className="hero-hive-close-bg" />
 
-                <g className="hero-hive-close-cross">
-                  <path
-                    d="M18 18 C25 27 39 37 46 46"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="4.8"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M46 18 C37 25 27 39 18 46"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="4.8"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M18 18 C14 15 12 12 12 8"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M46 18 C50 15 52 12 52 8"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M46 46 C50 49 52 52 52 56"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M18 46 C14 49 12 52 12 56"
-                    fill="none"
-                    stroke="url(#heroHiveCloseGold)"
-                    strokeWidth="3.2"
-                    strokeLinecap="round"
-                  />
-                </g>
-              </svg>
-            </button>
-
-            <nav className="absolute inset-0 z-[3]" aria-label="Главное меню">
-              {renderedItems.map((item) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleNavClick(item.href)}
-                  className="hero-hive-text-button absolute left-1/2 flex h-[42px] w-[300px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
-                  style={{ top: item.top }}
+                <svg
+                  className="hero-hive-close-svg"
+                  viewBox="0 0 64 64"
+                  aria-hidden="true"
                 >
-                  {item.isArc ? (
-                    <svg
-                      className="hero-hive-arc-svg"
-                      viewBox="0 0 300 48"
-                      aria-hidden="true"
+                  <defs>
+                    <linearGradient
+                      id="heroHiveCloseGold"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="100%"
                     >
-                      <defs>
-                        <linearGradient
-                          id={`heroHiveTextGold-${item.id}`}
-                          x1="0%"
-                          y1="0%"
-                          x2="100%"
-                          y2="0%"
-                        >
-                          <stop offset="0%" stopColor="#8f6420" />
-                          <stop offset="14%" stopColor="#d6a33c" />
-                          <stop offset="32%" stopColor="#fff1b5" />
-                          <stop offset="50%" stopColor="#d19b39" />
-                          <stop offset="68%" stopColor="#fff7cf" />
-                          <stop offset="84%" stopColor="#bd8228" />
-                          <stop offset="100%" stopColor="#8f6420" />
-                        </linearGradient>
+                      <stop offset="0%" stopColor="#8f5f18" />
+                      <stop offset="22%" stopColor="#d9a33b" />
+                      <stop offset="45%" stopColor="#fff0ae" />
+                      <stop offset="68%" stopColor="#c98924" />
+                      <stop offset="100%" stopColor="#7d4d12" />
+                    </linearGradient>
+                  </defs>
 
-                        <path
-                          id={`heroHiveArcPath-${item.id}`}
-                          d="M34 29 Q150 24.5 266 29"
-                        />
-                      </defs>
+                  <g className="hero-hive-close-cross">
+                    <path
+                      d="M18 18 C25 27 39 37 46 46"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="4.8"
+                      strokeLinecap="round"
+                    />
 
-                      <text
-                        className="hero-hive-arc-text"
-                        fill={`url(#heroHiveTextGold-${item.id})`}
+                    <path
+                      d="M46 18 C37 25 27 39 18 46"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="4.8"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M18 18 C14 15 12 12 12 8"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M46 18 C50 15 52 12 52 8"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M46 46 C50 49 52 52 52 56"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                    />
+
+                    <path
+                      d="M18 46 C14 49 12 52 12 56"
+                      fill="none"
+                      stroke="url(#heroHiveCloseGold)"
+                      strokeWidth="3.2"
+                      strokeLinecap="round"
+                    />
+                  </g>
+                </svg>
+              </button>
+
+              <nav
+                className="absolute inset-0 z-[3]"
+                aria-label="Главное меню"
+              >
+                {renderedItems.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleNavClick(item.href)}
+                    className="hero-hive-text-button absolute left-1/2 flex h-[42px] w-[300px] -translate-x-1/2 -translate-y-1/2 items-center justify-center border-0 bg-transparent"
+                    style={{ top: item.top }}
+                  >
+                    {item.isArc ? (
+                      <svg
+                        className="hero-hive-arc-svg"
+                        viewBox="0 0 300 48"
+                        aria-hidden="true"
                       >
-                        <textPath
-                          href={`#heroHiveArcPath-${item.id}`}
-                          startOffset="50%"
-                          textAnchor="middle"
+                        <defs>
+                          <linearGradient
+                            id={`heroHiveTextGold-${item.id}`}
+                            x1="0%"
+                            y1="0%"
+                            x2="100%"
+                            y2="0%"
+                          >
+                            <stop offset="0%" stopColor="#8f6420" />
+                            <stop offset="14%" stopColor="#d6a33c" />
+                            <stop offset="32%" stopColor="#fff1b5" />
+                            <stop offset="50%" stopColor="#d19b39" />
+                            <stop offset="68%" stopColor="#fff7cf" />
+                            <stop offset="84%" stopColor="#bd8228" />
+                            <stop offset="100%" stopColor="#8f6420" />
+                          </linearGradient>
+
+                          <path
+                            id={`heroHiveArcPath-${item.id}`}
+                            d="M34 29 Q150 24.5 266 29"
+                          />
+                        </defs>
+
+                        <text
+                          className="hero-hive-arc-text"
+                          fill={`url(#heroHiveTextGold-${item.id})`}
                         >
-                          {item.label}
-                        </textPath>
-                      </text>
-                    </svg>
-                  ) : (
-                    <span className="hero-hive-strip-text">{item.label}</span>
-                  )}
-                </button>
-              ))}
-            </nav>
+                          <textPath
+                            href={`#heroHiveArcPath-${item.id}`}
+                            startOffset="50%"
+                            textAnchor="middle"
+                          >
+                            {item.label}
+                          </textPath>
+                        </text>
+                      </svg>
+                    ) : (
+                      <span className="hero-hive-strip-text">
+                        {item.label}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </nav>
+            </div>
           </div>
         </div>
       </div>
 
       <style jsx>{`
+        .hero-menu-dock {
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
+        }
+
+        .hero-menu-dock--open {
+          animation: heroMenuDockBrakeIn 920ms
+            cubic-bezier(0.18, 0.95, 0.2, 1) both;
+        }
+
+        .hero-menu-dock--closed {
+          animation: heroMenuDockSlideOut 620ms
+            cubic-bezier(0.76, 0, 0.24, 1) both;
+        }
+
         .hero-hive-hitbox {
           cursor: pointer;
           pointer-events: auto;
           clip-path: ellipse(48% 47% at 54% 54%);
+        }
+
+        .hero-hive-hitbox:disabled {
+          cursor: default;
+          pointer-events: none;
         }
 
         .hero-hive-preview {
@@ -487,8 +645,8 @@ export default function HeroMenu() {
         }
 
         .hero-hive-close-button:hover .hero-hive-close-cross {
-          animation: heroHiveCloseFan 720ms cubic-bezier(0.2, 0.95, 0.34, 1)
-            1;
+          animation: heroHiveCloseFan 720ms
+            cubic-bezier(0.2, 0.95, 0.34, 1) 1;
           filter:
             drop-shadow(0 0 7px rgba(255, 229, 145, 0.72))
             drop-shadow(0 0 16px rgba(214, 167, 70, 0.4));
@@ -560,22 +718,59 @@ export default function HeroMenu() {
           transition: filter 260ms ease;
         }
 
+        @keyframes heroMenuDockBrakeIn {
+          0% {
+            transform: translate3d(620px, 0, 0);
+          }
+
+          62% {
+            transform: translate3d(-18px, 0, 0);
+          }
+
+          76% {
+            transform: translate3d(9px, 0, 0);
+          }
+
+          88% {
+            transform: translate3d(-4px, 0, 0);
+          }
+
+          100% {
+            transform: translate3d(0, 0, 0);
+          }
+        }
+
+        @keyframes heroMenuDockSlideOut {
+          0% {
+            transform: translate3d(0, 0, 0);
+          }
+
+          100% {
+            transform: translate3d(620px, 0, 0);
+          }
+        }
+
         @keyframes heroHiveSingleShake {
           0% {
             transform: rotate(0deg);
           }
+
           18% {
             transform: rotate(-2deg);
           }
+
           38% {
             transform: rotate(1.55deg);
           }
+
           58% {
             transform: rotate(-0.95deg);
           }
+
           78% {
             transform: rotate(0.45deg);
           }
+
           100% {
             transform: rotate(0deg);
           }
@@ -586,18 +781,22 @@ export default function HeroMenu() {
             opacity: 0;
             transform: translate3d(0, -6px, 0) scale(1);
           }
+
           4% {
             opacity: 1;
             transform: translate3d(0, -2px, 0) scale(1);
           }
+
           18% {
             opacity: 1;
             transform: translate3d(0, 44px, 0) scale(1);
           }
+
           24% {
             opacity: 0;
             transform: translate3d(0, 52px, 0) scale(1);
           }
+
           100% {
             opacity: 0;
             transform: translate3d(0, 52px, 0) scale(1);
@@ -608,12 +807,15 @@ export default function HeroMenu() {
           0% {
             transform: rotate(0deg) scale(1);
           }
+
           45% {
             transform: rotate(260deg) scale(1.12);
           }
+
           72% {
             transform: rotate(340deg) scale(1.04);
           }
+
           100% {
             transform: rotate(360deg) scale(1);
           }
@@ -623,9 +825,11 @@ export default function HeroMenu() {
           0% {
             background-position: 0% 50%;
           }
+
           50% {
             background-position: 100% 50%;
           }
+
           100% {
             background-position: 0% 50%;
           }
@@ -638,10 +842,18 @@ export default function HeroMenu() {
               0 0 7px rgba(231, 197, 106, 0.22),
               0 0 14px rgba(231, 197, 106, 0.12);
           }
+
           50% {
             text-shadow:
               0 0 12px rgba(255, 233, 158, 0.42),
               0 0 22px rgba(214, 167, 70, 0.24);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-menu-dock--open,
+          .hero-menu-dock--closed {
+            animation-duration: 1ms;
           }
         }
       `}</style>

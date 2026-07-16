@@ -62,7 +62,11 @@ const workSteps = [
 function HexIcon({ children }) {
   return (
     <span className="relative flex h-12 w-12 shrink-0 items-center justify-center text-[#d8b66a]">
-      <svg viewBox="0 0 52 58" className="absolute h-12 w-12" aria-hidden="true">
+      <svg
+        viewBox="0 0 52 58"
+        className="absolute h-12 w-12"
+        aria-hidden="true"
+      >
         <path
           d="M26 2 49 15.5v27L26 56 3 42.5v-27L26 2Z"
           fill="rgb(3, 17, 13)"
@@ -78,7 +82,12 @@ function HexIcon({ children }) {
 
 function LeafIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M19.6 4.4C12.4 4.6 6.9 8 5.1 13.1c-1 2.9.6 5.3 3.4 5.7 5.2.7 9.7-5.4 11.1-14.4Z"
         stroke="currentColor"
@@ -98,7 +107,12 @@ function LeafIcon() {
 
 function CheckIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M5 12.6 9.2 17 19.2 7"
         stroke="currentColor"
@@ -112,7 +126,12 @@ function CheckIcon() {
 
 function ShieldIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M12 3.6 18.8 6v5.4c0 4.4-2.7 7.4-6.8 9-4.1-1.6-6.8-4.6-6.8-9V6L12 3.6Z"
         stroke="currentColor"
@@ -132,7 +151,12 @@ function ShieldIcon() {
 
 function LikeIcon() {
   return (
-    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      className="h-5 w-5"
+      fill="none"
+      aria-hidden="true"
+    >
       <path
         d="M7.2 10.4v9H4.8a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h2.4Z"
         stroke="currentColor"
@@ -196,16 +220,18 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden bg-[#020908] px-5 py-16 sm:px-8 lg:px-12 xl:px-[5vw]">
-        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/suede-green.webp')] bg-cover bg-center opacity-55" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_0%,rgba(216,182,106,0.15),transparent_30%),radial-gradient(circle_at_88%_30%,rgba(34,91,54,0.34),transparent_36%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[url('/textures/suede-green.webp')] bg-cover bg-center" />
+
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,9,8,0.92)_0%,rgba(2,9,8,0)_5%,rgba(2,9,8,0)_95%,rgba(2,9,8,0.92)_100%)]" />
 
         <div className="relative z-10 mx-auto max-w-[1280px]">
           <div className="mb-10 flex items-center justify-center gap-5 text-[#d8b66a]">
             <span className="h-px w-32 bg-gradient-to-r from-transparent to-[#d8b66a]" />
+
             <p className="text-center text-[12px] font-bold uppercase tracking-[0.52em]">
               Этапы лечения
             </p>
+
             <span className="h-px w-32 bg-gradient-to-l from-transparent to-[#d8b66a]" />
           </div>
 
@@ -269,6 +295,7 @@ export default function AboutPage() {
                 <p className="text-[12px] font-bold uppercase tracking-[0.52em]">
                   Мои ценности в работе
                 </p>
+
                 <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
               </div>
 
@@ -311,6 +338,7 @@ export default function AboutPage() {
                 <p className="text-[12px] font-bold uppercase tracking-[0.52em] drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">
                   Как проходит работа
                 </p>
+
                 <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
               </div>
 

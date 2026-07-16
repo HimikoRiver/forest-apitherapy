@@ -59,6 +59,7 @@ function PlaceholderIcon() {
           stroke="rgba(216,182,106,0.82)"
           strokeWidth="1.35"
         />
+
         <path
           d="M29 17.5 40 24v12.7L29 43.2 18 36.7V24L29 17.5Z"
           fill="none"
@@ -83,6 +84,7 @@ function SmallPlaceholderIcon() {
           stroke="rgba(216,182,106,0.8)"
           strokeWidth="1.35"
         />
+
         <circle
           cx="29"
           cy="32"
@@ -279,7 +281,7 @@ export default function ContactsPage() {
     >
       <section className="relative min-h-screen overflow-hidden bg-[#020908] px-4 py-5 sm:px-7 lg:px-10 xl:px-[4vw]">
         <Image
-          src="/images/contacts/fon5.webp"
+          src="/images/contacts/fon555.webp"
           alt=""
           fill
           priority
@@ -288,6 +290,7 @@ export default function ContactsPage() {
         />
 
         <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(2,9,8,0.12)_0%,rgba(2,9,8,0.02)_42%,rgba(2,9,8,0.12)_100%)] min-[1440px]:block" />
+
         <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(180deg,rgba(2,9,8,0.02)_0%,rgba(2,9,8,0)_62%,rgba(2,9,8,0.14)_100%)] min-[1440px]:block" />
 
         <div className="relative z-10 mx-auto flex min-h-[calc(100vh-40px)] max-w-[1100px] flex-col">
@@ -343,50 +346,70 @@ export default function ContactsPage() {
                     shadow="drop-shadow(0 0 12px rgba(216,182,106,0.2)) drop-shadow(0 14px 30px rgba(0,0,0,0.46))"
                   >
                     <div className="grid min-h-[560px] sm:min-h-[520px] lg:min-h-[320px] lg:grid-cols-[0.34fr_0.66fr]">
-                      <div className="relative z-10 flex flex-col justify-between border-b border-[#d8b66a]/14 p-4 sm:p-5 lg:border-b-0 lg:border-r">
-                        <div>
-                          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.38em] text-[#d8b66a] sm:mb-4 sm:text-[11px] sm:tracking-[0.44em]">
-                            Адрес
-                          </p>
+                      <div className="relative min-h-[250px] overflow-hidden border-b border-[#d8b66a]/14 lg:min-h-0 lg:border-b-0 lg:border-r">
+                        <Image
+                          src="/images/contacts/home.webp"
+                          alt="Центр апитерапии в Грозном"
+                          fill
+                          sizes="(max-width: 1023px) 100vw, 240px"
+                          className="object-cover object-center"
+                        />
 
-                          <div className="flex items-start gap-3">
-                            <SmallPlaceholderIcon />
+                        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(2,9,8,0.35)_0%,rgba(2,9,8,0.12)_42%,rgba(2,9,8,0.74)_100%)]" />
 
-                            <p className="text-[14px] font-semibold leading-6 text-[#f7eed9] sm:text-[15px] sm:leading-7">
-                              г. Грозный,
-                              <br />
-                              ул. Гикало, 6В
+                        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(2,9,8,0.2)_0%,transparent_48%,rgba(2,9,8,0.2)_100%)]" />
+
+                        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0%,rgba(2,9,8,0.1)_52%,rgba(2,9,8,0.5)_100%)]" />
+
+                        <div className="relative z-10 flex h-full min-h-[250px] flex-col justify-between p-4 sm:p-5 lg:min-h-[320px]">
+                          <div>
+                            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.38em] text-[#d8b66a] drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] sm:mb-4 sm:text-[11px] sm:tracking-[0.44em]">
+                              Адрес
                             </p>
-                          </div>
-                        </div>
 
-                        <div className="mt-5 sm:mt-6">
+                            <BevelPanel
+                              className="w-full max-w-[220px]"
+                              cut={9}
+                              background="rgba(3,15,12,0.88)"
+                              borderColor="rgba(216,182,106,0.48)"
+                              innerBorderColor="rgba(216,182,106,0.12)"
+                              shadow="drop-shadow(0 0 12px rgba(216,182,106,0.2)) drop-shadow(0 8px 20px rgba(0,0,0,0.58))"
+                            >
+                              <div className="relative z-10 flex items-center gap-3 px-3 py-3 sm:px-4 sm:py-3.5">
+                                <SmallPlaceholderIcon />
+
+                                <p className="text-[13px] font-semibold leading-6 text-[#fff7e5] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:text-[14px] sm:leading-7">
+                                  г. Грозный,
+                                  <br />
+                                  ул. Гикало, 6В
+                                </p>
+                              </div>
+                            </BevelPanel>
+                          </div>
+
                           <a
                             href="https://yandex.ru/maps/?text=Грозный%20Гикало%206В"
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex"
+                            className="inline-flex self-start"
                           >
                             <BevelPanel
                               className="min-w-[158px] sm:min-w-[172px]"
                               cut={10}
-                              background="#06130f"
-                              borderColor="rgba(216,182,106,0.46)"
-                              innerBorderColor="rgba(216,182,106,0.1)"
-                              shadow="drop-shadow(0 0 8px rgba(216,182,106,0.18)) drop-shadow(0 7px 15px rgba(0,0,0,0.32))"
+                              background="rgba(3,15,12,0.9)"
+                              borderColor="rgba(216,182,106,0.54)"
+                              innerBorderColor="rgba(216,182,106,0.14)"
+                              shadow="drop-shadow(0 0 10px rgba(216,182,106,0.25)) drop-shadow(0 8px 18px rgba(0,0,0,0.5))"
                             >
                               <span className="flex h-9 items-center justify-center gap-3 px-4 text-[8px] font-bold uppercase tracking-[0.16em] text-[#f6e3aa] transition duration-300 hover:text-[#fff0ae] sm:h-10 sm:px-5 sm:text-[9px] sm:tracking-[0.18em]">
                                 Открыть на карте
+
                                 <span className="text-[17px] leading-none sm:text-[18px]">
                                   ›
                                 </span>
                               </span>
                             </BevelPanel>
                           </a>
-                        </div>
-
-                        <div className="pointer-events-none absolute bottom-0 left-0 h-[52px] w-[150px] opacity-18 sm:h-[64px] sm:w-[180px]">
-                          <div className="h-full w-full bg-[linear-gradient(180deg,transparent_0%,rgba(216,182,106,0.07)_100%)]" />
                         </div>
                       </div>
 

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { PageLogo } from "@/components/shared/PageLogo";
 import BeeIconFrame from "./shared/BeeIconFrame";
 import DecorativeDivider from "./shared/DecorativeDivider";
 
@@ -20,20 +21,7 @@ export default function ApidomikHero() {
 
       <div className="relative z-10 mx-auto flex h-full w-full max-w-[1800px] flex-col px-5 py-[clamp(18px,2.6vh,30px)] sm:px-8 lg:px-14 xl:px-20">
         <header className="shrink-0">
-          <div className="flex w-fit flex-col items-center">
-            <p
-              className="text-[clamp(1.55rem,3.2vh,2.8rem)] tracking-[0.12em] text-[#e0b45b]"
-              style={{
-                fontFamily: "Georgia, 'Times New Roman', serif",
-              }}
-            >
-              APIDARB
-            </p>
-
-            <div className="mt-3">
-              <DecorativeDivider compact />
-            </div>
-          </div>
+          <PageLogo />
         </header>
 
         <div className="flex min-h-0 flex-1 items-center py-[clamp(28px,4vh,52px)]">

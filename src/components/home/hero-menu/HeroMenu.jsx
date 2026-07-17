@@ -16,7 +16,7 @@ import HeroMenuOverlay from "./HeroMenuOverlay";
 import { useBodyScrollLock } from "./useBodyScrollLock";
 import { useFooterFade } from "./useFooterFade";
 
-const HIVE_CLOSED_SRC = "/images/hero/hive1.webp";
+const HIVE_CLOSED_SRC = "/images/hero/hive11.webp";
 const HIVE_OPEN_SRC = "/images/hero/hiveOpen2.webp";
 const TEXTURE_PATH = "/textures/suede-green.webp";
 
@@ -306,7 +306,7 @@ export default function HeroMenu() {
           }`}
         >
           <div
-            className={`absolute right-[-10px] top-[50px] z-[1002] h-[310px] w-[250px] transition duration-300 ${
+            className={`absolute right-[-45px] top-[70px] z-[1002] h-[310px] w-[280px] transition duration-300 ${
               isOpen ? "pointer-events-none opacity-0" : "opacity-100"
             } ${
               menuHiddenByFooter || !isDockVisible
@@ -319,7 +319,7 @@ export default function HeroMenu() {
               aria-label="Открыть меню"
               onClick={handleOpen}
               disabled={menuHiddenByFooter || !isDockVisible}
-              className="hero-hive-hitbox absolute right-[10px] top-[142px] z-[5] h-[156px] w-[168px] border-0 bg-transparent p-0"
+              className="hero-hive-hitbox absolute left-[42px] top-[105px] z-[5] h-[210px] w-[210px] border-0 bg-transparent p-0"
             />
 
             <span className="hero-hive-preview pointer-events-none absolute inset-0 block h-full w-full">
@@ -329,10 +329,10 @@ export default function HeroMenu() {
                 fill
                 priority
                 sizes="250px"
-                className="pointer-events-none select-none object-contain drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300"
+                className="pointer-events-none select-none object-cover object-left drop-shadow-[0_18px_34px_rgba(0,0,0,0.34)] transition duration-300"
               />
 
-              <span className="absolute left-[50.9%] top-[60%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
+              <span className="absolute left-[47%] top-[55.5%] z-[2] flex w-[112px] -translate-x-1/2 -translate-y-1/2 items-center justify-center text-center">
                 <span className="hero-hive-menu-text">menu</span>
               </span>
             </span>
@@ -524,7 +524,7 @@ export default function HeroMenu() {
         .hero-hive-hitbox {
           cursor: pointer;
           pointer-events: auto;
-          clip-path: ellipse(48% 47% at 54% 54%);
+          clip-path: ellipse(50% 49% at 50% 52%);
         }
 
         .hero-hive-hitbox:disabled {

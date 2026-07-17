@@ -1,8 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+
 import StoryCopy from "./StoryCopy";
-import StoryHomeImage from "./StoryHomeImage";
 import StoryLogoCluster from "./StoryLogoCluster";
 
 const LOGO_TEXT_DELAY_MS = 3500;
@@ -31,7 +32,7 @@ export default function CenterStorySection() {
       },
       {
         threshold: 0.22,
-      }
+      },
     );
 
     observer.observe(sectionRef.current);
@@ -48,7 +49,7 @@ export default function CenterStorySection() {
   return (
     <section
       ref={sectionRef}
-      className={`center-story-section relative z-50 min-h-[120svh] overflow-hidden bg-transparent text-[#f3efe5] ${
+      className={`center-story-section relative z-50 overflow-hidden bg-transparent text-[#f3efe5] ${
         isRingVisible ? "is-story-ring-visible" : ""
       }`}
     >
@@ -58,12 +59,107 @@ export default function CenterStorySection() {
         className="pointer-events-none absolute left-0 top-0 z-20 h-px w-px"
       />
 
-      <div className="relative z-10 mx-auto flex min-h-[120svh] w-full max-w-[1680px] flex-col px-6 pb-8 pt-[clamp(320px,30svh,470px)] sm:px-10 md:px-14 lg:px-20 lg:pt-[clamp(350px,32svh,520px)]">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1680px] flex-col px-6 pb-8 pt-[320px] sm:px-10 md:px-14 lg:px-20 lg:pt-[350px]">
         <StoryLogoCluster isLogoVisible={isLogoVisible} />
 
-        <div className="grid flex-1 items-start gap-10 md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-18">
+        <div className="story-content-grid relative grid flex-1 items-start gap-10 overflow-hidden md:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:gap-18">
+          <div className="pointer-events-none absolute inset-0 z-0">
+            <Image
+              src="/images/beesHome11.webp"
+              alt=""
+              fill
+              draggable={false}
+              sizes="(max-width: 767px) 100vw, 1310px"
+              className="object-cover object-[63%_center]"
+            />
+
+            <div
+              className="absolute inset-y-0 left-0"
+              style={{
+                width: "41%",
+                backgroundColor: "#000",
+              }}
+            />
+
+            <div
+              className="absolute inset-y-0"
+              style={{
+                left: "41%",
+                width: "22%",
+                background:
+                  "linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.92) 22%, rgba(0,0,0,0.72) 48%, rgba(0,0,0,0.42) 72%, rgba(0,0,0,0.16) 88%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute inset-x-0 top-0"
+              style={{
+                height: "24%",
+                background:
+                  "linear-gradient(180deg, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.82) 24%, rgba(0,0,0,0.54) 52%, rgba(0,0,0,0.22) 76%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute inset-x-0 bottom-0"
+              style={{
+                height: "12%",
+                background:
+                  "linear-gradient(0deg, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.46) 48%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute inset-y-0 right-0"
+              style={{
+                width: "8%",
+                background:
+                  "linear-gradient(270deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.28) 52%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute left-0 top-0"
+              style={{
+                width: "18%",
+                height: "22%",
+                background:
+                  "radial-gradient(circle at top left, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute bottom-0 left-0"
+              style={{
+                width: "18%",
+                height: "20%",
+                background:
+                  "radial-gradient(circle at bottom left, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.58) 48%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute right-0 top-0"
+              style={{
+                width: "12%",
+                height: "18%",
+                background:
+                  "radial-gradient(circle at top right, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.24) 46%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+
+            <div
+              className="absolute bottom-0 right-0"
+              style={{
+                width: "12%",
+                height: "16%",
+                background:
+                  "radial-gradient(circle at bottom right, rgba(0,0,0,0.56) 0%, rgba(0,0,0,0.24) 46%, rgba(0,0,0,0) 100%)",
+              }}
+            />
+          </div>
+
           <StoryCopy />
-          <StoryHomeImage />
         </div>
       </div>
 
@@ -73,12 +169,12 @@ export default function CenterStorySection() {
           font-family: var(--font-comfortaa), Arial, Helvetica, sans-serif;
         }
 
-        .story-copy {
-          position: relative;
+        .story-content-grid {
+          isolation: isolate;
         }
 
-        .story-home-image {
-          transform: translate3d(1vw, 0, 0);
+        .story-copy {
+          position: relative;
         }
 
         .story-logo-row {
@@ -332,6 +428,7 @@ export default function CenterStorySection() {
           --story-ring-size: calc(
             var(--story-logo-size) + clamp(64px, 5.5vw, 94px)
           );
+
           min-height: var(--story-ring-size);
           width: var(--story-ring-size);
         }
@@ -460,11 +557,6 @@ export default function CenterStorySection() {
         @media (max-width: 767px) {
           .story-gold-line {
             display: none;
-          }
-
-          .story-home-image {
-            transform: none;
-            min-height: 340px;
           }
 
           .story-cluster {

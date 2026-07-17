@@ -28,7 +28,7 @@ const storyText = [
 
 export default function StoryCopy() {
   return (
-    <div className="story-copy max-w-[620px]">
+    <div className="story-copy relative z-10 w-full max-w-[620px]">
       <p className="mb-4 mt-0 text-xs font-bold uppercase tracking-[0.48em]">
         <GoldText>APIDARB</GoldText>
       </p>
@@ -39,7 +39,9 @@ export default function StoryCopy() {
 
       <div className="my-7 flex w-full max-w-[430px] items-center gap-4">
         <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a]/0 via-[#d8b66a]/80 to-[#d8b66a]" />
+
         <BeeDividerIcon />
+
         <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] via-[#d8b66a]/80 to-[#d8b66a]/0" />
       </div>
 

@@ -7,7 +7,7 @@ export default function ApidomikHero() {
   return (
     <section className="relative h-[100svh] min-h-[740px] overflow-hidden">
       <Image
-        src="/images/services/fon1.webp"
+        src="/images/services/fon11.webp"
         alt=""
         fill
         priority

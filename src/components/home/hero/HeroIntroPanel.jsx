@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { PageLogo } from "@/components/shared/PageLogo";
 
 const TEXTURE_PATH = "/textures/suede-green.webp";
 
@@ -18,12 +19,14 @@ function BeeIcon({ className = "size-6" }) {
         stroke="currentColor"
         strokeWidth="1.35"
       />
+
       <path
         d="M13.2 16.8h5.6M12.8 19.6h6.4M16 13.1v-3.6M13.8 9.5h4.4"
         stroke="currentColor"
         strokeWidth="1.25"
         strokeLinecap="round"
       />
+
       <path
         d="M12.5 13.9C8.8 10.4 5 10.2 4.2 12.3c-.8 2.2 1.8 5.3 7.2 5.1M19.5 13.9c3.7-3.5 7.5-3.7 8.3-1.6.8 2.2-1.8 5.3-7.2 5.1"
         stroke="currentColor"
@@ -31,6 +34,7 @@ function BeeIcon({ className = "size-6" }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
       <path
         d="M13.9 23.2 16 26l2.1-2.8"
         stroke="currentColor"
@@ -53,7 +57,13 @@ function GoldArc() {
       fill="none"
     >
       <defs>
-        <linearGradient id="hero-panel-arc" x1="252.5" y1="0" x2="500" y2="495">
+        <linearGradient
+          id="hero-panel-arc"
+          x1="252.5"
+          y1="0"
+          x2="500"
+          y2="495"
+        >
           <stop offset="0%" stopColor="#fff4c2" stopOpacity="0.28" />
           <stop offset="18%" stopColor="#f6cf6b" stopOpacity="1" />
           <stop offset="42%" stopColor="#fff1b7" stopOpacity="1" />
@@ -84,6 +94,7 @@ function GoldArc() {
           height="140%"
         >
           <feGaussianBlur stdDeviation="4.5" result="blur" />
+
           <feColorMatrix
             in="blur"
             type="matrix"
@@ -95,6 +106,7 @@ function GoldArc() {
             "
             result="goldGlow"
           />
+
           <feMerge>
             <feMergeNode in="goldGlow" />
             <feMergeNode in="SourceGraphic" />
@@ -109,6 +121,7 @@ function GoldArc() {
           height="150%"
         >
           <feGaussianBlur stdDeviation="8" result="blur" />
+
           <feColorMatrix
             in="blur"
             type="matrix"
@@ -168,6 +181,7 @@ function GoldArc() {
           dur="3.6s"
           repeatCount="indefinite"
         />
+
         <animate
           attributeName="opacity"
           values="0;0.95;0.55;0"
@@ -349,7 +363,10 @@ export default function HeroIntroPanel() {
       `}</style>
 
       <div className="pointer-events-none absolute inset-0 z-30 overflow-visible">
-        <PanelToggleButton isOpen={isOpen} onClick={handleTogglePanel} />
+        <PanelToggleButton
+          isOpen={isOpen}
+          onClick={handleTogglePanel}
+        />
 
         <div
           className={`hero-intro-panel absolute left-0 top-[88px] z-[1] hidden h-[495px] w-[500px] overflow-visible lg:block ${
@@ -372,14 +389,16 @@ export default function HeroIntroPanel() {
 
           <GoldArc />
 
-          <div className="relative z-[5] flex h-full flex-col px-[84px] pt-[70px]">
-            <div className="relative mb-7 w-fit">
-              <div className="absolute left-[124px] -top-[36px] text-[#f0c76d] drop-shadow-[0_0_18px_rgba(240,199,109,0.32)]">
-                <BeeIcon className="size-8" />
+          <div className="relative z-[5] flex h-full flex-col px-[84px] pt-[28px]">
+            <div className="relative mb-5 flex w-[332px] -translate-y-[14px] flex-col items-center">
+              <div className="mb-1 text-[#f0c76d] drop-shadow-[0_0_18px_rgba(240,199,109,0.32)]">
+                <BeeIcon className="size-7" />
               </div>
 
+              <PageLogo variant="hero" />
+
               <p
-                className="text-xs font-bold uppercase tracking-[0.34em] text-[#f0c76d] drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
+                className="mt-4 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.34em] text-[#f0c76d] drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]"
                 style={{
                   fontFamily: "var(--font-comfortaa), Arial, sans-serif",
                 }}
@@ -389,20 +408,21 @@ export default function HeroIntroPanel() {
             </div>
 
             <div className="overflow-visible">
-              <h1 className="apitherapy-custom-title w-[980px] text-[clamp(6.2rem,10.2vw,12rem)] font-normal leading-[0.76] tracking-[0.5px] text-[#f5efe2] drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
+              <h1 className="apitherapy-custom-title w-[980px] text-[clamp(5.8rem,9.6vw,11.2rem)] font-normal leading-[0.74] tracking-[0.5px] text-[#f5efe2] drop-shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
                 Апи
                 <br />
                 терапия
               </h1>
             </div>
 
-            <div className="mt-[28px] grid max-w-[360px] grid-cols-[2px_1fr] gap-5">
-              <span className="block h-[120px] -translate-y-6 rounded-full bg-gradient-to-b from-[#f0c76d]/0 via-[#fff0b9] to-[#f0c76d]/0 shadow-[0_0_20px_rgba(240,199,109,0.24)]" />
+            <div className="mt-[24px] grid max-w-[340px] grid-cols-[2px_1fr] gap-5">
+              <span className="block h-[110px] -translate-y-5 rounded-full bg-gradient-to-b from-[#f0c76d]/0 via-[#fff0b9] to-[#f0c76d]/0 shadow-[0_0_20px_rgba(240,199,109,0.24)]" />
 
-              <p className="font-comfortaa m-0 text-[15px] font-medium leading-[1.6] tracking-[-0.03em] text-[#f5efe2]/90 drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]">
+              <p className="font-comfortaa m-0 text-[13px] font-medium leading-[1.55] tracking-[-0.03em] text-[#f5efe2]/90 drop-shadow-[0_4px_18px_rgba(0,0,0,0.55)]">
                 Целебная сила пчёл,
                 <br />
                 проверенная временем.
+                <br />
                 В окружении первозданной природы.
               </p>
             </div>

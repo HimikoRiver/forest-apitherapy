@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { PageLogo } from "@/components/shared/PageLogo";
-import BeeIconFrame from "./shared/BeeIconFrame";
+import BeeIcon from "@/components/home/shared/BeeIcon";
 import DecorativeDivider from "./shared/DecorativeDivider";
 
 export default function ApidomikHero() {
@@ -54,7 +54,7 @@ export default function ApidomikHero() {
 
             <DecorativeDivider />
 
-            <div className="max-w-[640px] space-y-[clamp(26px,3.4vh,38px)] text-[clamp(13px,1.65vh,16px)] font-medium leading-[1.8] text-[#eee3cd]">
+            <div className="max-w-[650px] space-y-[clamp(26px,3.4vh,38px)] text-[clamp(15px,1.85vh,18px)] font-medium leading-[1.8] text-[#eee3cd]">
               <p>
                 Сон на пчелиных ульях, или по-другому — SPA-процедура на пчёлах
                 — научно доказанный и очень действенный способ укрепления
@@ -82,10 +82,29 @@ export default function ApidomikHero() {
 
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(2,18,13,0.18)_0%,rgba(2,18,13,0.38)_100%)]" />
 
-              <div className="relative z-10 flex items-center gap-5">
-                <BeeIconFrame />
+              <div className="relative z-10 flex items-center gap-5 sm:gap-7">
+                <span
+                  aria-hidden="true"
+                  className="luxury-button__icon !m-0 !h-[56px] !w-[56px] !shrink-0 sm:!h-[66px] sm:!w-[66px]"
+                >
+                  <BeeIcon className="size-full" />
+                </span>
 
-                <p className="text-[clamp(12px,1.5vh,15px)] font-semibold leading-[1.7] text-[#e7bd67]">
+                <p
+                  className="text-[clamp(13px,1.65vh,17px)] font-semibold leading-[1.7]"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, #7e551d 0%, #c28b37 18%, #fff2c7 34%, #aa6d25 50%, #f4d88f 68%, #7e551d 100%)",
+                    backgroundSize: "240% 100%",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    color: "transparent",
+                    WebkitTextFillColor: "transparent",
+                    filter:
+                      "drop-shadow(0 1px 9px rgba(244, 214, 151, 0.24))",
+                    animation: "textGoldFlow 6.4s linear infinite",
+                  }}
+                >
                   Вы просто спите, а пчёлы дают вам новые силы, забирая взамен
                   болезни и усталость.
                 </p>

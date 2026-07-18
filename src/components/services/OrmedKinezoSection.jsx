@@ -97,7 +97,6 @@ function KinezoVideo() {
         onContextMenu={(event) => event.preventDefault()}
       >
         <source src="/videos/services-vid2.mp4" type="video/mp4" />
-
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
 
@@ -168,33 +167,33 @@ export default function OrmedKinezoSection() {
         <div className="relative overflow-hidden rounded-[24px] border border-[#d0a34a]/62 bg-transparent px-5 py-6 shadow-[0_-24px_40px_-26px_rgba(0,0,0,0.95),0_24px_40px_-26px_rgba(0,0,0,0.95)] sm:px-7 sm:py-8 lg:px-9 lg:py-9 xl:px-12 xl:py-10">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute right-3 top-1 hidden h-[92px] w-[92px] rotate-[8deg] opacity-90 lg:block xl:right-5 xl:h-[105px] xl:w-[105px]"
+            className="pointer-events-none absolute left-3 top-1 hidden h-[92px] w-[92px] -rotate-[8deg] opacity-90 lg:block xl:left-5 xl:h-[105px] xl:w-[105px]"
           >
             <Image
               src="/images/services/bee.webp"
               alt=""
               fill
               sizes="105px"
-              className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+              className="-scale-x-100 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
             />
           </div>
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center xl:gap-12">
-            <div className="relative flex min-h-[260px] items-center justify-center sm:min-h-[340px] lg:min-h-[430px] lg:justify-start">
-              <div className="relative w-full max-w-[680px] lg:-translate-x-3">
+          <div className="relative z-10 grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-8">
+            <div className="relative flex min-h-[210px] items-center justify-center sm:min-h-[260px] lg:min-h-[320px] lg:justify-start">
+              <div className="relative w-[116%] max-w-[820px] translate-y-5 sm:w-[120%] sm:translate-y-7 lg:w-[128%] lg:max-w-[920px] lg:-translate-x-10 lg:translate-y-10">
                 <Image
                   src="/images/services/kinez2.webp"
                   alt="ОРМЕД-Кинезо"
                   width={1448}
                   height={1086}
-                  sizes="(max-width: 1023px) 100vw, 42vw"
+                  sizes="(max-width: 1023px) 100vw, 50vw"
                   className="pointer-events-none h-auto w-full select-none object-contain mix-blend-screen drop-shadow-[0_20px_42px_rgba(0,0,0,0.48)]"
                 />
               </div>
             </div>
 
             <div className="min-w-0">
-              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
                 Оборудование
               </p>
 
@@ -207,9 +206,9 @@ export default function OrmedKinezoSection() {
                 ОРМЕД-Кинезо
               </h2>
 
-              <div className="mt-5 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
+              <div className="mt-3 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
 
-              <div className="mt-6 max-w-[860px] space-y-5 text-[12px] font-medium leading-7 text-[#e8ddc8]/90 sm:text-[13px] lg:text-[14px]">
+              <div className="mt-4 max-w-[860px] space-y-3 text-[12px] font-medium leading-6 text-[#e8ddc8]/90 sm:text-[13px] sm:leading-7 lg:text-[14px]">
                 <p>
                   «ОРМЕД-Кинезо» — установка для активно-пассивной механотерапии
                   позвоночника. Аппарат используется для выполнения лечебных
@@ -219,8 +218,8 @@ export default function OrmedKinezoSection() {
                 </p>
 
                 <p>
-                  Воздействие охватывает межпозвонковые диски, суставы,
-                  связочный аппарат, сухожилия и мышцы.
+                  Воздействие охватывает межпозвонковые диски, суставы, связочный
+                  аппарат, сухожилия и мышцы.
                 </p>
 
                 <p>
@@ -233,7 +232,7 @@ export default function OrmedKinezoSection() {
             </div>
           </div>
 
-          <div className="relative z-10 my-8 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-10 lg:my-12" />
+          <div className="relative z-10 my-6 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-7 lg:my-8" />
 
           <div className="relative z-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center xl:gap-12">
             <div className="relative flex flex-col justify-center">

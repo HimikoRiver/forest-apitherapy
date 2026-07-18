@@ -179,9 +179,9 @@ export default function OrmedEquipmentSection() {
             />
           </div>
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-start xl:gap-12">
+          <div className="relative z-10 grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-start xl:gap-8">
             <div className="min-w-0">
-              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
+              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
                 Оборудование
               </p>
 
@@ -194,9 +194,9 @@ export default function OrmedEquipmentSection() {
                 ORMED-Тракцион
               </h2>
 
-              <div className="mt-5 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
+              <div className="mt-3 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
 
-              <div className="mt-6 max-w-[860px] space-y-5 text-[12px] font-medium leading-7 text-[#e8ddc8]/90 sm:text-[13px] lg:text-[14px]">
+              <div className="mt-4 max-w-[860px] space-y-3 text-[12px] font-medium leading-6 text-[#e8ddc8]/90 sm:text-[13px] sm:leading-7 lg:text-[14px]">
                 <p>
                   В центре используется современная система ORMED для
                   контролируемой работы с шейным и поясничным отделами
@@ -220,21 +220,21 @@ export default function OrmedEquipmentSection() {
               </div>
             </div>
 
-            <div className="relative flex min-h-[240px] items-start justify-center lg:min-h-[280px] lg:justify-end">
-              <div className="relative w-full max-w-[540px] translate-y-6 sm:translate-y-8 lg:max-w-[600px] lg:translate-y-12">
+            <div className="relative flex min-h-[190px] items-start justify-center sm:min-h-[220px] lg:min-h-[250px] lg:justify-end">
+              <div className="relative w-[112%] max-w-[680px] translate-y-5 sm:w-[116%] sm:translate-y-7 lg:w-[125%] lg:max-w-[820px] lg:translate-y-10">
                 <Image
                   src="/images/services/ormed.webp"
                   alt="ORMED-Тракцион"
                   width={1448}
                   height={1086}
-                  sizes="(max-width: 1023px) 100vw, 40vw"
+                  sizes="(max-width: 1023px) 100vw, 48vw"
                   className="h-auto w-full object-contain drop-shadow-[0_18px_38px_rgba(0,0,0,0.5)]"
                 />
               </div>
             </div>
           </div>
 
-          <div className="relative z-10 my-8 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-10 lg:my-12" />
+          <div className="relative z-10 my-6 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-7 lg:my-8" />
 
           <div className="relative z-10 grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-12">
             <div className="min-w-0">

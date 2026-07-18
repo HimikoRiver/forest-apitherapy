@@ -75,8 +75,8 @@ export default function ServicesPage() {
             className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[220px] bg-[linear-gradient(0deg,rgba(0,0,0,0.98)_0%,rgba(0,0,0,0.88)_18%,rgba(0,0,0,0.56)_42%,rgba(0,0,0,0.2)_72%,transparent_100%)]"
           />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1800px] px-4 pb-0 pt-8 sm:px-7 sm:pt-10 lg:px-10 lg:pt-12 xl:px-16">
-            <div className="grid w-full gap-5 lg:gap-6">
+          <div className="relative z-10 mx-auto w-full max-w-[1800px] px-4 pb-0 pt-6 sm:px-7 sm:pt-8 lg:px-10 lg:pt-9 xl:px-16">
+            <div className="grid w-full gap-3 sm:gap-4">
               <ApidomikBenefits />
               <ApidomikDescription />
             </div>

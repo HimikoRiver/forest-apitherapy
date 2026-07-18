@@ -5,7 +5,7 @@ import DecorativeDivider from "./shared/DecorativeDivider";
 
 export default function ApidomikHero() {
   return (
-    <section className="relative h-[100svh] min-h-[740px] overflow-hidden">
+    <section className="relative h-[clamp(740px,100svh,1080px)] overflow-hidden">
       <Image
         src="/images/services/fon11.webp"
         alt=""

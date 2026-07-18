@@ -52,12 +52,6 @@ const PAGE_TOP_EDGE_DEPTH = 0.017;
 const PAGE_BOTTOM_EDGE_DEPTH = 0.013;
 const PAGE_CENTER_BILLOW = 0.0065;
 
-/*
- * Форма страницы в спокойном положении:
- * верхний внешний край оставляем без дополнительного опускания,
- * а нижний край приподнимаем по центру. За счёт этого внешний
- * нижний угол визуально находится ниже всей остальной страницы.
- */
 const STATIC_OUTER_TOP_INSET = 0;
 const STATIC_OUTER_CURVE_START = 0.82;
 const STATIC_BOTTOM_ARC_LIFT = 0.018;
@@ -161,10 +155,6 @@ function drawPageOutline(context, width, height, side) {
       height,
     );
 
-    /*
-     * Внешний нижний угол остаётся на нижней точке,
-     * а середина нижнего края поднимается выше.
-     */
     context.bezierCurveTo(
       width * 0.12,
       height * 0.996,
@@ -212,10 +202,6 @@ function drawPageOutline(context, width, height, side) {
       height,
     );
 
-    /*
-     * Зеркальная форма для правой страницы:
-     * внешний нижний угол ниже, середина края выше.
-     */
     context.bezierCurveTo(
       width * 0.88,
       height * 0.996,
@@ -718,7 +704,6 @@ function TurningPageMesh({
   onComplete,
 }) {
   const isNext = direction === "next";
-
   const groupRef = useRef(null);
 
   const viewportWidth = useThree(
@@ -946,11 +931,6 @@ function TurningPageMesh({
         pageHeight *
         STATIC_OUTER_TOP_INSET;
 
-      /*
-       * Нижний край приподнимается по центру и остаётся ниже
-       * у корешка и внешнего угла. Поэтому нужный внешний кусок
-       * визуально опускается без резкого локального скоса.
-       */
       const staticBottomArcLift =
         Math.pow(Math.sin(Math.PI * u), 0.9) *
         bottomInfluence *
@@ -1441,8 +1421,8 @@ export default function OrmedBookSlider() {
         <div className="mx-auto mt-5 h-px w-20 bg-gradient-to-r from-transparent via-[#d8ad56]/75 to-transparent" />
       </div>
 
-      <div className="relative -mt-[8%] sm:-mt-[10%] lg:-mt-[12%]">
-        <div className="relative mx-auto w-full max-w-[1650px] px-12 sm:px-16 lg:px-14">
+      <div className="relative mx-auto w-full max-w-[1650px]">
+        <div className="relative -mt-[8%] px-12 sm:-mt-[10%] sm:px-16 lg:-mt-[12%] lg:px-14">
           <ClipDefs
             pageLeftId={pageLeftId}
             pageRightId={pageRightId}

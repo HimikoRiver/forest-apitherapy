@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
-const navItems = [
+const baseNavItems = [
   {
     id: "home",
     label: "Главная",
@@ -14,7 +16,7 @@ const navItems = [
   {
     id: "about",
     label: "О специалисте",
-    href: "/specialist",
+    href: "/about",
     icon: "/images/footer/cardIcons/about.webp",
   },
   {
@@ -47,10 +49,39 @@ const goldItems = new Set(["about", "products", "contacts"]);
 
 export default function MobileHeroMenu() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { data: session } = authClient.useSession();
+
   const [isOpen, setIsOpen] = useState(false);
 
+  const isAuthenticated = Boolean(session?.user);
+
+  const isCabinetRoute =
+    pathname === "/profile" || pathname.startsWith("/profile/");
+
+  const navItems = useMemo(
+    () => [
+      ...baseNavItems,
+      {
+        id: "auth",
+        label: isAuthenticated ? "Кабинет" : "Вход",
+        href: isAuthenticated ? "/profile" : "/login",
+        icon: isAuthenticated
+          ? "/images/footer/cardIcons/cabinet.webp"
+          : "/images/footer/cardIcons/exit.webp",
+      },
+    ],
+    [isAuthenticated]
+  );
+
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isCabinetRoute || !isOpen) return;
+
+    setIsOpen(false);
+  }, [isCabinetRoute, isOpen]);
+
+  useEffect(() => {
+    if (!isOpen || isCabinetRoute) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -67,7 +98,7 @@ export default function MobileHeroMenu() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isCabinetRoute, isOpen]);
 
   const handleNavClick = (href) => {
     setIsOpen(false);
@@ -77,23 +108,30 @@ export default function MobileHeroMenu() {
     });
   };
 
+  if (isCabinetRoute) {
+    return null;
+  }
+
   return (
     <div
-      className={`mobile-hero-menu ${isOpen ? "mobile-hero-menu--open" : ""}`}
+      className={`mobile-hero-menu ${
+        isOpen ? "mobile-hero-menu--open" : ""
+      }`}
       aria-expanded={isOpen}
     >
-      <button
+      <LuxuryButton
         type="button"
         aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
-        className="mobile-hero-menu__button"
+        className="mobile-hero-menu__button !min-h-0 !translate-y-0 !rounded-full !p-0"
         onClick={() => setIsOpen((current) => !current)}
-      >
-        <span className="mobile-hero-menu__morph" aria-hidden="true">
-          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--top" />
-          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--middle" />
-          <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--bottom" />
-        </span>
-      </button>
+        icon={
+          <span className="mobile-hero-menu__morph" aria-hidden="true">
+            <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--top" />
+            <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--middle" />
+            <span className="mobile-hero-menu__morph-line mobile-hero-menu__morph-line--bottom" />
+          </span>
+        }
+      />
 
       {isOpen ? (
         <>
@@ -105,9 +143,16 @@ export default function MobileHeroMenu() {
 
           <nav className="mobile-hero-menu__panel" aria-label="Мобильное меню">
             <div className="mobile-hero-menu__panel-head">
-              <span className="mobile-hero-menu__panel-line" />
-              <span className="mobile-hero-menu__panel-dot" />
-              <span className="mobile-hero-menu__panel-line" />
+              <span className="mobile-hero-menu__panel-title">menu</span>
+
+              <div
+                className="mobile-hero-menu__panel-divider"
+                aria-hidden="true"
+              >
+                <span className="mobile-hero-menu__panel-line" />
+                <span className="mobile-hero-menu__panel-dot" />
+                <span className="mobile-hero-menu__panel-line" />
+              </div>
             </div>
 
             <div className="mobile-hero-menu__list">
@@ -153,7 +198,7 @@ export default function MobileHeroMenu() {
           display: block;
         }
 
-        .mobile-hero-menu__button {
+        :global(.mobile-hero-menu__button) {
           pointer-events: auto;
           position: absolute;
           top: calc(env(safe-area-inset-top) + 12px);
@@ -162,84 +207,139 @@ export default function MobileHeroMenu() {
           display: grid;
           width: 58px;
           height: 58px;
+          min-height: 58px;
           place-items: center;
           margin: 0;
           padding: 0;
-          border: 0;
-          border-radius: 999px;
-          cursor: pointer;
           overflow: hidden;
-          background:
-            radial-gradient(
-              circle at 50% 28%,
-              rgba(255, 235, 170, 0.18),
-              rgba(8, 62, 43, 0.96) 54%,
-              rgba(2, 22, 17, 0.98) 100%
-            ),
-            url("/textures/suede-green.webp");
-          background-size: cover;
-          box-shadow:
-            0 10px 22px rgba(0, 0, 0, 0.38),
-            inset 0 0 16px rgba(216, 182, 106, 0.12),
-            0 0 16px rgba(216, 182, 106, 0.24);
-          transform: translate3d(0, 0, 0);
+          border-radius: 999px;
           opacity: 1;
           visibility: visible;
+          transform: translate3d(0, 0, 0);
           transition:
             transform 260ms ease,
-            box-shadow 260ms ease;
+            border-color 350ms ease,
+            box-shadow 350ms ease;
         }
 
-        .mobile-hero-menu__button::before {
-          content: "";
-          pointer-events: none;
+        :global(.mobile-hero-menu__button .luxury-button__base) {
+          background: linear-gradient(
+            180deg,
+            #123512 0%,
+            #081e08 56%,
+            #041004 100%
+          );
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__texture),
+        :global(.mobile-hero-menu__button .luxury-button__velvet-light),
+        :global(.mobile-hero-menu__button .luxury-button__gold-fill),
+        :global(.mobile-hero-menu__button .luxury-button__shine),
+        :global(.mobile-hero-menu__button .luxury-button__border) {
+          border-radius: 999px;
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__texture) {
+          background:
+            linear-gradient(
+              180deg,
+              rgba(8, 30, 8, 0.04),
+              rgba(0, 0, 0, 0.26)
+            ),
+            url("/textures/suede-green.webp");
+          background-position: center;
+          background-size: 190% auto;
+          filter: saturate(0.88) contrast(1.08) brightness(0.72);
+          opacity: 0.98;
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__velvet-light) {
+          opacity: 0.22;
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__gold-fill) {
+          opacity: 0;
+          transform: translateX(-42%) skewX(-12deg);
+          transition: none;
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__shine) {
+          opacity: 0;
+          animation: none;
+        }
+
+        :global(.mobile-hero-menu__button .luxury-button__content) {
           position: absolute;
           inset: 0;
-          z-index: 1;
-          border-radius: inherit;
-          padding: 2px;
-          background: linear-gradient(
-            135deg,
-            #7a4d17 0%,
-            #d8b66a 22%,
-            #fff3c4 48%,
-            #b87928 70%,
-            #f4d88f 100%
-          );
-          background-size: 180% 180%;
-          -webkit-mask:
-            linear-gradient(#000 0 0) content-box,
-            linear-gradient(#000 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          animation: mobileHeroMenuButtonGoldBreath 3.2s ease-in-out infinite;
+          display: grid;
+          place-items: center;
+          padding: 0;
         }
 
-        .mobile-hero-menu__button::after {
-          content: "";
-          pointer-events: none;
-          position: absolute;
-          inset: 8px;
-          z-index: 1;
-          border-radius: inherit;
-          background: radial-gradient(
-            circle at 50% 35%,
-            rgba(244, 216, 143, 0.18),
-            transparent 62%
-          );
-          opacity: 0.42;
-          animation: mobileHeroMenuButtonInnerGlow 3.2s ease-in-out infinite;
+        :global(.mobile-hero-menu__button .luxury-button__icon) {
+          display: grid;
+          width: 30px;
+          height: 24px;
+          place-items: center;
+          margin: 0;
+          color: inherit;
+          filter: none;
+          animation: none;
         }
 
-        .mobile-hero-menu__button:active {
+        :global(.mobile-hero-menu__button:hover) {
+          border-color: rgba(190, 137, 52, 0.88);
+          transform: translate3d(0, 0, 0);
+          box-shadow:
+            0 18px 58px rgba(0, 0, 0, 0.42),
+            inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+
+        :global(.mobile-hero-menu__button:hover .luxury-button__texture) {
+          opacity: 0.98;
+          filter: saturate(0.88) contrast(1.08) brightness(0.72);
+        }
+
+        :global(
+          .mobile-hero-menu__button:hover .luxury-button__velvet-light
+        ) {
+          opacity: 0.22;
+        }
+
+        :global(.mobile-hero-menu__button:hover .luxury-button__gold-fill) {
+          opacity: 0;
+          transform: translateX(-42%) skewX(-12deg);
+        }
+
+        :global(.mobile-hero-menu__button:hover .luxury-button__shine) {
+          opacity: 0;
+          animation: none;
+        }
+
+        :global(.mobile-hero-menu__button:hover .luxury-button__icon) {
+          color: inherit;
+          filter: none;
+          animation: none;
+        }
+
+        :global(.mobile-hero-menu__button:active) {
           transform: scale(0.96);
         }
 
-        .mobile-hero-menu--open .mobile-hero-menu__button {
+        .mobile-hero-menu--open :global(.mobile-hero-menu__button) {
+          border-color: rgba(255, 232, 170, 0.98);
           box-shadow:
-            0 12px 26px rgba(0, 0, 0, 0.42),
-            inset 0 0 18px rgba(216, 182, 106, 0.14),
-            0 0 24px rgba(216, 182, 106, 0.32);
+            0 12px 30px rgba(0, 0, 0, 0.46),
+            0 0 22px rgba(240, 195, 101, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .mobile-hero-menu--open :global(.mobile-hero-menu__button:hover) {
+          border-color: rgba(255, 232, 170, 0.98);
+          box-shadow:
+            0 12px 30px rgba(0, 0, 0, 0.46),
+            0 0 22px rgba(240, 195, 101, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
         }
 
         .mobile-hero-menu__morph {
@@ -287,8 +387,8 @@ export default function MobileHeroMenu() {
 
         .mobile-hero-menu__morph-line--middle {
           width: 23px;
-          transform: translate(-50%, -50%) rotate(0deg) scaleX(1);
           opacity: 1;
+          transform: translate(-50%, -50%) rotate(0deg) scaleX(1);
         }
 
         .mobile-hero-menu__morph-line--bottom {
@@ -305,8 +405,8 @@ export default function MobileHeroMenu() {
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line--middle {
-          transform: translate(-50%, -50%) rotate(0deg) scaleX(0.08);
           opacity: 0;
+          transform: translate(-50%, -50%) rotate(0deg) scaleX(0.08);
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line--bottom {
@@ -318,9 +418,11 @@ export default function MobileHeroMenu() {
           position: absolute;
           inset: 0;
           z-index: 81;
-          background: rgba(2, 13, 10, 0.22);
+          background: rgba(2, 13, 10, 0.38);
+          -webkit-backdrop-filter: blur(12px) saturate(0.82);
+          backdrop-filter: blur(12px) saturate(0.82);
           opacity: 1;
-          animation: mobileHeroMenuBackdropIn 180ms ease both;
+          animation: mobileHeroMenuBackdropIn 220ms ease both;
         }
 
         .mobile-hero-menu__panel {
@@ -333,24 +435,26 @@ export default function MobileHeroMenu() {
           display: flex;
           width: 100%;
           overflow: hidden;
+          flex-direction: column;
           border: 0;
           border-radius: 0 0 30px 30px;
-          background:
+          background-color: #081e08;
+          background-image:
             linear-gradient(
               180deg,
-              rgba(5, 48, 36, 0.97),
-              rgba(2, 24, 19, 0.985)
+              rgba(8, 30, 8, 0.94),
+              rgba(8, 30, 8, 0.985)
             ),
             url("/textures/suede-green.webp");
+          background-position: center;
           background-size: auto, 260px 260px;
           box-shadow:
             0 18px 34px rgba(0, 0, 0, 0.42),
             inset 0 0 0 1px rgba(255, 235, 180, 0.1),
             0 0 22px rgba(216, 182, 106, 0.1);
-          flex-direction: column;
           transform-origin: top center;
-          animation: mobileHeroMenuPanelIn 260ms cubic-bezier(0.22, 1, 0.36, 1)
-            both;
+          animation: mobileHeroMenuPanelIn 260ms
+            cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         .mobile-hero-menu__panel::before {
@@ -384,14 +488,50 @@ export default function MobileHeroMenu() {
           position: relative;
           z-index: 1;
           display: flex;
-          height: calc(env(safe-area-inset-top) + 74px);
-          min-height: 74px;
-          align-items: flex-end;
+          height: calc(env(safe-area-inset-top) + 96px);
+          min-height: 96px;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
+          gap: 8px;
+          padding-bottom: 11px;
+          border-bottom: 1px solid rgba(216, 182, 106, 0.26);
+          background: rgba(0, 0, 0, 0.12);
+        }
+
+        .mobile-hero-menu__panel-title {
+          display: block;
+          padding-left: 0.28em;
+          background: linear-gradient(
+            90deg,
+            #8a5d20 0%,
+            #d8b66a 25%,
+            #fff2c3 50%,
+            #c18a32 75%,
+            #f4d88f 100%
+          );
+          background-size: 180% 100%;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          font-family: Georgia, "Times New Roman", serif;
+          font-size: 1.3rem;
+          font-weight: 600;
+          line-height: 1;
+          letter-spacing: 0.28em;
+          text-transform: lowercase;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0 0 7px rgba(216, 182, 106, 0.2));
+          transform: translateY(-8px);
+          animation: mobileHeroMenuGoldSoftShift 5.4s ease-in-out infinite
+            alternate;
+        }
+
+        .mobile-hero-menu__panel-divider {
+          display: flex;
+          align-items: center;
           justify-content: center;
           gap: 10px;
-          padding-bottom: 13px;
-          border-bottom: 1px solid rgba(216, 182, 106, 0.26);
-          background: rgba(1, 15, 12, 0.08);
         }
 
         .mobile-hero-menu__panel-line {
@@ -420,8 +560,8 @@ export default function MobileHeroMenu() {
           position: relative;
           z-index: 1;
           display: flex;
-          flex-direction: column;
           width: 100%;
+          flex-direction: column;
         }
 
         .mobile-hero-menu__link {
@@ -516,23 +656,30 @@ export default function MobileHeroMenu() {
         }
 
         @media (min-width: 768px) and (max-width: 1279px) {
-          .mobile-hero-menu__button {
+          :global(.mobile-hero-menu__button) {
             top: calc(env(safe-area-inset-top) + 24px);
             right: 28px;
             width: 82px;
             height: 82px;
+            min-height: 82px;
             box-shadow:
-              0 16px 34px rgba(0, 0, 0, 0.42),
-              inset 0 0 22px rgba(216, 182, 106, 0.14),
-              0 0 24px rgba(216, 182, 106, 0.28);
+              0 16px 38px rgba(0, 0, 0, 0.44),
+              0 0 26px rgba(240, 195, 101, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
           }
 
-          .mobile-hero-menu__button::before {
-            padding: 2.5px;
+          :global(.mobile-hero-menu__button:hover) {
+            border-color: rgba(190, 137, 52, 0.88);
+            transform: translate3d(0, 0, 0);
+            box-shadow:
+              0 16px 38px rgba(0, 0, 0, 0.44),
+              0 0 26px rgba(240, 195, 101, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
           }
 
-          .mobile-hero-menu__button::after {
-            inset: 11px;
+          :global(.mobile-hero-menu__button .luxury-button__icon) {
+            width: 42px;
+            height: 34px;
           }
 
           .mobile-hero-menu__morph {
@@ -570,10 +717,21 @@ export default function MobileHeroMenu() {
           }
 
           .mobile-hero-menu__panel-head {
-            height: calc(env(safe-area-inset-top) + 118px);
-            min-height: 118px;
+            height: calc(env(safe-area-inset-top) + 152px);
+            min-height: 152px;
+            gap: 13px;
+            padding-bottom: 18px;
+          }
+
+          .mobile-hero-menu__panel-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: 0.32em;
+            transform: translateY(-14px);
+          }
+
+          .mobile-hero-menu__panel-divider {
             gap: 18px;
-            padding-bottom: 22px;
           }
 
           .mobile-hero-menu__panel-line {
@@ -630,39 +788,6 @@ export default function MobileHeroMenu() {
           }
         }
 
-        @keyframes mobileHeroMenuButtonGoldBreath {
-          0%,
-          100% {
-            opacity: 0.74;
-            background-position: 42% 50%;
-            filter:
-              drop-shadow(0 0 3px rgba(216, 182, 106, 0.18))
-              brightness(0.96);
-          }
-
-          50% {
-            opacity: 1;
-            background-position: 58% 50%;
-            filter:
-              drop-shadow(0 0 8px rgba(244, 216, 143, 0.42))
-              drop-shadow(0 0 16px rgba(216, 182, 106, 0.2))
-              brightness(1.08);
-          }
-        }
-
-        @keyframes mobileHeroMenuButtonInnerGlow {
-          0%,
-          100% {
-            opacity: 0.26;
-            transform: scale(0.92);
-          }
-
-          50% {
-            opacity: 0.56;
-            transform: scale(1.04);
-          }
-        }
-
         @keyframes mobileHeroMenuGoldBreath {
           0%,
           100% {
@@ -707,12 +832,14 @@ export default function MobileHeroMenu() {
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .mobile-hero-menu__button::before,
-          .mobile-hero-menu__button::after,
+          :global(.mobile-hero-menu__button .luxury-button__border),
+          :global(.mobile-hero-menu__button .luxury-button__gold-fill),
           .mobile-hero-menu__panel::before,
+          .mobile-hero-menu__panel-title,
           .mobile-hero-menu__morph-line,
           .mobile-hero-menu__link--gold .mobile-hero-menu__label {
             animation: none;
+            transition: none;
           }
         }
 

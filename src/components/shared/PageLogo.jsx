@@ -5,12 +5,8 @@ import { usePathname } from "next/navigation";
 import DecorativeDivider from "@/components/services/shared/DecorativeDivider";
 
 const LOGO_ROUTES = {
-  "/":
-    "left-5 top-[clamp(18px,2.6vh,30px)] sm:left-8 lg:left-14 xl:hidden",
-  "/about":
-    "left-5 top-[clamp(18px,2.6vh,30px)] sm:left-8 lg:left-14 xl:left-20",
-  "/contacts":
-    "left-5 top-[clamp(18px,2.6vh,30px)] sm:left-8 lg:left-14 xl:left-20",
+  "/about": "left-20 top-[clamp(18px,2.6vh,30px)]",
+  "/contacts": "left-20 top-[clamp(18px,2.6vh,30px)]",
 };
 
 const LOGO_VARIANTS = {
@@ -59,7 +55,9 @@ export default function RoutePageLogo() {
   if (!positionClassName) return null;
 
   return (
-    <div className={`absolute z-[999] ${positionClassName}`}>
+    <div
+      className={`absolute z-[999] hidden xl:block ${positionClassName}`}
+    >
       <PageLogo />
     </div>
   );

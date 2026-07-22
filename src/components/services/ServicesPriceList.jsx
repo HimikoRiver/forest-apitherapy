@@ -43,21 +43,14 @@ export default function ServicesPriceList() {
       <div className="pointer-events-none absolute right-0 top-0 h-[260px] w-[420px] bg-[radial-gradient(circle_at_top_right,rgba(216,173,86,0.07),transparent_68%)]" />
 
       <div className="relative z-10">
-        <div className="flex items-center gap-5">
-          <h2
-            className="shrink-0 text-[clamp(1.35rem,2vw,2rem)] font-normal uppercase tracking-[0.035em] text-[#e2b45b]"
-            style={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-            }}
-          >
-            Наши услуги
-          </h2>
-
-          <span
-            aria-hidden="true"
-            className="h-px min-w-10 flex-1 bg-gradient-to-r from-[#d8ad56]/45 to-transparent"
-          />
-        </div>
+        <h2
+          className="text-[clamp(1.35rem,2vw,2rem)] font-normal uppercase tracking-[0.035em] text-[#e2b45b]"
+          style={{
+            fontFamily: "Georgia, 'Times New Roman', serif",
+          }}
+        >
+          Наши услуги
+        </h2>
 
         <div className="mt-9 grid gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-24">
           <PriceColumn services={firstColumn} startIndex={0} />

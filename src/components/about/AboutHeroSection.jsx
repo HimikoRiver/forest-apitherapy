@@ -56,25 +56,34 @@ function DropIcon() {
   );
 }
 
-function HoneyIcon() {
+function JarIcon() {
   return (
     <svg
-      viewBox="0 0 24 24"
-      className="h-5 w-5"
+      viewBox="0 0 32 32"
+      className="h-[22px] w-[22px]"
       fill="none"
       aria-hidden="true"
     >
       <path
-        d="M8 4h8l4 7-4 7H8l-4-7 4-7Z"
+        d="M12 5.5h8M13 5.5v4.2M19 5.5v4.2M11.8 10h8.4c1.35 0 2.45 1.1 2.45 2.45v10.1A4.45 4.45 0 0 1 18.2 27h-4.4a4.45 4.45 0 0 1-4.45-4.45v-10.1A2.45 2.45 0 0 1 11.8 10Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.45"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
 
       <path
-        d="M8 4 12 11m4-7-4 7m0 0 4 7m-4-7-4 7"
+        d="M9.45 17.2c2.1-1.05 3.8.9 6.1-.08 2.25-.95 3.9-2.55 7 .08"
         stroke="currentColor"
-        strokeWidth="1.2"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      <path
+        d="M12.7 21.8c.9.72 2.15 1.1 3.3 1.1s2.4-.38 3.3-1.1"
+        stroke="currentColor"
+        strokeWidth="1.15"
         strokeLinecap="round"
       />
     </svg>
@@ -180,10 +189,7 @@ export default function AboutHeroSection() {
         playsInline
         preload="metadata"
       >
-        <source
-          src="/videos/about-hero1.mp4"
-          type="video/mp4"
-        />
+        <source src="/videos/about-hero1.mp4" type="video/mp4" />
       </video>
 
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,9,8,0.88)_0%,rgba(2,9,8,0.72)_22%,rgba(2,9,8,0.34)_48%,rgba(2,9,8,0.1)_68%,rgba(2,9,8,0.34)_100%)]" />
@@ -214,24 +220,20 @@ export default function AboutHeroSection() {
             <span className="h-px flex-1 bg-gradient-to-l from-[#d8b66a] to-transparent" />
           </div>
 
-          <p className="mt-8 max-w-[620px] text-[17px] font-medium leading-8 text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)]">
-            Лечение пациентов методами апитерапии и восстановительные курсы
-            на основе силы пчёл.
+          <p className="mt-8 max-w-[680px] text-[16px] font-medium leading-8 text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)] sm:text-[17px]">
+            Более 18 лет я практикую апитерапию. По два года работал в железнодорожной больнице Одессы и городской больнице № 10. Второе образование получил в ЧГУ по специальности «Микробиология», обучаясь по очно-заочной форме. В своей практике я объединяю медицинский опыт, знания о свойствах пчелопродуктов и комплексный подход к восстановлению организма.
           </p>
 
           <div className="mt-10 grid max-w-[680px] gap-6 sm:grid-cols-3">
             {benefits.map((benefit, index) => (
-              <div
-                key={benefit}
-                className="flex items-center gap-4"
-              >
+              <div key={benefit} className="flex items-center gap-4">
                 <HexIcon>
                   {index === 0 ? (
                     <BeeSmallIcon />
                   ) : index === 1 ? (
                     <DropIcon />
                   ) : (
-                    <HoneyIcon />
+                    <JarIcon />
                   )}
                 </HexIcon>
 
@@ -247,18 +249,12 @@ export default function AboutHeroSection() {
           <LuxuryButton
             type="button"
             aria-label={
-              isPaused
-                ? "Запустить видео"
-                : "Остановить видео"
+              isPaused ? "Запустить видео" : "Остановить видео"
             }
             aria-pressed={isPaused}
             onClick={toggleVideo}
             className="!flex !h-[72px] !w-[72px] !min-w-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden"
-            icon={
-              isPaused
-                ? <PlayIcon />
-                : <PauseIcon />
-            }
+            icon={isPaused ? <PlayIcon /> : <PauseIcon />}
           />
         </div>
       </div>

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { PageLogo } from "@/components/shared/PageLogo";
 import BeeIcon from "@/components/home/shared/BeeIcon";
-import DecorativeDivider from "./shared/DecorativeDivider";
 
 export default function ApidomikHero() {
   return (
@@ -52,8 +51,6 @@ export default function ApidomikHero() {
               </p>
             </div>
 
-            <DecorativeDivider />
-
             <div className="max-w-[650px] space-y-[clamp(26px,3.4vh,38px)] text-[clamp(15px,1.85vh,18px)] font-medium leading-[1.8] text-[#eee3cd]">
               <p>
                 Сон на пчелиных ульях, или по-другому — SPA-процедура на пчёлах
@@ -82,10 +79,10 @@ export default function ApidomikHero() {
 
               <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(2,18,13,0.18)_0%,rgba(2,18,13,0.38)_100%)]" />
 
-              <div className="relative z-10 flex items-center gap-5 sm:gap-7">
+              <div className="relative z-10 flex items-center gap-5 sm:gap-6">
                 <span
                   aria-hidden="true"
-                  className="luxury-button__icon !m-0 !h-[56px] !w-[56px] !shrink-0 sm:!h-[66px] sm:!w-[66px]"
+                  className="luxury-button__icon !m-0 !h-[42px] !w-[42px] !shrink-0 sm:!h-[48px] sm:!w-[48px]"
                 >
                   <BeeIcon className="size-full" />
                 </span>

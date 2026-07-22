@@ -8,12 +8,13 @@ import {
   useState,
 } from "react";
 import Image from "next/image";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
-const TURN_DURATION = 1.15;
-const SETTLE_HOLD_DURATION = 90;
-const SETTLE_DURATION = 900;
+const TURN_DURATION = 0.5;
+const SETTLE_HOLD_DURATION = 0;
+const SETTLE_DURATION = 110;
 
 const PAGE_LEFT_PERCENT = 7.3;
 const PAGE_RIGHT_PERCENT = 49;
@@ -530,43 +531,40 @@ function usePageTexture(photoSrc, side) {
   return textureState;
 }
 
-function ChevronButton({
-  direction = "left",
-  onClick,
-  disabled = false,
-}) {
+function ChevronButton({ direction = "left", onClick }) {
   const isLeft = direction === "left";
 
   return (
-    <button
+    <LuxuryButton
       type="button"
       onClick={onClick}
-      disabled={disabled}
       aria-label={
         isLeft ? "Предыдущий разворот" : "Следующий разворот"
       }
-      className="group flex size-11 shrink-0 items-center justify-center rounded-full border border-[#b98736]/65 bg-[#03110d]/95 text-[#d8ad56] shadow-[0_12px_30px_rgba(0,0,0,0.45),inset_0_0_14px_rgba(216,173,86,0.05)] transition duration-300 hover:border-[#e0b45b] hover:bg-[#092017] disabled:cursor-not-allowed disabled:opacity-40 sm:size-12"
-    >
-      <svg
-        viewBox="0 0 24 24"
-        className={`size-5 transition-transform duration-300 ${
-          isLeft
-            ? "group-hover:-translate-x-0.5"
-            : "group-hover:translate-x-0.5"
-        }`}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {isLeft ? (
-          <path d="M14.5 5.5 8 12l6.5 6.5" />
-        ) : (
-          <path d="M9.5 5.5 16 12l-6.5 6.5" />
-        )}
-      </svg>
-    </button>
+      className="group !flex !size-[48px] !min-h-[48px] !min-w-[48px] !max-h-[48px] !max-w-[48px] !shrink-0 !translate-y-0 !items-center !justify-center !overflow-hidden !rounded-full !p-0 before:!inset-0 before:!rounded-full after:!inset-0 after:!rounded-full sm:!size-[54px] sm:!min-h-[54px] sm:!min-w-[54px] sm:!max-h-[54px] sm:!max-w-[54px] [&_*]:!rounded-full [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!size-full [&_.luxury-button__content]:!min-h-0 [&_.luxury-button__content]:!min-w-0 [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__content]:!p-0 [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!size-full [&_.luxury-button__icon]:!min-h-0 [&_.luxury-button__icon]:!min-w-0 [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden"
+      icon={
+        <svg
+          viewBox="0 0 24 24"
+          className={`!size-5 transition-transform duration-300 ${
+            isLeft
+              ? "group-hover:-translate-x-0.5"
+              : "group-hover:translate-x-0.5"
+          }`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          {isLeft ? (
+            <path d="M14.5 5.5 8 12l6.5 6.5" />
+          ) : (
+            <path d="M9.5 5.5 16 12l-6.5 6.5" />
+          )}
+        </svg>
+      }
+    />
   );
 }
 
@@ -1133,11 +1131,17 @@ export default function OrmedBookSlider() {
   const pageLeftId = `book-page-left-${safeId}`;
   const pageRightId = `book-page-right-${safeId}`;
 
+  const currentSpreadRef = useRef(0);
+  const turnActiveRef = useRef(false);
+  const pendingTurnsRef = useRef([]);
+
   const coveringFrameOneRef = useRef(null);
   const coveringFrameTwoRef = useRef(null);
 
   const settleFrameOneRef = useRef(null);
   const settleFrameTwoRef = useRef(null);
+
+  const nextTurnFrameRef = useRef(null);
 
   const settleHoldTimeoutRef = useRef(null);
   const settleTimeoutRef = useRef(null);
@@ -1169,6 +1173,10 @@ export default function OrmedBookSlider() {
 
   const [currentSpread, setCurrentSpread] = useState(0);
   const [turnState, setTurnState] = useState(null);
+
+  useEffect(() => {
+    currentSpreadRef.current = currentSpread;
+  }, [currentSpread]);
 
   useEffect(() => {
     const preloadedImages = [];
@@ -1209,6 +1217,10 @@ export default function OrmedBookSlider() {
         cancelAnimationFrame(settleFrameTwoRef.current);
       }
 
+      if (nextTurnFrameRef.current) {
+        cancelAnimationFrame(nextTurnFrameRef.current);
+      }
+
       if (settleHoldTimeoutRef.current) {
         clearTimeout(settleHoldTimeoutRef.current);
       }
@@ -1216,6 +1228,9 @@ export default function OrmedBookSlider() {
       if (settleTimeoutRef.current) {
         clearTimeout(settleTimeoutRef.current);
       }
+
+      pendingTurnsRef.current = [];
+      turnActiveRef.current = false;
     };
   }, []);
 
@@ -1229,26 +1244,36 @@ export default function OrmedBookSlider() {
     ? spreads[turnState.targetIndex]
     : current;
 
-  const startTurn = (direction) => {
-    if (turnState) {
-      return;
-    }
-
+  const beginTurn = (
+    direction,
+    sourceIndex = currentSpreadRef.current,
+  ) => {
     const targetIndex =
       direction === "next"
-        ? (currentSpread + 1) % spreads.length
+        ? (sourceIndex + 1) % spreads.length
         : (
-            currentSpread -
+            sourceIndex -
             1 +
             spreads.length
           ) % spreads.length;
 
+    turnActiveRef.current = true;
+
     setTurnState({
       direction,
-      sourceIndex: currentSpread,
+      sourceIndex,
       targetIndex,
       phase: "preparing",
     });
+  };
+
+  const startTurn = (direction) => {
+    if (turnActiveRef.current) {
+      pendingTurnsRef.current.push(direction);
+      return;
+    }
+
+    beginTurn(direction);
   };
 
   const handleTurningPageReady = () => {
@@ -1295,6 +1320,7 @@ export default function OrmedBookSlider() {
       targetIndex,
     } = turnState;
 
+    currentSpreadRef.current = targetIndex;
     setCurrentSpread(targetIndex);
 
     setTurnState((currentState) => {
@@ -1332,18 +1358,22 @@ export default function OrmedBookSlider() {
           });
 
           settleTimeoutRef.current = window.setTimeout(() => {
-            setTurnState((currentState) => {
-              if (
-                !currentState ||
-                currentState.sourceIndex !== sourceIndex ||
-                currentState.targetIndex !== targetIndex ||
-                currentState.phase !== "settling"
-              ) {
-                return currentState;
-              }
+            const nextDirection =
+              pendingTurnsRef.current.shift() ?? null;
 
-              return null;
-            });
+            setTurnState(null);
+
+            if (nextDirection) {
+              turnActiveRef.current = true;
+
+              nextTurnFrameRef.current = requestAnimationFrame(() => {
+                beginTurn(nextDirection, targetIndex);
+              });
+
+              return;
+            }
+
+            turnActiveRef.current = false;
           }, SETTLE_DURATION);
         }, SETTLE_HOLD_DURATION);
       });
@@ -1432,7 +1462,6 @@ export default function OrmedBookSlider() {
             <ChevronButton
               direction="left"
               onClick={() => startTurn("prev")}
-              disabled={Boolean(turnState)}
             />
           </div>
 
@@ -1440,7 +1469,6 @@ export default function OrmedBookSlider() {
             <ChevronButton
               direction="right"
               onClick={() => startTurn("next")}
-              disabled={Boolean(turnState)}
             />
           </div>
 

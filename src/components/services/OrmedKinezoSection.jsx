@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
-import HoneycombRows from "@/components/home/about/CenterStorySection/HoneycombRows";
 
 function PauseIcon() {
   return (
@@ -33,6 +32,38 @@ function PlayIcon() {
     >
       <path d="M8 5.5v13l10-6.5-10-6.5Z" />
     </svg>
+  );
+}
+
+function VideoVineFrame({ children, mirrored = false }) {
+  return (
+    <div
+      className={`relative ${
+        mirrored
+          ? "pr-[36px] pb-[48px] pt-[22px] sm:pr-[46px] sm:pb-[60px] sm:pt-[26px] lg:pr-[56px] lg:pb-[72px] lg:pt-[30px]"
+          : "pl-[36px] pb-[48px] pt-[22px] sm:pl-[46px] sm:pb-[60px] sm:pt-[26px] lg:pl-[56px] lg:pb-[72px] lg:pt-[30px]"
+      }`}
+    >
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none absolute z-20 ${
+          mirrored ? "-right-[120px]" : "-left-[10%]"
+        } -bottom-[8%] w-[136%] sm:w-[138%] lg:w-[140%]`}
+      >
+        <Image
+          src="/images/services/vine.webp"
+          alt=""
+          width={3344}
+          height={1882}
+          sizes="(max-width: 1023px) 120vw, 62vw"
+          className={`h-auto w-full max-w-none select-none object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.22)] ${
+            mirrored ? "-scale-x-100" : ""
+          }`}
+        />
+      </div>
+
+      <div className="relative z-10">{children}</div>
+    </div>
   );
 }
 
@@ -237,13 +268,9 @@ export default function OrmedKinezoSection() {
           <div className="relative z-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center xl:gap-12">
             <div className="relative flex flex-col justify-center">
               <div className="mb-7">
-                <div className="flex items-center gap-4">
-                  <h3 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
-                    Особенности процедуры
-                  </h3>
-
-                  <div className="h-px flex-1 bg-gradient-to-r from-[#d7aa51]/65 to-transparent" />
-                </div>
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                  Особенности процедуры
+                </h3>
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
@@ -262,13 +289,9 @@ export default function OrmedKinezoSection() {
               </div>
 
               <div>
-                <div className="flex items-center gap-4">
-                  <h3 className="shrink-0 text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
-                    Применение
-                  </h3>
-
-                  <div className="h-px flex-1 bg-gradient-to-r from-[#d7aa51]/65 to-transparent" />
-                </div>
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                  Применение
+                </h3>
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
@@ -287,15 +310,9 @@ export default function OrmedKinezoSection() {
             </div>
 
             <div className="min-w-0">
-              <div className="mb-4 px-5 sm:mb-5 sm:px-6">
-                <HoneycombRows mode="standalone" direction="top" />
-              </div>
-
-              <KinezoVideo />
-
-              <div className="mt-4 px-5 sm:mt-5 sm:px-6">
-                <HoneycombRows mode="standalone" direction="bottom" />
-              </div>
+              <VideoVineFrame mirrored>
+                <KinezoVideo />
+              </VideoVineFrame>
             </div>
           </div>
         </div>

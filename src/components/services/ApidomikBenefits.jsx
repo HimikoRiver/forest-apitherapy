@@ -32,15 +32,7 @@ export default function ApidomikBenefits() {
           >
             <ServiceIcon src={item.icon} />
 
-            <div className="my-3 flex items-center gap-2">
-              <span className="h-px w-7 bg-[#d8ad56]/55" />
-
-              <span className="size-[4px] rotate-45 border border-[#d8ad56]/80" />
-
-              <span className="h-px w-7 bg-[#d8ad56]/55" />
-            </div>
-
-            <h3 className="max-w-[240px] text-[11px] font-bold leading-5 text-[#e0b45b] sm:text-[12px] xl:text-[13px]">
+            <h3 className="mt-3 max-w-[240px] text-[11px] font-bold leading-5 text-[#e0b45b] sm:text-[12px] xl:text-[13px]">
               {item.title}
             </h3>
 

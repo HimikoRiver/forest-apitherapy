@@ -45,7 +45,21 @@ const baseNavItems = [
   },
 ];
 
+const hiddenMenuRoutePrefixes = [
+  "/products",
+  "/profile",
+  "/cart",
+  "/checkout",
+  "/admin",
+];
+
 const goldItems = new Set(["about", "products", "contacts"]);
+
+function isHiddenMenuRoute(pathname) {
+  return hiddenMenuRoutePrefixes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+}
 
 export default function MobileHeroMenu() {
   const router = useRouter();
@@ -55,9 +69,7 @@ export default function MobileHeroMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
   const isAuthenticated = Boolean(session?.user);
-
-  const isCabinetRoute =
-    pathname === "/profile" || pathname.startsWith("/profile/");
+  const shouldHideMenu = isHiddenMenuRoute(pathname);
 
   const navItems = useMemo(
     () => [
@@ -75,13 +87,13 @@ export default function MobileHeroMenu() {
   );
 
   useEffect(() => {
-    if (!isCabinetRoute || !isOpen) return;
+    if (!shouldHideMenu || !isOpen) return;
 
     setIsOpen(false);
-  }, [isCabinetRoute, isOpen]);
+  }, [shouldHideMenu, isOpen]);
 
   useEffect(() => {
-    if (!isOpen || isCabinetRoute) return;
+    if (!isOpen || shouldHideMenu) return;
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -98,7 +110,7 @@ export default function MobileHeroMenu() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isCabinetRoute, isOpen]);
+  }, [isOpen, shouldHideMenu]);
 
   const handleNavClick = (href) => {
     setIsOpen(false);
@@ -108,7 +120,7 @@ export default function MobileHeroMenu() {
     });
   };
 
-  if (isCabinetRoute) {
+  if (shouldHideMenu) {
     return null;
   }
 

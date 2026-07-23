@@ -1,9 +1,6 @@
 import Image from "next/image";
 import FooterCards from "@/components/home/footer/FooterCards";
 
-const instagramDisclaimer =
-  "Instagram принадлежит компании Meta Platforms Inc., деятельность которой признана экстремистской и запрещена на территории Российской Федерации. Упоминание осуществляется исключительно в информационных целях.";
-
 const copyright = "© 2026 Himiko River. Все права защищены.";
 
 export default function FooterDesktop() {
@@ -70,10 +67,6 @@ export default function FooterDesktop() {
 
           <span className="h-px bg-gradient-to-r from-[#d8b66a]/22 via-[#d8b66a]/76 to-transparent shadow-[0_0_14px_rgba(216,182,106,0.3)]" />
         </div>
-
-        <p className="absolute bottom-[1.7%] left-[6.7%] z-10 m-0 max-w-[720px] text-left text-[clamp(0.42rem,0.52vw,0.64rem)] font-medium leading-[1.55] tracking-[-0.02em] text-[#d8b66a]/76 drop-shadow-[0_3px_12px_rgba(0,0,0,0.82)]">
-          {instagramDisclaimer}
-        </p>
 
         <p className="absolute bottom-[1.7%] right-[6.7%] z-10 m-0 max-w-[420px] text-right text-[clamp(0.54rem,0.64vw,0.76rem)] font-medium leading-[1.45] tracking-[0.02em] text-[#d8b66a]/88 drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)]">
           {copyright}

@@ -14,37 +14,46 @@ const MEDIA_SHADOW =
 const ADDRESS_PANEL_SHADOW =
   "drop-shadow(0 7px 10px rgba(0,0,0,0.88)) drop-shadow(0 12px 16px rgba(0,0,0,0.72))";
 
+const FULL_ADDRESS =
+  "г. Грозный, Байсангуровский район, Смотровой переулок, 4";
+
+const ADDRESS_QUERY = encodeURIComponent(FULL_ADDRESS);
+
+const YANDEX_MAP_URL = `https://yandex.ru/maps/?text=${ADDRESS_QUERY}`;
+
+const YANDEX_MAP_WIDGET_URL = `https://yandex.ru/map-widget/v1/?mode=search&text=${ADDRESS_QUERY}&z=17`;
+
 const contacts = [
   {
     title: "Телефон",
-    text: "+7 000 000-00-00",
+    text: "8 (966) 727-17-71",
     caption: "Ежедневно с 09:00 до 20:00",
-    href: "tel:+70000000000",
+    href: "tel:+79667271771",
     icon: "/images/footer/cardIcons/connection.webp",
     iconAlt: "Телефон",
   },
   {
     title: "WhatsApp",
-    text: "Написать в WhatsApp",
-    caption: "Ответим в течение нескольких минут",
-    href: "https://wa.me/70000000000",
+    text: "8 (966) 727-17-71",
+    caption: "Написать в WhatsApp",
+    href: "https://wa.me/79667271771",
     icon: "/images/footer/WhatsApp.webp",
     iconAlt: "WhatsApp",
   },
   {
     title: "Telegram",
-    text: "Открыть Telegram",
+    text: "t.me/apiterapiya_95",
     caption: "Быстрая связь и консультация",
-    href: "https://t.me/",
+    href: "https://t.me/apiterapiya_95",
     icon: "/images/footer/Telegram.webp",
     iconAlt: "Telegram",
   },
   {
     title: "E-mail",
-    text: "info@apidarb.ru",
-    caption: "Ответим на все ваши вопросы",
-    href: "mailto:info@apidarb.ru",
-    icon: "/images/footer/cardIcons/contacts.webp",
+    text: "afelaktitaapi@mail.ru",
+    caption: "Написать на электронную почту",
+    href: "mailto:afelaktitaapi@mail.ru",
+    icon: "/images/footer/Mail.webp",
     iconAlt: "E-mail",
   },
 ];
@@ -546,7 +555,7 @@ export default function ContactsPage() {
                           </p>
 
                           <BevelPanel
-                            className="w-full max-w-[220px]"
+                            className="w-full max-w-[250px]"
                             cut={9}
                             background="rgba(3,15,12,0.88)"
                             borderColor={BRIGHT_BORDER}
@@ -563,14 +572,14 @@ export default function ContactsPage() {
                               <p className="text-[13px] font-semibold leading-6 text-[#fff7e5] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:text-[14px] sm:leading-7">
                                 г. Грозный,
                                 <br />
-                                ул. Гикало, 6В
+                                Смотровой переулок, 4
                               </p>
                             </div>
                           </BevelPanel>
                         </div>
 
                         <LuxuryButton
-                          href="https://yandex.ru/maps/?text=Грозный%20Гикало%206В"
+                          href={YANDEX_MAP_URL}
                           target="_blank"
                           rel="noreferrer"
                           variant="contactMap"
@@ -584,7 +593,7 @@ export default function ContactsPage() {
                     <MediaFrame className="min-h-[320px]">
                       <iframe
                         title="Карта проезда"
-                        src="https://yandex.ru/map-widget/v1/?ll=45.694909%2C43.318902&z=15"
+                        src={YANDEX_MAP_WIDGET_URL}
                         className="absolute inset-0 h-full w-full opacity-58 grayscale-[0.72] contrast-[1.15] sepia-[0.22]"
                         loading="lazy"
                       />

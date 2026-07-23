@@ -3,7 +3,6 @@ import LuxuryButton from "@/components/home/shared/LuxuryButton";
 import MobileHeroMenu from "./MobileHeroMenu";
 
 const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
-const LOGO_IMAGE = "/images/logo1.webp";
 
 export default function HeroMobile() {
   return (
@@ -28,28 +27,10 @@ export default function HeroMobile() {
         className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_34%,rgba(0,0,0,0.1)_100%)]"
       />
 
-      <header className="absolute left-0 right-0 top-0 z-20 flex items-start justify-between gap-4 px-5 pt-[calc(env(safe-area-inset-top)+18px)]">
-        <div className="flex items-center gap-3">
-          <span className="relative block size-[52px] shrink-0 overflow-hidden rounded-full shadow-[0_0_18px_rgba(216,182,106,0.22)]">
-            <Image
-              src={LOGO_IMAGE}
-              alt="APIDARB"
-              fill
-              sizes="52px"
-              className="object-cover"
-            />
-          </span>
-
-          <span className="block pt-1">
-            <span className="block text-[1.62rem] font-semibold uppercase leading-none tracking-[0.13em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
-              APIDARB
-            </span>
-
-            <span className="mt-1 block text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#d8b66a]/90">
-              Центр апитерапии
-            </span>
-          </span>
-        </div>
+      <header className="absolute inset-x-0 top-0 z-20 px-5 pt-[calc(env(safe-area-inset-top)+22px)]">
+        <span className="block text-[1.68rem] font-semibold uppercase leading-none tracking-[0.15em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
+          APIDARB
+        </span>
       </header>
 
       <MobileHeroMenu />

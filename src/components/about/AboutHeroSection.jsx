@@ -94,7 +94,7 @@ function PauseIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[23px] w-[23px] translate-x-[1px]"
+      className="h-[22px] w-[22px]"
       fill="none"
       aria-hidden="true"
     >
@@ -112,7 +112,7 @@ function PlayIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[23px] w-[23px] translate-x-[2px]"
+      className="h-[22px] w-[22px] translate-x-[1px]"
       fill="currentColor"
       aria-hidden="true"
     >
@@ -121,17 +121,21 @@ function PlayIcon() {
   );
 }
 
-function HexIcon({ children }) {
+function HexIcon({ children, compact = false }) {
+  const sizeClassName = compact ? "h-11 w-11" : "h-12 w-12";
+
   return (
-    <span className="relative flex h-12 w-12 shrink-0 items-center justify-center text-[#d8b66a]">
+    <span
+      className={`relative flex shrink-0 items-center justify-center text-[#d8b66a] ${sizeClassName}`}
+    >
       <svg
         viewBox="0 0 52 58"
-        className="absolute h-12 w-12"
+        className={`absolute ${sizeClassName}`}
         aria-hidden="true"
       >
         <path
           d="M26 2 49 15.5v27L26 56 3 42.5v-27L26 2Z"
-          fill="rgba(3,17,13,0.5)"
+          fill="rgba(3,17,13,0.76)"
           stroke="rgba(216,182,106,0.78)"
           strokeWidth="1.4"
         />
@@ -139,6 +143,36 @@ function HexIcon({ children }) {
 
       <span className="relative z-10">{children}</span>
     </span>
+  );
+}
+
+function BenefitIcon({ index }) {
+  if (index === 0) {
+    return <BeeSmallIcon />;
+  }
+
+  if (index === 1) {
+    return <DropIcon />;
+  }
+
+  return <JarIcon />;
+}
+
+function VideoToggleButton({
+  isPaused,
+  onClick,
+  className = "",
+  sizeClassName,
+}) {
+  return (
+    <LuxuryButton
+      type="button"
+      aria-label={isPaused ? "Запустить видео" : "Остановить видео"}
+      aria-pressed={isPaused}
+      onClick={onClick}
+      className={`!flex !min-w-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden ${sizeClassName} ${className}`}
+      icon={isPaused ? <PlayIcon /> : <PauseIcon />}
+    />
   );
 }
 
@@ -179,10 +213,15 @@ export default function AboutHeroSection() {
   };
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden bg-[#020908] xl:h-[min(100svh,1080px)] xl:min-h-[760px]">
+    <section
+      className="relative overflow-hidden bg-[#020908] text-[#f4edda] xl:h-[min(100svh,1080px)] xl:min-h-[760px]"
+      style={{
+        fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
+      }}
+    >
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover object-center"
+        className="absolute inset-x-0 top-0 h-[58svh] min-h-[500px] w-full object-cover object-[64%_center] md:h-full md:min-h-0 md:object-[62%_center] xl:object-center"
         autoPlay
         muted
         loop
@@ -192,15 +231,172 @@ export default function AboutHeroSection() {
         <source src="/videos/about-hero1.mp4" type="video/mp4" />
       </video>
 
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(2,9,8,0.88)_0%,rgba(2,9,8,0.72)_22%,rgba(2,9,8,0.34)_48%,rgba(2,9,8,0.1)_68%,rgba(2,9,8,0.34)_100%)]" />
+      {/* MOBILE VIDEO OVERLAYS */}
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,9,8,0.14)_0%,rgba(2,9,8,0.04)_42%,rgba(2,9,8,0.9)_100%)]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[58svh] min-h-[500px] bg-[linear-gradient(180deg,rgba(2,9,8,0.36)_0%,rgba(2,9,8,0.04)_28%,rgba(2,9,8,0.1)_52%,rgba(2,9,8,0.82)_83%,#020908_100%)] md:hidden"
+      />
 
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-[58vw] bg-[radial-gradient(ellipse_at_20%_48%,rgba(3,22,16,0.82)_0%,rgba(3,22,16,0.66)_32%,rgba(3,22,16,0.36)_58%,rgba(3,22,16,0.12)_78%,transparent_100%)] blur-[18px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-[58svh] min-h-[500px] w-[68%] bg-[linear-gradient(90deg,rgba(2,9,8,0.62)_0%,rgba(2,9,8,0.18)_68%,transparent_100%)] md:hidden"
+      />
 
-      <div className="pointer-events-none absolute bottom-[-12%] right-[-8%] h-[70%] w-[56vw] bg-[radial-gradient(circle_at_100%_100%,rgba(2,9,8,0.76)_0%,rgba(2,9,8,0.54)_26%,rgba(2,9,8,0.26)_54%,transparent_82%)] blur-[20px]" />
+      {/* TABLET VIDEO OVERLAYS */}
 
-      <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-[1920px] items-center px-5 pb-16 pt-20 sm:px-8 lg:px-12 xl:h-full xl:min-h-0 xl:px-[5vw]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(2,9,8,0.94)_0%,rgba(2,9,8,0.78)_24%,rgba(2,9,8,0.44)_52%,rgba(2,9,8,0.12)_74%,rgba(2,9,8,0.24)_100%)] md:block xl:hidden"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(180deg,rgba(2,9,8,0.18)_0%,rgba(2,9,8,0.02)_42%,rgba(2,9,8,0.84)_100%)] md:block xl:hidden"
+      />
+
+      {/* DESKTOP VIDEO OVERLAYS */}
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(90deg,rgba(2,9,8,0.88)_0%,rgba(2,9,8,0.72)_22%,rgba(2,9,8,0.34)_48%,rgba(2,9,8,0.1)_68%,rgba(2,9,8,0.34)_100%)] xl:block"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(180deg,rgba(2,9,8,0.14)_0%,rgba(2,9,8,0.04)_42%,rgba(2,9,8,0.9)_100%)] xl:block"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 hidden h-full w-[58vw] bg-[radial-gradient(ellipse_at_20%_48%,rgba(3,22,16,0.82)_0%,rgba(3,22,16,0.66)_32%,rgba(3,22,16,0.36)_58%,rgba(3,22,16,0.12)_78%,transparent_100%)] blur-[18px] xl:block"
+      />
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[-12%] right-[-8%] hidden h-[70%] w-[56vw] bg-[radial-gradient(circle_at_100%_100%,rgba(2,9,8,0.76)_0%,rgba(2,9,8,0.54)_26%,rgba(2,9,8,0.26)_54%,transparent_82%)] blur-[20px] xl:block"
+      />
+
+      {/* MOBILE */}
+
+      <div className="relative z-10 md:hidden">
+        <div className="relative h-[58svh] min-h-[500px] px-5 pt-[calc(env(safe-area-inset-top)+38px)]">
+          <p className="m-0 text-[0.7rem] font-bold uppercase tracking-[0.48em] text-[#d8b66a] drop-shadow-[0_4px_14px_rgba(0,0,0,0.88)]">
+            О специалисте
+          </p>
+
+          <div className="absolute inset-x-5 bottom-11">
+            <h1 className="m-0 max-w-[76%] font-serif text-[clamp(3.2rem,16vw,4.7rem)] font-normal leading-[0.88] tracking-[-0.075em] text-[#f8f0dd] drop-shadow-[0_12px_32px_rgba(0,0,0,0.92)]">
+              Магомед
+              <br />
+              Базаев
+            </h1>
+          </div>
+
+          <div className="absolute bottom-7 right-5 z-30">
+            <VideoToggleButton
+              isPaused={isPaused}
+              onClick={toggleVideo}
+              sizeClassName="!h-[58px] !w-[58px]"
+            />
+          </div>
+        </div>
+
+        <div className="relative bg-[#020908] px-5 pb-14 pt-3">
+          <div className="flex items-center gap-4 text-[#d8b66a]">
+            <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d8b66a]/76" />
+
+            <BeeSmallIcon />
+
+            <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#d8b66a]/76" />
+          </div>
+
+          <p className="mt-7 text-[0.93rem] font-medium leading-[1.85] tracking-[-0.035em] text-[#f3e8cf]/92">
+            Более 18 лет я практикую апитерапию. По два года работал в
+            железнодорожной больнице Одессы и городской больнице № 10. Второе
+            образование получил в ЧГУ по специальности «Микробиология»,
+            обучаясь по очно-заочной форме. В своей практике я объединяю
+            медицинский опыт, знания о свойствах пчелопродуктов и комплексный
+            подход к восстановлению организма.
+          </p>
+
+          <div className="mt-8 grid gap-3">
+            {benefits.map((benefit, index) => (
+              <div
+                key={benefit}
+                className="flex min-h-[62px] items-center gap-4 border-b border-[#d8b66a]/14 pb-3 last:border-b-0"
+              >
+                <HexIcon compact>
+                  <BenefitIcon index={index} />
+                </HexIcon>
+
+                <p className="m-0 text-[0.9rem] font-semibold text-[#f3e6c8]">
+                  {benefit}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* TABLET */}
+
+      <div className="relative z-10 hidden min-h-[100svh] w-full items-center px-10 py-20 md:flex lg:px-14 xl:hidden">
+        <div className="w-[56%] max-w-[620px]">
+          <p className="mb-6 text-[0.75rem] font-semibold uppercase tracking-[0.54em] text-[#d8b66a] drop-shadow-[0_5px_16px_rgba(0,0,0,0.78)]">
+            О специалисте
+          </p>
+
+          <h1 className="m-0 font-serif text-[clamp(4.2rem,8vw,6rem)] font-normal leading-[0.91] tracking-[-0.07em] text-[#f8f0dd] drop-shadow-[0_12px_34px_rgba(0,0,0,0.86)]">
+            Магомед
+            <br />
+            Базаев
+          </h1>
+
+          <div className="mt-7 flex max-w-[460px] items-center gap-4 text-[#d8b66a]">
+            <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
+
+            <BeeSmallIcon />
+
+            <span className="h-px flex-1 bg-gradient-to-l from-[#d8b66a] to-transparent" />
+          </div>
+
+          <p className="mt-7 max-w-[570px] text-[0.96rem] font-medium leading-[1.85] tracking-[-0.035em] text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.86)] lg:text-[1.02rem]">
+            Более 18 лет я практикую апитерапию. По два года работал в
+            железнодорожной больнице Одессы и городской больнице № 10. Второе
+            образование получил в ЧГУ по специальности «Микробиология»,
+            обучаясь по очно-заочной форме. В своей практике я объединяю
+            медицинский опыт, знания о свойствах пчелопродуктов и комплексный
+            подход к восстановлению организма.
+          </p>
+
+          <div className="mt-8 grid max-w-[570px] gap-4">
+            {benefits.map((benefit, index) => (
+              <div key={benefit} className="flex items-center gap-4">
+                <HexIcon>
+                  <BenefitIcon index={index} />
+                </HexIcon>
+
+                <p className="m-0 text-[0.94rem] font-semibold leading-5 text-[#f3e6c8] drop-shadow-[0_4px_12px_rgba(0,0,0,0.78)]">
+                  {benefit}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="absolute left-[62%] top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
+          <VideoToggleButton
+            isPaused={isPaused}
+            onClick={toggleVideo}
+            sizeClassName="!h-[66px] !w-[66px]"
+          />
+        </div>
+      </div>
+
+      {/* DESKTOP */}
+
+      <div className="relative z-10 mx-auto hidden h-full min-h-0 w-full max-w-[1920px] items-center px-[5vw] xl:flex">
         <div className="w-full max-w-[720px]">
           <p className="mb-7 text-[13px] font-semibold uppercase tracking-[0.58em] text-[#d8b66a] drop-shadow-[0_5px_16px_rgba(0,0,0,0.78)]">
             О специалисте
@@ -220,21 +416,20 @@ export default function AboutHeroSection() {
             <span className="h-px flex-1 bg-gradient-to-l from-[#d8b66a] to-transparent" />
           </div>
 
-          <p className="mt-8 max-w-[680px] text-[16px] font-medium leading-8 text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)] sm:text-[17px]">
-            Более 18 лет я практикую апитерапию. По два года работал в железнодорожной больнице Одессы и городской больнице № 10. Второе образование получил в ЧГУ по специальности «Микробиология», обучаясь по очно-заочной форме. В своей практике я объединяю медицинский опыт, знания о свойствах пчелопродуктов и комплексный подход к восстановлению организма.
+          <p className="mt-8 max-w-[680px] text-[16px] font-medium leading-8 text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)]">
+            Более 18 лет я практикую апитерапию. По два года работал в
+            железнодорожной больнице Одессы и городской больнице № 10. Второе
+            образование получил в ЧГУ по специальности «Микробиология»,
+            обучаясь по очно-заочной форме. В своей практике я объединяю
+            медицинский опыт, знания о свойствах пчелопродуктов и комплексный
+            подход к восстановлению организма.
           </p>
 
-          <div className="mt-10 grid max-w-[680px] gap-6 sm:grid-cols-3">
+          <div className="mt-10 grid max-w-[680px] grid-cols-3 gap-6">
             {benefits.map((benefit, index) => (
               <div key={benefit} className="flex items-center gap-4">
                 <HexIcon>
-                  {index === 0 ? (
-                    <BeeSmallIcon />
-                  ) : index === 1 ? (
-                    <DropIcon />
-                  ) : (
-                    <JarIcon />
-                  )}
+                  <BenefitIcon index={index} />
                 </HexIcon>
 
                 <p className="text-[14px] font-semibold leading-5 text-[#f3e6c8] drop-shadow-[0_4px_12px_rgba(0,0,0,0.72)]">
@@ -246,15 +441,10 @@ export default function AboutHeroSection() {
         </div>
 
         <div className="absolute left-[49%] top-[47%] z-30 -translate-x-1/2 -translate-y-1/2">
-          <LuxuryButton
-            type="button"
-            aria-label={
-              isPaused ? "Запустить видео" : "Остановить видео"
-            }
-            aria-pressed={isPaused}
+          <VideoToggleButton
+            isPaused={isPaused}
             onClick={toggleVideo}
-            className="!flex !h-[72px] !w-[72px] !min-w-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden"
-            icon={isPaused ? <PlayIcon /> : <PauseIcon />}
+            sizeClassName="!h-[72px] !w-[72px]"
           />
         </div>
       </div>

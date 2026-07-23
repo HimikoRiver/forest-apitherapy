@@ -101,29 +101,6 @@ function FooterHoneycombRow() {
               repeatCount="indefinite"
             />
           </linearGradient>
-
-          <filter
-            id="footer-honey-glow"
-            x="-20%"
-            y="-80%"
-            width="140%"
-            height="260%"
-          >
-            <feGaussianBlur stdDeviation="1.6" result="blur" />
-
-            <feColorMatrix
-              in="blur"
-              type="matrix"
-              values="
-                1 0 0 0 0.84
-                0 1 0 0 0.71
-                0 0 1 0 0.41
-                0 0 0 0.58 0
-              "
-            />
-
-            <feBlend in="SourceGraphic" mode="screen" />
-          </filter>
         </defs>
 
         <g
@@ -131,7 +108,6 @@ function FooterHoneycombRow() {
           strokeWidth="1.55"
           strokeLinejoin="round"
           fill="url(#footer-honey-fill)"
-          filter="url(#footer-honey-glow)"
         >
           {hexagons.map((points, index) => (
             <polygon key={index} points={points} />
@@ -145,30 +121,17 @@ function FooterHoneycombRow() {
 function FooterMobilePanel({ title, icon, children }) {
   return (
     <section
-      className="relative h-full w-full overflow-hidden rounded-[26px] border border-[#d8b66a]/28 shadow-[0_18px_46px_rgba(0,0,0,0.44)]"
+      className="relative h-full w-full overflow-hidden rounded-[26px] border border-[#d8b66a]/32 bg-[#03130f]"
       style={{
-        backgroundColor: "#041813",
-        backgroundImage: `
-          linear-gradient(
-            180deg,
-            rgba(4, 24, 19, 0.18) 0%,
-            rgba(2, 11, 9, 0.34) 100%
-          ),
-          url("${PANEL_TEXTURE_PATH}")
-        `,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
+        backgroundImage: `url("${PANEL_TEXTURE_PATH}")`,
+        backgroundPosition: "center top",
+        backgroundRepeat: "repeat",
+        backgroundSize: "auto",
       }}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(216,182,106,0.1),transparent_36%),linear-gradient(180deg,rgba(255,255,255,0.03)_0%,rgba(255,255,255,0.01)_26%,rgba(0,0,0,0.12)_100%)]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-[1px] rounded-[25px] border border-black/45"
+        className="pointer-events-none absolute inset-[1px] rounded-[25px] border border-black/60"
       />
 
       <div className="relative z-10 flex h-full flex-col px-4 py-5">
@@ -182,7 +145,7 @@ function FooterMobilePanel({ title, icon, children }) {
                 alt=""
                 fill
                 sizes="44px"
-                className="object-contain drop-shadow-[0_0_14px_rgba(216,182,106,0.28)]"
+                className="object-contain"
               />
             </span>
 
@@ -214,7 +177,7 @@ export default function FooterMobile() {
 
   return (
     <footer
-      className="relative overflow-hidden bg-[#020908] text-[#f3efe5]"
+      className="relative overflow-hidden bg-black text-[#f3efe5]"
       style={{
         fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
       }}
@@ -225,12 +188,8 @@ export default function FooterMobile() {
         className="pointer-events-none absolute -top-64 left-0 h-px w-px"
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(13,82,43,0.5),rgba(4,28,19,0.72)_42%,rgba(1,7,6,0.98)_100%)]" />
-
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.82)_0%,rgba(0,0,0,0.18)_28%,rgba(0,0,0,0.94)_100%)]" />
-
       <div className="relative z-10 mx-auto w-full max-w-[440px] px-4 pb-8 pt-8 md:max-w-[960px] md:px-7 md:pb-10 md:pt-10">
-        <p className="m-0 mb-7 text-center text-[0.96rem] font-medium leading-[1.75] tracking-[-0.035em] text-[#f3d98d] drop-shadow-[0_0_14px_rgba(216,182,106,0.18)] md:mb-9">
+        <p className="m-0 mb-7 text-center text-[0.96rem] font-medium leading-[1.75] tracking-[-0.035em] text-[#f3d98d] md:mb-9">
           {tagline}
         </p>
 
@@ -249,8 +208,8 @@ export default function FooterMobile() {
                     href={item.href}
                     className={`group relative grid min-h-[52px] grid-cols-[42px_1fr_18px] items-center gap-3 overflow-hidden rounded-2xl border px-3 transition duration-300 ${
                       isActive
-                        ? "border-[#d8b66a]/38 bg-[#d8b66a]/10 text-[#ffe6a2]"
-                        : "border-[#d8b66a]/12 bg-black/18 text-[#f3efe5]/88 hover:border-[#d8b66a]/28 hover:text-[#f6d98d]"
+                        ? "border-[#d8b66a]/42 bg-[#d8b66a]/10 text-[#ffe6a2]"
+                        : "border-[#d8b66a]/18 bg-black/45 text-[#f3efe5]/88 hover:border-[#d8b66a]/34 hover:text-[#f6d98d]"
                     }`}
                   >
                     <span className="relative z-10 block size-9 transition duration-300 group-hover:-translate-y-0.5 group-hover:brightness-125">
@@ -259,7 +218,7 @@ export default function FooterMobile() {
                         alt=""
                         fill
                         sizes="36px"
-                        className="object-contain drop-shadow-[0_0_12px_rgba(216,182,106,0.18)]"
+                        className="object-contain"
                       />
                     </span>
 
@@ -286,7 +245,7 @@ export default function FooterMobile() {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="group grid min-h-[66px] grid-cols-[48px_1fr] items-center gap-3 rounded-2xl border border-[#d8b66a]/12 bg-black/18 px-3 transition duration-300 hover:border-[#d8b66a]/28"
+                    className="group grid min-h-[66px] grid-cols-[48px_1fr] items-center gap-3 rounded-2xl border border-[#d8b66a]/18 bg-black/45 px-3 transition duration-300 hover:border-[#d8b66a]/34"
                   >
                     <span className="relative block size-11 transition duration-300 group-hover:-translate-y-0.5 group-hover:brightness-125">
                       <Image
@@ -294,7 +253,7 @@ export default function FooterMobile() {
                         alt=""
                         fill
                         sizes="44px"
-                        className="object-contain drop-shadow-[0_0_14px_rgba(216,182,106,0.18)]"
+                        className="object-contain"
                       />
                     </span>
 
@@ -321,7 +280,7 @@ export default function FooterMobile() {
         <div className="mt-7 grid grid-cols-[1fr_38px_1fr] items-center gap-3 md:mt-9">
           <span className="h-px bg-gradient-to-r from-transparent via-[#d8b66a]/70 to-[#d8b66a]/20" />
 
-          <span className="mx-auto size-1.5 rounded-full bg-[#d8b66a] shadow-[0_0_12px_rgba(216,182,106,0.66)]" />
+          <span className="mx-auto size-1.5 rounded-full bg-[#d8b66a]" />
 
           <span className="h-px bg-gradient-to-r from-[#d8b66a]/20 via-[#d8b66a]/70 to-transparent" />
         </div>

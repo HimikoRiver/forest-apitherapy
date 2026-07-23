@@ -96,6 +96,7 @@ export default function MobileHeroMenu() {
     if (!isOpen || shouldHideMenu) return;
 
     const previousOverflow = document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
 
     const handleKeyDown = (event) => {
@@ -230,8 +231,35 @@ export default function MobileHeroMenu() {
           transform: translate3d(0, 0, 0);
           transition:
             transform 260ms ease,
-            border-color 350ms ease,
             box-shadow 350ms ease;
+        }
+
+        :global(.mobile-hero-menu__button)::after {
+          content: "";
+          pointer-events: none;
+          position: absolute;
+          inset: 0;
+          z-index: 7;
+          border-radius: inherit;
+          padding: 1.5px;
+          background: linear-gradient(
+            110deg,
+            #795019 0%,
+            #c88e36 18%,
+            #ffe9a8 38%,
+            #d99f3e 58%,
+            #fff0b8 78%,
+            #81531a 100%
+          );
+          background-position: 0% 50%;
+          background-size: 240% 100%;
+          -webkit-mask:
+            linear-gradient(#000 0 0) content-box,
+            linear-gradient(#000 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          animation: mobileHeroMenuButtonShimmer 4.6s ease-in-out infinite
+            alternate;
         }
 
         :global(.mobile-hero-menu__button .luxury-button__base) {
@@ -260,7 +288,7 @@ export default function MobileHeroMenu() {
             ),
             url("/textures/suede-green.webp");
           background-position: center;
-          background-size: 190% auto;
+          background-size: cover;
           filter: saturate(0.88) contrast(1.08) brightness(0.72);
           opacity: 0.98;
         }
@@ -269,20 +297,25 @@ export default function MobileHeroMenu() {
           opacity: 0.22;
         }
 
-        :global(.mobile-hero-menu__button .luxury-button__gold-fill) {
+        :global(.mobile-hero-menu__button .luxury-button__gold-fill),
+        :global(.mobile-hero-menu__button .luxury-button__shine) {
           opacity: 0;
-          transform: translateX(-42%) skewX(-12deg);
+          animation: none;
           transition: none;
         }
 
-        :global(.mobile-hero-menu__button .luxury-button__shine) {
-          opacity: 0;
+        :global(.mobile-hero-menu__button .luxury-button__border) {
+          box-shadow:
+            inset 0 0 0 1px rgba(178, 126, 42, 0.72),
+            inset 0 0 10px rgba(255, 231, 166, 0.05),
+            0 0 8px rgba(180, 126, 37, 0.08);
           animation: none;
         }
 
         :global(.mobile-hero-menu__button .luxury-button__content) {
           position: absolute;
           inset: 0;
+          z-index: 8;
           display: grid;
           place-items: center;
           padding: 0;
@@ -300,10 +333,10 @@ export default function MobileHeroMenu() {
         }
 
         :global(.mobile-hero-menu__button:hover) {
-          border-color: rgba(190, 137, 52, 0.88);
           transform: translate3d(0, 0, 0);
           box-shadow:
             0 18px 58px rgba(0, 0, 0, 0.42),
+            0 0 18px rgba(240, 195, 101, 0.12),
             inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
 
@@ -318,14 +351,11 @@ export default function MobileHeroMenu() {
           opacity: 0.22;
         }
 
-        :global(.mobile-hero-menu__button:hover .luxury-button__gold-fill) {
-          opacity: 0;
-          transform: translateX(-42%) skewX(-12deg);
-        }
-
+        :global(.mobile-hero-menu__button:hover .luxury-button__gold-fill),
         :global(.mobile-hero-menu__button:hover .luxury-button__shine) {
           opacity: 0;
           animation: none;
+          transform: none;
         }
 
         :global(.mobile-hero-menu__button:hover .luxury-button__icon) {
@@ -339,15 +369,6 @@ export default function MobileHeroMenu() {
         }
 
         .mobile-hero-menu--open :global(.mobile-hero-menu__button) {
-          border-color: rgba(255, 232, 170, 0.98);
-          box-shadow:
-            0 12px 30px rgba(0, 0, 0, 0.46),
-            0 0 22px rgba(240, 195, 101, 0.22),
-            inset 0 1px 0 rgba(255, 255, 255, 0.06);
-        }
-
-        .mobile-hero-menu--open :global(.mobile-hero-menu__button:hover) {
-          border-color: rgba(255, 232, 170, 0.98);
           box-shadow:
             0 12px 30px rgba(0, 0, 0, 0.46),
             0 0 22px rgba(240, 195, 101, 0.22),
@@ -373,12 +394,13 @@ export default function MobileHeroMenu() {
           background: linear-gradient(
             90deg,
             #8a5d20 0%,
-            #d8b66a 24%,
-            #fff2c3 50%,
-            #c18a32 74%,
+            #d8b66a 22%,
+            #fff2c3 46%,
+            #c18a32 70%,
             #f4d88f 100%
           );
-          background-size: 190% 100%;
+          background-position: 0% 50%;
+          background-size: 220% 100%;
           box-shadow:
             0 1px 3px rgba(0, 0, 0, 0.34),
             0 0 8px rgba(216, 182, 106, 0.24);
@@ -386,60 +408,56 @@ export default function MobileHeroMenu() {
           transition:
             transform 520ms cubic-bezier(0.22, 1.2, 0.36, 1),
             opacity 260ms ease,
-            width 420ms cubic-bezier(0.22, 1, 0.36, 1),
-            filter 320ms ease;
-          animation:
-            mobileHeroMenuGoldSoftShift 3.8s ease-in-out infinite alternate,
-            mobileHeroMenuLineGlow 3.2s ease-in-out infinite;
+            width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+          animation: mobileHeroMenuLineShimmer 4.2s ease-in-out infinite
+            alternate;
         }
 
         .mobile-hero-menu__morph-line--top {
-          transform: translate(-50%, -10px) rotate(0deg) scaleX(1);
+          transform: translate(-50%, -10px);
         }
 
         .mobile-hero-menu__morph-line--middle {
           width: 23px;
           opacity: 1;
-          transform: translate(-50%, -50%) rotate(0deg) scaleX(1);
+          transform: translate(-50%, -50%);
         }
 
         .mobile-hero-menu__morph-line--bottom {
-          transform: translate(-50%, 7px) rotate(0deg) scaleX(1);
+          transform: translate(-50%, 7px);
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line {
           width: 31px;
-          filter: brightness(1.12);
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line--top {
-          transform: translate(-50%, -50%) rotate(45deg) scaleX(1.04);
+          transform: translate(-50%, -50%) rotate(45deg);
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line--middle {
           opacity: 0;
-          transform: translate(-50%, -50%) rotate(0deg) scaleX(0.08);
+          transform: translate(-50%, -50%) scaleX(0.08);
         }
 
         .mobile-hero-menu--open .mobile-hero-menu__morph-line--bottom {
-          transform: translate(-50%, -50%) rotate(-45deg) scaleX(1.04);
+          transform: translate(-50%, -50%) rotate(-45deg);
         }
 
         .mobile-hero-menu__backdrop {
           pointer-events: auto;
-          position: absolute;
+          position: fixed;
           inset: 0;
           z-index: 81;
-          background: rgba(2, 13, 10, 0.38);
+          background: rgba(2, 13, 10, 0.44);
           -webkit-backdrop-filter: blur(12px) saturate(0.82);
           backdrop-filter: blur(12px) saturate(0.82);
-          opacity: 1;
           animation: mobileHeroMenuBackdropIn 220ms ease both;
         }
 
         .mobile-hero-menu__panel {
           pointer-events: auto;
-          position: absolute;
+          position: fixed;
           top: 0;
           left: 0;
           right: 0;
@@ -450,16 +468,21 @@ export default function MobileHeroMenu() {
           flex-direction: column;
           border: 0;
           border-radius: 0 0 30px 30px;
-          background-color: #081e08;
+          background-color: #061707;
           background-image:
             linear-gradient(
               180deg,
-              rgba(8, 30, 8, 0.94),
-              rgba(8, 30, 8, 0.985)
+              rgba(0, 12, 3, 0.08) 0%,
+              rgba(0, 8, 2, 0.28) 100%
             ),
             url("/textures/suede-green.webp");
-          background-position: center;
-          background-size: auto, 260px 260px;
+          background-position:
+            center,
+            center;
+          background-repeat: no-repeat;
+          background-size:
+            cover,
+            cover;
           box-shadow:
             0 18px 34px rgba(0, 0, 0, 0.42),
             inset 0 0 0 1px rgba(255, 235, 180, 0.1),
@@ -491,9 +514,8 @@ export default function MobileHeroMenu() {
             linear-gradient(#000 0 0);
           -webkit-mask-composite: xor;
           mask-composite: exclude;
-          opacity: 0.82;
+          opacity: 0.86;
           filter: drop-shadow(0 0 5px rgba(216, 182, 106, 0.2));
-          animation: mobileHeroMenuGoldBreath 4.8s ease-in-out infinite;
         }
 
         .mobile-hero-menu__panel-head {
@@ -508,7 +530,7 @@ export default function MobileHeroMenu() {
           gap: 8px;
           padding-bottom: 11px;
           border-bottom: 1px solid rgba(216, 182, 106, 0.26);
-          background: rgba(0, 0, 0, 0.12);
+          background: rgba(0, 0, 0, 0.1);
         }
 
         .mobile-hero-menu__panel-title {
@@ -522,6 +544,7 @@ export default function MobileHeroMenu() {
             #c18a32 75%,
             #f4d88f 100%
           );
+          background-position: 0% 50%;
           background-size: 180% 100%;
           -webkit-background-clip: text;
           background-clip: text;
@@ -586,7 +609,7 @@ export default function MobileHeroMenu() {
           padding: 0 18px;
           border: 0;
           border-bottom: 1px solid rgba(216, 182, 106, 0.24);
-          background: transparent;
+          background: rgba(0, 0, 0, 0.04);
           color: #f3efe5;
           font-family: var(--font-comfortaa), Arial, Helvetica, sans-serif;
           font-size: 0.98rem;
@@ -598,10 +621,17 @@ export default function MobileHeroMenu() {
             0 1px 2px rgba(0, 0, 0, 0.36),
             0 0 8px rgba(216, 182, 106, 0.08);
           cursor: pointer;
+          transition:
+            background-color 220ms ease,
+            color 220ms ease;
         }
 
         .mobile-hero-menu__link:last-child {
           border-bottom: 0;
+        }
+
+        .mobile-hero-menu__link:active {
+          background: rgba(216, 182, 106, 0.08);
         }
 
         .mobile-hero-menu__icon {
@@ -643,6 +673,7 @@ export default function MobileHeroMenu() {
             #c18a32 72%,
             #f4d88f 100%
           );
+          background-position: 0% 50%;
           background-size: 180% 100%;
           -webkit-background-clip: text;
           background-clip: text;
@@ -680,15 +711,6 @@ export default function MobileHeroMenu() {
               inset 0 1px 0 rgba(255, 255, 255, 0.06);
           }
 
-          :global(.mobile-hero-menu__button:hover) {
-            border-color: rgba(190, 137, 52, 0.88);
-            transform: translate3d(0, 0, 0);
-            box-shadow:
-              0 16px 38px rgba(0, 0, 0, 0.44),
-              0 0 26px rgba(240, 195, 101, 0.2),
-              inset 0 1px 0 rgba(255, 255, 255, 0.06);
-          }
-
           :global(.mobile-hero-menu__button .luxury-button__icon) {
             width: 42px;
             height: 34px;
@@ -705,7 +727,7 @@ export default function MobileHeroMenu() {
           }
 
           .mobile-hero-menu__morph-line--top {
-            transform: translate(-50%, -13px) rotate(0deg) scaleX(1);
+            transform: translate(-50%, -13px);
           }
 
           .mobile-hero-menu__morph-line--middle {
@@ -713,7 +735,7 @@ export default function MobileHeroMenu() {
           }
 
           .mobile-hero-menu__morph-line--bottom {
-            transform: translate(-50%, 9px) rotate(0deg) scaleX(1);
+            transform: translate(-50%, 9px);
           }
 
           .mobile-hero-menu--open .mobile-hero-menu__morph-line {
@@ -737,7 +759,6 @@ export default function MobileHeroMenu() {
 
           .mobile-hero-menu__panel-title {
             font-size: 1.75rem;
-            font-weight: 600;
             letter-spacing: 0.32em;
             transform: translateY(-14px);
           }
@@ -800,53 +821,38 @@ export default function MobileHeroMenu() {
           }
         }
 
-        @keyframes mobileHeroMenuGoldBreath {
-          0%,
-          100% {
-            opacity: 0.72;
-            filter: drop-shadow(0 0 4px rgba(216, 182, 106, 0.18));
+        @keyframes mobileHeroMenuButtonShimmer {
+          from {
+            background-position: 0% 50%;
           }
 
-          50% {
-            opacity: 0.96;
-            filter:
-              drop-shadow(0 0 7px rgba(216, 182, 106, 0.34))
-              drop-shadow(0 0 14px rgba(244, 216, 143, 0.14));
+          to {
+            background-position: 100% 50%;
+          }
+        }
+
+        @keyframes mobileHeroMenuLineShimmer {
+          from {
+            background-position: 0% 50%;
+          }
+
+          to {
+            background-position: 100% 50%;
           }
         }
 
         @keyframes mobileHeroMenuGoldSoftShift {
-          0% {
-            background-position: 38% 50%;
+          from {
+            background-position: 35% 50%;
           }
 
-          100% {
-            background-position: 62% 50%;
-          }
-        }
-
-        @keyframes mobileHeroMenuLineGlow {
-          0%,
-          100% {
-            box-shadow:
-              0 1px 3px rgba(0, 0, 0, 0.34),
-              0 0 6px rgba(216, 182, 106, 0.18);
-            filter: brightness(0.95);
-          }
-
-          50% {
-            box-shadow:
-              0 1px 3px rgba(0, 0, 0, 0.34),
-              0 0 12px rgba(244, 216, 143, 0.48),
-              0 0 20px rgba(216, 182, 106, 0.18);
-            filter: brightness(1.12);
+          to {
+            background-position: 65% 50%;
           }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          :global(.mobile-hero-menu__button .luxury-button__border),
-          :global(.mobile-hero-menu__button .luxury-button__gold-fill),
-          .mobile-hero-menu__panel::before,
+          :global(.mobile-hero-menu__button)::after,
           .mobile-hero-menu__panel-title,
           .mobile-hero-menu__morph-line,
           .mobile-hero-menu__link--gold .mobile-hero-menu__label {

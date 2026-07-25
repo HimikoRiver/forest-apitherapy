@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import AboutHeroSection from "@/components/about/AboutHeroSection";
 import Footer from "@/components/home/footer/Footer";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
@@ -95,6 +96,7 @@ function LeafIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
       <path
         d="M5.1 19.2c2.7-4.7 6.4-7.6 11.1-9.7"
         stroke="currentColor"
@@ -138,6 +140,7 @@ function ShieldIcon() {
         strokeWidth="1.45"
         strokeLinejoin="round"
       />
+
       <path
         d="M9.2 12.1 11.1 14l3.9-4.2"
         stroke="currentColor"
@@ -163,6 +166,7 @@ function LikeIcon() {
         strokeWidth="1.45"
         strokeLinejoin="round"
       />
+
       <path
         d="M7.2 10.4c2.2-1.7 3.2-3.9 3.8-6 .2-.8.9-1.3 1.7-1.1 1 .2 1.6 1.1 1.4 2.1l-.6 3.1h4.4c1.5 0 2.6 1.4 2.3 2.9l-1.1 5.5a3.1 3.1 0 0 1-3 2.5H7.2"
         stroke="currentColor"
@@ -189,6 +193,7 @@ function JarIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
       <path
         d="M9.45 17.2c2.1-1.05 3.8.9 6.1-.08 2.25-.95 3.9-2.55 7 .08"
         stroke="currentColor"
@@ -196,6 +201,7 @@ function JarIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+
       <path
         d="M12.7 21.8c.9.72 2.15 1.1 3.3 1.1s2.4-.38 3.3-1.1"
         stroke="currentColor"
@@ -203,6 +209,35 @@ function JarIcon() {
         strokeLinecap="round"
       />
     </svg>
+  );
+}
+
+function HoneycombDivider() {
+  return (
+    <div
+      aria-hidden="true"
+      className="mt-8 flex w-full max-w-[330px] items-center justify-center gap-4 text-[#d8b66a] xl:hidden"
+    >
+      <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#d8b66a]/70 to-[#d8b66a]" />
+
+      <svg
+        viewBox="0 0 58 50"
+        className="h-10 w-12 shrink-0 drop-shadow-[0_0_9px_rgba(216,182,106,0.28)]"
+        fill="none"
+      >
+        <g stroke="currentColor" strokeWidth="1.25">
+          <path d="M29 2 36 6v8l-7 4-7-4V6l7-4Z" />
+          <path d="M15 10 22 14v8l-7 4-7-4v-8l7-4Z" />
+          <path d="M43 10 50 14v8l-7 4-7-4v-8l7-4Z" />
+          <path d="M29 18 36 22v8l-7 4-7-4v-8l7-4Z" />
+          <path d="M15 26 22 30v8l-7 4-7-4v-8l7-4Z" />
+          <path d="M43 26 50 30v8l-7 4-7-4v-8l7-4Z" />
+          <path d="M29 34 36 38v8l-7 4-7-4v-8l7-4Z" />
+        </g>
+      </svg>
+
+      <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#d8b66a]/70 to-[#d8b66a]" />
+    </div>
   );
 }
 
@@ -275,8 +310,24 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-t border-[#d8b66a]/12 bg-[#000] px-5 pb-16 pt-14 sm:px-8 lg:px-12 xl:px-[5vw]">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <section className="relative overflow-hidden border-t border-[#d8b66a]/12 bg-black px-5 pb-16 pt-14 sm:px-8 lg:px-12 xl:px-[5vw]">
+        {/* MOBILE / TABLET BACKGROUND */}
+
+        <div className="pointer-events-none absolute inset-0 overflow-hidden xl:hidden">
+          <div className="absolute left-[-28%] top-[38%] h-[52%] w-[150%] sm:left-[-23%] sm:w-[142%] md:left-[-20%] md:top-[40%] md:h-[48%] md:w-[135%] lg:left-[-16%] lg:top-[42%] lg:w-[128%]">
+            <Image
+              src="/images/about/fon7.webp"
+              alt=""
+              fill
+              sizes="128vw"
+              className="select-none object-contain object-center"
+            />
+          </div>
+        </div>
+
+        {/* DESKTOP BACKGROUND — БЕЗ ИЗМЕНЕНИЙ */}
+
+        <div className="pointer-events-none absolute inset-0 hidden overflow-hidden xl:block">
           <div className="absolute inset-y-0 right-[-1%] w-full">
             <Image
               src="/images/about/fon7.webp"
@@ -291,12 +342,16 @@ export default function AboutPage() {
         <div className="relative z-10 mx-auto grid max-w-[1280px] items-start gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="relative">
             <div className="relative z-10">
-              <div className="mb-9 flex items-center gap-5 text-[#d8b66a]">
-                <p className="text-[12px] font-bold uppercase tracking-[0.52em]">
+              <div className="mb-9 flex w-full items-center justify-center gap-4 text-[#d8b66a] xl:justify-start xl:gap-5">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d8b66a] xl:hidden" />
+
+                <p className="shrink-0 text-center text-[10px] font-bold uppercase tracking-[0.38em] sm:text-[11px] xl:text-left xl:text-[12px] xl:tracking-[0.52em]">
                   Мои ценности в работе
                 </p>
 
-                <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#d8b66a] xl:hidden" />
+
+                <span className="hidden h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent xl:block" />
               </div>
 
               <div className="space-y-7">
@@ -334,12 +389,16 @@ export default function AboutPage() {
 
           <div className="relative">
             <div className="relative z-10">
-              <div className="mb-9 flex items-center gap-5 text-[#d8b66a]">
-                <p className="text-[12px] font-bold uppercase tracking-[0.52em] drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)]">
+              <div className="mb-9 flex w-full items-center justify-center gap-4 text-[#d8b66a] xl:justify-start xl:gap-5">
+                <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d8b66a] xl:hidden" />
+
+                <p className="shrink-0 text-center text-[10px] font-bold uppercase tracking-[0.38em] drop-shadow-[0_3px_10px_rgba(0,0,0,0.9)] sm:text-[11px] xl:text-left xl:text-[12px] xl:tracking-[0.52em]">
                   Как проходит работа
                 </p>
 
-                <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
+                <span className="h-px flex-1 bg-gradient-to-l from-transparent to-[#d8b66a] xl:hidden" />
+
+                <span className="hidden h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent xl:block" />
               </div>
 
               <div className="relative grid gap-0">
@@ -367,7 +426,23 @@ export default function AboutPage() {
                 ))}
               </div>
 
-              <div className="mt-5 pl-[4px]">
+              {/* MOBILE / TABLET BUTTON */}
+
+              <div className="mt-8 flex flex-col items-center xl:hidden">
+                <LuxuryButton
+                  href="/products"
+                  icon={<JarIcon />}
+                  className="!inline-flex !h-[64px] !w-full !max-w-[315px] !translate-y-0 !justify-center !px-8 [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!mr-4 [&_.luxury-button__icon]:!text-[#d8b66a] [&_.luxury-button__label]:!tracking-[0.12em]"
+                >
+                  Пчелопродукты
+                </LuxuryButton>
+
+                <HoneycombDivider />
+              </div>
+
+              {/* DESKTOP BUTTON — БЕЗ ИЗМЕНЕНИЙ */}
+
+              <div className="mt-5 hidden pl-[4px] xl:block">
                 <LuxuryButton
                   href="/products"
                   icon={<JarIcon />}

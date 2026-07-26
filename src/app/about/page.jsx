@@ -257,7 +257,7 @@ export default function AboutPage() {
       <section className="relative isolate -mt-px overflow-hidden bg-[#020908] px-5 py-16 sm:px-8 lg:px-12 xl:px-[5vw]">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[38px]"
+          className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[38px] xl:hidden"
         >
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d8b66a]/90 to-transparent shadow-[0_0_14px_rgba(216,182,106,0.52)]" />
 
@@ -322,6 +322,17 @@ export default function AboutPage() {
       </section>
 
       <section className="relative overflow-hidden border-t border-[#d8b66a]/12 bg-black px-5 pb-16 pt-14 sm:px-8 lg:px-12 xl:px-[5vw]">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[42px] xl:hidden"
+        >
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#d8b66a]/80 to-transparent" />
+
+          <div className="absolute left-1/2 top-0 h-[42px] w-[86%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(216,182,106,0.18)_0%,rgba(216,182,106,0.07)_36%,transparent_74%)] blur-xl" />
+
+          <div className="absolute inset-x-0 top-0 h-[22px] bg-gradient-to-b from-[#d8b66a]/10 to-transparent" />
+        </div>
+
         {/* MOBILE / TABLET BACKGROUND */}
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden xl:hidden">

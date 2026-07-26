@@ -333,7 +333,7 @@ export default function AboutPage() {
           <div className="absolute inset-x-0 top-0 h-[22px] bg-gradient-to-b from-[#d8b66a]/10 to-transparent" />
         </div>
 
-        {/* MOBILE / TABLET BACKGROUND */}
+        {/* MOBILE / TABLET BACKGROUND — ПОЛОЖЕНИЕ НЕ ИЗМЕНЕНО */}
 
         <div className="pointer-events-none absolute inset-0 overflow-hidden xl:hidden">
           <div className="absolute left-[-28%] top-[38%] h-[52%] w-[150%] sm:left-[-23%] sm:w-[142%] md:left-[-20%] md:top-[40%] md:h-[48%] md:w-[135%] lg:left-[-16%] lg:top-[42%] lg:w-[128%]">
@@ -345,6 +345,11 @@ export default function AboutPage() {
               className="select-none object-contain object-center"
             />
           </div>
+
+          <div
+            aria-hidden="true"
+            className="absolute left-0 top-[42%] z-[2] h-[46%] w-[82%] bg-[radial-gradient(ellipse_at_20%_48%,rgba(0,0,0,0.98)_0%,rgba(0,0,0,0.94)_34%,rgba(0,0,0,0.82)_52%,rgba(0,0,0,0.58)_68%,rgba(0,0,0,0.3)_82%,rgba(0,0,0,0.1)_91%,transparent_100%)] md:hidden"
+          />
         </div>
 
         {/* DESKTOP BACKGROUND — БЕЗ ИЗМЕНЕНИЙ */}
@@ -361,8 +366,8 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto grid max-w-[1280px] items-start gap-12 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="relative">
+        <div className="relative z-10 mx-auto grid max-w-[1280px] items-start gap-12 xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="relative mx-auto w-full max-w-[720px] xl:mx-0 xl:max-w-none">
             <div className="relative z-10">
               <div className="mb-9 flex w-full items-center justify-center gap-4 text-[#d8b66a] xl:justify-start xl:gap-5">
                 <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d8b66a] xl:hidden" />
@@ -409,7 +414,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="relative">
+          <div className="relative mx-auto w-full max-w-[720px] xl:mx-0 xl:max-w-none">
             <div className="relative z-10">
               <div className="mb-9 flex w-full items-center justify-center gap-4 text-[#d8b66a] xl:justify-start xl:gap-5">
                 <span className="h-px flex-1 bg-gradient-to-r from-transparent to-[#d8b66a] xl:hidden" />
@@ -424,18 +429,25 @@ export default function AboutPage() {
               </div>
 
               <div className="relative grid gap-0">
-                <span className="pointer-events-none absolute left-6 top-12 h-[calc(100%-96px)] w-px bg-[#d8b66a]/42" />
+                <span className="pointer-events-none absolute left-6 top-12 hidden h-[calc(100%-96px)] w-px bg-[#d8b66a]/42 xl:block" />
 
                 {workSteps.map((step, index) => (
                   <article
                     key={step.title}
                     className="relative grid min-h-[96px] grid-cols-[54px_1fr] gap-5"
                   >
+                    {index < workSteps.length - 1 && (
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-[-24px] left-6 top-12 w-px bg-[#d8b66a]/42 xl:hidden"
+                      />
+                    )}
+
                     <span className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border border-[#d8b66a]/70 bg-[#03110d] text-sm font-semibold text-[#d8b66a] shadow-[0_0_18px_rgba(216,182,106,0.12)]">
                       {index + 1}
                     </span>
 
-                    <div className="pb-5">
+                    <div className="relative z-10 pb-5">
                       <h3 className="text-[1.08rem] font-semibold tracking-[-0.04em] text-[#d8b66a] drop-shadow-[0_4px_12px_rgba(0,0,0,0.92)]">
                         {step.title}
                       </h3>
@@ -448,8 +460,6 @@ export default function AboutPage() {
                 ))}
               </div>
 
-              {/* MOBILE / TABLET BUTTON */}
-
               <div className="mt-8 flex flex-col items-center xl:hidden">
                 <LuxuryButton
                   href="/products"
@@ -461,8 +471,6 @@ export default function AboutPage() {
 
                 <HoneycombDivider />
               </div>
-
-              {/* DESKTOP BUTTON — БЕЗ ИЗМЕНЕНИЙ */}
 
               <div className="mt-5 hidden pl-[4px] xl:block">
                 <LuxuryButton

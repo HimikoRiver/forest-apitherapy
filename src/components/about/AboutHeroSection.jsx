@@ -9,25 +9,31 @@ const benefits = [
   {
     title: "Пчелоужаление",
     subtitle: "Природная стимуляция иммунитета",
-    icon: "/images/about/icons/1.webp",
+    icon: "/images/about/icons/11.webp",
+    mobileImageClassName: "",
+    tabletImageClassName: "",
+    desktopImageClassName: "scale-[1.2]",
   },
   {
     title: "Апитоксин",
     subtitle: "Активные пептиды для здоровья",
-    icon: "/images/about/icons/2.webp",
+    icon: "/images/about/icons/2222.webp",
+    mobileImageClassName: "scale-[0.82]",
+    tabletImageClassName: "scale-[0.82]",
+    desktopImageClassName: "scale-100",
   },
   {
     title: "Пчелопродукты",
     subtitle: "Натуральная поддержка организма",
-    icon: "/images/about/icons/3.webp",
+    icon: "/images/about/icons/33.webp",
+    mobileImageClassName: "",
+    tabletImageClassName: "",
+    desktopImageClassName: "scale-[1.2]",
   },
 ];
 
 const aboutText =
   "Более 18 лет я практикую апитерапию. По два года работал в железнодорожной больнице Одессы и городской больнице № 10. Второе образование получил в ЧГУ по специальности «Микробиология», обучаясь по очно-заочной форме. В своей практике я объединяю медицинский опыт, знания о свойствах пчелопродуктов и комплексный подход к восстановлению организма.";
-
-const ICON_CLIP_PATH =
-  "polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%)";
 
 function BeeSmallIcon() {
   return (
@@ -131,52 +137,41 @@ function GoldDivider({ tablet = false }) {
   );
 }
 
-function BenefitImage({
-  benefit,
-  variant = "mobile",
-}) {
+function BenefitImage({ benefit, variant = "mobile" }) {
   const settings = {
     mobile: {
-      wrapper: "size-[42px]",
-      sizes: "42px",
-      image: "scale-[1.62]",
+      wrapper: "size-[46px]",
+      sizes: "46px",
+      imageClassName: benefit.mobileImageClassName || "",
     },
     tablet: {
-      wrapper: "size-[56px]",
-      sizes: "56px",
-      image: "scale-[1.62]",
+      wrapper: "size-[60px]",
+      sizes: "60px",
+      imageClassName: benefit.tabletImageClassName || "",
     },
     desktop: {
-      wrapper: "size-[76px]",
-      sizes: "76px",
-      image: "scale-[1.58]",
+      wrapper: "size-[82px]",
+      sizes: "82px",
+      imageClassName: benefit.desktopImageClassName || "",
     },
   };
 
   const current = settings[variant];
 
   return (
-    <span
-      className={`relative block shrink-0 overflow-hidden ${current.wrapper}`}
-      style={{
-        clipPath: ICON_CLIP_PATH,
-      }}
-    >
+    <span className={`relative block shrink-0 ${current.wrapper}`}>
       <Image
         src={benefit.icon}
         alt=""
         fill
         sizes={current.sizes}
-        className={`object-cover object-center ${current.image}`}
+        className={`object-contain ${current.imageClassName}`}
       />
     </span>
   );
 }
 
-function BenefitCard({
-  benefit,
-  tablet = false,
-}) {
+function BenefitCard({ benefit, tablet = false }) {
   return (
     <div
       className={`relative overflow-hidden border border-[#d8b66a]/34 bg-[linear-gradient(180deg,rgba(4,22,16,0.82)_0%,rgba(2,12,9,0.94)_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.34)] ${
@@ -203,8 +198,8 @@ function BenefitCard({
       <div
         className={`relative z-10 grid items-center ${
           tablet
-            ? "min-h-[92px] grid-cols-[58px_minmax(0,1fr)_12px] gap-4 px-5 py-3"
-            : "min-h-[72px] grid-cols-[44px_minmax(0,1fr)_10px] gap-3 px-3.5 py-2.5"
+            ? "min-h-[92px] grid-cols-[62px_minmax(0,1fr)_12px] gap-4 px-5 py-3"
+            : "min-h-[72px] grid-cols-[48px_minmax(0,1fr)_10px] gap-3 px-3.5 py-2.5"
         }`}
       >
         <BenefitImage
@@ -245,11 +240,8 @@ function BenefitCard({
 
 function DesktopBenefit({ benefit }) {
   return (
-    <div className="flex min-w-0 items-center gap-5">
-      <BenefitImage
-        benefit={benefit}
-        variant="desktop"
-      />
+    <div className="grid min-w-0 grid-cols-[82px_minmax(0,1fr)] items-center gap-5">
+      <BenefitImage benefit={benefit} variant="desktop" />
 
       <p className="m-0 text-[15px] font-semibold leading-5 text-[#f3e6c8] drop-shadow-[0_4px_12px_rgba(0,0,0,0.72)]">
         {benefit.title}
@@ -287,10 +279,7 @@ function MobileInformationPanel() {
 
         <div className="mt-5 grid gap-2.5">
           {benefits.map((benefit) => (
-            <BenefitCard
-              key={benefit.title}
-              benefit={benefit}
-            />
+            <BenefitCard key={benefit.title} benefit={benefit} />
           ))}
         </div>
 
@@ -522,19 +511,19 @@ export default function AboutHeroSection() {
 
       {/* DESKTOP */}
 
-      <div className="relative z-10 mx-auto hidden h-full min-h-0 w-full max-w-[1920px] items-center px-[5vw] xl:flex">
+      <div className="relative z-10 mx-auto hidden h-full min-h-0 w-full max-w-[1920px] items-start px-[5vw] pb-[clamp(24px,3vh,42px)] pt-[clamp(170px,19vh,220px)] xl:flex">
         <div className="w-full max-w-[760px]">
-          <p className="mb-7 text-[13px] font-semibold uppercase tracking-[0.58em] text-[#d8b66a] drop-shadow-[0_5px_16px_rgba(0,0,0,0.78)]">
+          <p className="mb-5 text-[13px] font-semibold uppercase tracking-[0.58em] text-[#d8b66a] drop-shadow-[0_5px_16px_rgba(0,0,0,0.78)]">
             О специалисте
           </p>
 
-          <h1 className="max-w-[700px] font-serif text-[clamp(3.2rem,5.8vw,6.8rem)] font-normal leading-[0.98] tracking-[-0.06em] text-[#f8f0dd] drop-shadow-[0_12px_34px_rgba(0,0,0,0.82)]">
+          <h1 className="m-0 max-w-[700px] font-serif text-[clamp(3rem,5vw,6rem)] font-normal leading-[0.92] tracking-[-0.06em] text-[#f8f0dd] drop-shadow-[0_12px_34px_rgba(0,0,0,0.82)]">
             Магомед
             <br />
             Базаев
           </h1>
 
-          <div className="mt-8 flex max-w-[520px] items-center gap-4 text-[#d8b66a]">
+          <div className="mt-6 flex max-w-[520px] items-center gap-4 text-[#d8b66a]">
             <span className="h-px flex-1 bg-gradient-to-r from-[#d8b66a] to-transparent" />
 
             <BeeSmallIcon />
@@ -542,16 +531,13 @@ export default function AboutHeroSection() {
             <span className="h-px flex-1 bg-gradient-to-l from-[#d8b66a] to-transparent" />
           </div>
 
-          <p className="mt-8 max-w-[680px] text-[16px] font-medium leading-8 text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)]">
+          <p className="mt-6 max-w-[690px] text-[clamp(14px,0.88vw,16px)] font-medium leading-[1.82] text-[#f3e8cf] drop-shadow-[0_5px_18px_rgba(0,0,0,0.82)]">
             {aboutText}
           </p>
 
-          <div className="mt-10 grid max-w-[760px] grid-cols-3 gap-8">
+          <div className="mt-[clamp(34px,4vh,50px)] grid max-w-[760px] grid-cols-3 items-center gap-8">
             {benefits.map((benefit) => (
-              <DesktopBenefit
-                key={benefit.title}
-                benefit={benefit}
-              />
+              <DesktopBenefit key={benefit.title} benefit={benefit} />
             ))}
           </div>
         </div>

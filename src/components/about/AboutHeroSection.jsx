@@ -140,7 +140,7 @@ function GoldDivider({ tablet = false }) {
 function BenefitImage({ benefit, variant = "mobile" }) {
   const settings = {
     mobile: {
-      wrapper: "size-[46px]",
+      wrapper: "size-[clamp(32px,10vw,46px)]",
       sizes: "46px",
       imageClassName: benefit.mobileImageClassName || "",
     },
@@ -177,7 +177,7 @@ function BenefitCard({ benefit, tablet = false }) {
       className={`relative overflow-hidden border border-[#d8b66a]/34 bg-[linear-gradient(180deg,rgba(4,22,16,0.82)_0%,rgba(2,12,9,0.94)_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.34)] ${
         tablet
           ? "min-h-[92px] rounded-[22px]"
-          : "min-h-[72px] rounded-[18px]"
+          : "min-h-[clamp(44px,14vw,64px)] rounded-[clamp(14px,4vw,18px)]"
       }`}
     >
       <div
@@ -199,7 +199,7 @@ function BenefitCard({ benefit, tablet = false }) {
         className={`relative z-10 grid items-center ${
           tablet
             ? "min-h-[92px] grid-cols-[62px_minmax(0,1fr)_12px] gap-4 px-5 py-3"
-            : "min-h-[72px] grid-cols-[48px_minmax(0,1fr)_10px] gap-3 px-3.5 py-2.5"
+            : "min-h-[clamp(44px,14vw,64px)] grid-cols-[clamp(34px,10vw,48px)_minmax(0,1fr)_10px] gap-[clamp(8px,2.6vw,12px)] px-[clamp(10px,3.5vw,14px)] py-[clamp(5px,1.8vw,10px)]"
         }`}
       >
         <BenefitImage
@@ -210,7 +210,9 @@ function BenefitCard({ benefit, tablet = false }) {
         <div className="min-w-0 self-center text-left">
           <h3
             className={`m-0 font-semibold leading-[1.2] tracking-[-0.025em] text-[#f3e7c8] ${
-              tablet ? "text-[0.98rem]" : "text-[0.78rem]"
+              tablet
+                ? "text-[0.98rem]"
+                : "text-[clamp(0.68rem,3.1vw,0.78rem)]"
             }`}
           >
             {benefit.title}
@@ -220,7 +222,7 @@ function BenefitCard({ benefit, tablet = false }) {
             className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8b66a]/78 ${
               tablet
                 ? "mt-1.5 max-w-[280px] text-[0.59rem]"
-                : "mt-1 max-w-[185px] text-[0.47rem]"
+                : "mt-[clamp(2px,1vw,4px)] max-w-[185px] text-[clamp(0.4rem,1.9vw,0.47rem)]"
             }`}
           >
             {benefit.subtitle}
@@ -252,14 +254,14 @@ function DesktopBenefit({ benefit }) {
 
 function MobileInformationPanel() {
   return (
-    <div className="relative mx-auto min-h-[590px] w-full max-w-[430px] overflow-hidden rounded-[26px] bg-[#03100d] shadow-[0_18px_38px_rgba(0,0,0,0.44)]">
-      <div className="pointer-events-none absolute -inset-x-[5px] -inset-y-[10px]">
+    <div className="relative mx-auto aspect-[561/701] w-full max-w-[430px] overflow-hidden bg-[#03100d] shadow-[0_18px_38px_rgba(0,0,0,0.44)]">
+      <div className="pointer-events-none absolute inset-0">
         <Image
           src="/images/about/mobileFon.webp"
           alt=""
           fill
           sizes="(max-width: 767px) 100vw, 430px"
-          className="select-none object-cover object-center"
+          className="select-none object-contain object-center"
         />
       </div>
 
@@ -268,22 +270,22 @@ function MobileInformationPanel() {
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.04)_35%,rgba(0,0,0,0.14)_100%)]"
       />
 
-      <div className="relative z-10 flex min-h-[590px] flex-col px-[clamp(24px,7vw,34px)] pb-7 pt-[102px]">
-        <p className="m-0 text-left text-[0.69rem] font-medium leading-[1.68] tracking-[-0.025em] text-[#f1e7cf]/94">
+      <div className="relative z-10 flex h-full flex-col px-[clamp(22px,7vw,34px)] pb-[clamp(18px,5vw,27px)] pt-[clamp(58px,16vw,86px)]">
+        <p className="m-0 text-left text-[clamp(0.58rem,2.7vw,0.69rem)] font-medium leading-[1.55] tracking-[-0.025em] text-[#f1e7cf]/94">
           {aboutText}
         </p>
 
-        <div className="mt-5">
+        <div className="mt-[clamp(8px,2.8vw,16px)]">
           <GoldDivider />
         </div>
 
-        <div className="mt-5 grid gap-2.5">
+        <div className="mt-[clamp(8px,2.8vw,16px)] grid gap-[clamp(6px,2vw,10px)]">
           {benefits.map((benefit) => (
             <BenefitCard key={benefit.title} benefit={benefit} />
           ))}
         </div>
 
-        <div className="mt-6">
+        <div className="mt-[clamp(8px,2.8vw,16px)]">
           <GoldDivider />
         </div>
       </div>
@@ -294,13 +296,13 @@ function MobileInformationPanel() {
 function TabletInformationPanel() {
   return (
     <div className="relative mx-auto aspect-[3/4] w-full max-w-[820px] overflow-hidden bg-[#03100d] shadow-[0_22px_46px_rgba(0,0,0,0.46)]">
-      <div className="pointer-events-none absolute -inset-[5%]">
+      <div className="pointer-events-none absolute inset-0">
         <Image
           src="/images/about/tabletFon.webp"
           alt=""
           fill
           sizes="(max-width: 1279px) 92vw, 820px"
-          className="select-none object-cover object-center"
+          className="select-none object-contain object-center"
         />
       </div>
 

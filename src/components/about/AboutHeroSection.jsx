@@ -9,7 +9,7 @@ const benefits = [
   {
     title: "Пчелоужаление",
     subtitle: "Природная стимуляция иммунитета",
-    icon: "/images/about/icons/11.webp",
+    icon: "/images/about/icons/11111.webp",
     mobileImageClassName: "",
     tabletImageClassName: "",
     desktopImageClassName: "scale-[1.2]",
@@ -17,7 +17,7 @@ const benefits = [
   {
     title: "Апитоксин",
     subtitle: "Активные пептиды для здоровья",
-    icon: "/images/about/icons/2222.webp",
+    icon: "/images/about/icons/22222.webp",
     mobileImageClassName: "scale-[0.82]",
     tabletImageClassName: "scale-[0.82]",
     desktopImageClassName: "scale-100",
@@ -25,7 +25,7 @@ const benefits = [
   {
     title: "Пчелопродукты",
     subtitle: "Натуральная поддержка организма",
-    icon: "/images/about/icons/33.webp",
+    icon: "/images/about/icons/33333.webp",
     mobileImageClassName: "",
     tabletImageClassName: "",
     desktopImageClassName: "scale-[1.2]",
@@ -140,8 +140,8 @@ function GoldDivider({ tablet = false }) {
 function BenefitImage({ benefit, variant = "mobile" }) {
   const settings = {
     mobile: {
-      wrapper: "size-[clamp(32px,10vw,46px)]",
-      sizes: "46px",
+      wrapper: "size-[clamp(26px,7.8vw,34px)]",
+      sizes: "34px",
       imageClassName: benefit.mobileImageClassName || "",
     },
     tablet: {
@@ -177,7 +177,7 @@ function BenefitCard({ benefit, tablet = false }) {
       className={`relative overflow-hidden border border-[#d8b66a]/34 bg-[linear-gradient(180deg,rgba(4,22,16,0.82)_0%,rgba(2,12,9,0.94)_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.34)] ${
         tablet
           ? "min-h-[92px] rounded-[22px]"
-          : "min-h-[clamp(44px,14vw,64px)] rounded-[clamp(14px,4vw,18px)]"
+          : "min-h-[clamp(48px,13vw,58px)] rounded-[clamp(13px,3.5vw,17px)]"
       }`}
     >
       <div
@@ -199,7 +199,7 @@ function BenefitCard({ benefit, tablet = false }) {
         className={`relative z-10 grid items-center ${
           tablet
             ? "min-h-[92px] grid-cols-[62px_minmax(0,1fr)_12px] gap-4 px-5 py-3"
-            : "min-h-[clamp(44px,14vw,64px)] grid-cols-[clamp(34px,10vw,48px)_minmax(0,1fr)_10px] gap-[clamp(8px,2.6vw,12px)] px-[clamp(10px,3.5vw,14px)] py-[clamp(5px,1.8vw,10px)]"
+            : "min-h-[clamp(48px,13vw,58px)] grid-cols-[clamp(30px,8.5vw,38px)_minmax(0,1fr)_8px] gap-[clamp(7px,2.2vw,10px)] px-[clamp(10px,3vw,13px)] py-[clamp(4px,1.4vw,7px)]"
         }`}
       >
         <BenefitImage
@@ -212,18 +212,18 @@ function BenefitCard({ benefit, tablet = false }) {
             className={`m-0 font-semibold leading-[1.2] tracking-[-0.025em] text-[#f3e7c8] ${
               tablet
                 ? "text-[0.98rem]"
-                : "text-[clamp(0.68rem,3.1vw,0.78rem)]"
+                : "text-[clamp(0.64rem,2.85vw,0.74rem)]"
             }`}
           >
             {benefit.title}
           </h3>
 
           <p
-            className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8b66a]/78 ${
-              tablet
-                ? "mt-1.5 max-w-[280px] text-[0.59rem]"
-                : "mt-[clamp(2px,1vw,4px)] max-w-[185px] text-[clamp(0.4rem,1.9vw,0.47rem)]"
-            }`}
+className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8b66a]/78 ${
+  tablet
+    ? "mt-[10px] max-w-[280px] text-[0.59rem]"
+    : "mt-[clamp(7px,2vw,10px)] max-w-[185px] text-[clamp(0.38rem,1.72vw,0.44rem)]"
+}`}
           >
             {benefit.subtitle}
           </p>
@@ -232,7 +232,7 @@ function BenefitCard({ benefit, tablet = false }) {
         <span
           aria-hidden="true"
           className={`justify-self-end rounded-full bg-[#e0bb63] shadow-[0_0_10px_rgba(224,187,99,0.72)] ${
-            tablet ? "size-[7px]" : "size-[6px]"
+            tablet ? "size-[7px]" : "size-[5px]"
           }`}
         />
       </div>
@@ -270,23 +270,15 @@ function MobileInformationPanel() {
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.04)_35%,rgba(0,0,0,0.14)_100%)]"
       />
 
-      <div className="relative z-10 flex h-full flex-col px-[clamp(22px,7vw,34px)] pb-[clamp(18px,5vw,27px)] pt-[clamp(58px,16vw,86px)]">
+      <div className="relative z-10 flex h-full flex-col px-[clamp(30px,10vw,44px)] pb-[clamp(14px,4vw,24px)] pt-[clamp(68px,22vw,96px)]">
         <p className="m-0 text-left text-[clamp(0.58rem,2.7vw,0.69rem)] font-medium leading-[1.55] tracking-[-0.025em] text-[#f1e7cf]/94">
           {aboutText}
         </p>
 
-        <div className="mt-[clamp(8px,2.8vw,16px)]">
-          <GoldDivider />
-        </div>
-
-        <div className="mt-[clamp(8px,2.8vw,16px)] grid gap-[clamp(6px,2vw,10px)]">
+        <div className="mt-[clamp(14px,4vw,20px)] grid gap-[clamp(10px,3vw,14px)]">
           {benefits.map((benefit) => (
             <BenefitCard key={benefit.title} benefit={benefit} />
           ))}
-        </div>
-
-        <div className="mt-[clamp(8px,2.8vw,16px)]">
-          <GoldDivider />
         </div>
       </div>
     </div>
@@ -322,11 +314,7 @@ function TabletInformationPanel() {
 
         <div className="mx-auto mt-14 grid w-full max-w-[650px] gap-4">
           {benefits.map((benefit) => (
-            <BenefitCard
-              key={benefit.title}
-              benefit={benefit}
-              tablet
-            />
+            <BenefitCard key={benefit.title} benefit={benefit} tablet />
           ))}
         </div>
 

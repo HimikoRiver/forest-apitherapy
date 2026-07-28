@@ -281,17 +281,17 @@ export default function AboutPage() {
             <span className="h-px w-32 bg-gradient-to-l from-transparent to-[#d8b66a]" />
           </div>
 
-          <div className="grid gap-10 lg:grid-cols-3">
+          <div className="grid gap-10 lg:grid-cols-3 lg:gap-4 xl:gap-10">
             {directions.map((item) => (
               <article
                 key={item.number}
-                className="relative border-r border-[#d8b66a]/18 pr-8 last:border-r-0"
+                className="relative min-w-0 border-r border-[#d8b66a]/18 pr-0 last:border-r-0 lg:pr-4 xl:pr-8"
               >
-                <div className="flex items-start gap-6">
-                  <span className="relative flex h-14 w-14 shrink-0 items-center justify-center text-sm font-bold text-[#d8b66a]">
+                <div className="flex min-w-0 items-start gap-6 lg:gap-3 xl:gap-6">
+                  <span className="relative flex h-14 w-14 shrink-0 items-center justify-center text-sm font-bold text-[#d8b66a] lg:h-10 lg:w-10 lg:text-xs xl:h-14 xl:w-14 xl:text-sm">
                     <svg
                       viewBox="0 0 52 58"
-                      className="absolute h-14 w-14"
+                      className="absolute h-14 w-14 lg:h-10 lg:w-10 xl:h-14 xl:w-14"
                       aria-hidden="true"
                     >
                       <path
@@ -305,12 +305,12 @@ export default function AboutPage() {
                     <span className="relative z-10">{item.number}</span>
                   </span>
 
-                  <div>
-                    <h2 className="text-[clamp(1.45rem,2vw,2rem)] font-semibold leading-tight tracking-[-0.05em] text-[#f4edda]">
+                  <div className="min-w-0">
+                    <h2 className="min-w-0 text-[clamp(1.45rem,2vw,2rem)] font-semibold leading-tight tracking-[-0.05em] text-[#f4edda] [overflow-wrap:anywhere] lg:text-[1.05rem] lg:leading-[1.3] xl:text-[clamp(1.45rem,2vw,2rem)] xl:leading-tight">
                       {item.title}
                     </h2>
 
-                    <p className="mt-4 max-w-[320px] text-sm leading-7 text-[#cfc5ad]">
+                    <p className="mt-4 max-w-[320px] text-sm leading-7 text-[#cfc5ad] lg:mt-3 lg:text-[0.72rem] lg:leading-[1.65] xl:mt-4 xl:text-sm xl:leading-7">
                       {item.text}
                     </p>
                   </div>
@@ -321,7 +321,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden border-t border-[#d8b66a]/12 bg-black px-5 pb-16 pt-14 sm:px-8 lg:px-12 xl:px-[5vw]">
+      <section className="relative overflow-hidden border-t border-[#d8b66a]/12 bg-black px-5 pb-4 pt-14 sm:px-8 sm:pb-5 lg:px-12 lg:pb-6 xl:px-[5vw] xl:pb-16">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[42px] xl:hidden"

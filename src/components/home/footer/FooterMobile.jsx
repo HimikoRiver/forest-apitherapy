@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useId } from "react";
 import { usePathname } from "next/navigation";
 import { homeContent } from "@/data/homeContent";
 
@@ -31,7 +32,12 @@ function getOrderedNavItems(pathname) {
   ];
 }
 
-function FooterHoneycombRow() {
+function FooterHoneycombRow({ compact = false }) {
+  const gradientId = useId().replaceAll(":", "");
+
+  const strokeGradientId = `footer-honey-stroke-${gradientId}`;
+  const fillGradientId = `footer-honey-fill-${gradientId}`;
+
   const hexagons = [
     "10,2 16,5.5 16,12.5 10,16 4,12.5 4,5.5",
     "31,2 37,5.5 37,12.5 31,16 25,12.5 25,5.5",
@@ -46,7 +52,13 @@ function FooterHoneycombRow() {
   ];
 
   return (
-    <div className="flex justify-center px-3 pt-5">
+    <div
+      className={
+        compact
+          ? "flex justify-center"
+          : "flex justify-center px-3 pt-5"
+      }
+    >
       <svg
         viewBox="0 0 209 18"
         fill="none"
@@ -57,7 +69,7 @@ function FooterHoneycombRow() {
       >
         <defs>
           <linearGradient
-            id="footer-honey-stroke"
+            id={strokeGradientId}
             x1="0"
             y1="9"
             x2="209"
@@ -82,7 +94,7 @@ function FooterHoneycombRow() {
           </linearGradient>
 
           <linearGradient
-            id="footer-honey-fill"
+            id={fillGradientId}
             x1="0"
             y1="0"
             x2="209"
@@ -104,10 +116,10 @@ function FooterHoneycombRow() {
         </defs>
 
         <g
-          stroke="url(#footer-honey-stroke)"
+          stroke={`url(#${strokeGradientId})`}
           strokeWidth="1.55"
           strokeLinejoin="round"
-          fill="url(#footer-honey-fill)"
+          fill={`url(#${fillGradientId})`}
         >
           {hexagons.map((points, index) => (
             <polygon key={index} points={points} />
@@ -165,8 +177,12 @@ function FooterMobilePanel({ title, icon, children }) {
 
 export default function FooterMobile() {
   const pathname = usePathname();
+
   const activeItem = getActiveNavItem(pathname);
   const orderedNavItems = getOrderedNavItems(pathname);
+
+  const isAboutPage =
+    pathname.startsWith("/about") || pathname.startsWith("/specialist");
 
   const year = new Date().getFullYear();
   const tagline = homeContent.footer.tagline;
@@ -189,6 +205,12 @@ export default function FooterMobile() {
       />
 
       <div className="relative z-10 mx-auto w-full max-w-[440px] px-4 pb-8 pt-8 md:max-w-[960px] md:px-7 md:pb-10 md:pt-10">
+        {isAboutPage && (
+          <div className="mb-7 md:mb-9">
+            <FooterHoneycombRow compact />
+          </div>
+        )}
+
         <p className="m-0 mb-7 text-center text-[0.96rem] font-medium leading-[1.75] tracking-[-0.035em] text-[#f3d98d] md:mb-9">
           {tagline}
         </p>

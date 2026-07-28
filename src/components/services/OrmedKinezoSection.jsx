@@ -35,38 +35,6 @@ function PlayIcon() {
   );
 }
 
-function VideoVineFrame({ children, mirrored = false }) {
-  return (
-    <div
-      className={`relative ${
-        mirrored
-          ? "pr-[36px] pb-[48px] pt-[22px] sm:pr-[46px] sm:pb-[60px] sm:pt-[26px] lg:pr-[56px] lg:pb-[72px] lg:pt-[30px]"
-          : "pl-[36px] pb-[48px] pt-[22px] sm:pl-[46px] sm:pb-[60px] sm:pt-[26px] lg:pl-[56px] lg:pb-[72px] lg:pt-[30px]"
-      }`}
-    >
-      <div
-        aria-hidden="true"
-        className={`pointer-events-none absolute z-20 ${
-          mirrored ? "-right-[120px]" : "-left-[10%]"
-        } -bottom-[8%] w-[136%] sm:w-[138%] lg:w-[140%]`}
-      >
-        <Image
-          src="/images/services/vine.webp"
-          alt=""
-          width={3344}
-          height={1882}
-          sizes="(max-width: 1023px) 120vw, 62vw"
-          className={`h-auto w-full max-w-none select-none object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.22)] ${
-            mirrored ? "-scale-x-100" : ""
-          }`}
-        />
-      </div>
-
-      <div className="relative z-10">{children}</div>
-    </div>
-  );
-}
-
 function KinezoVideo() {
   const videoRef = useRef(null);
   const [hasStarted, setHasStarted] = useState(false);
@@ -128,6 +96,7 @@ function KinezoVideo() {
         onContextMenu={(event) => event.preventDefault()}
       >
         <source src="/videos/services-vid2.mp4" type="video/mp4" />
+
         Ваш браузер не поддерживает воспроизведение видео.
       </video>
 
@@ -198,38 +167,25 @@ export default function OrmedKinezoSection() {
         <div className="relative overflow-hidden rounded-[24px] border border-[#d0a34a]/62 bg-transparent px-5 py-6 shadow-[0_-24px_40px_-26px_rgba(0,0,0,0.95),0_24px_40px_-26px_rgba(0,0,0,0.95)] sm:px-7 sm:py-8 lg:px-9 lg:py-9 xl:px-12 xl:py-10">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-3 top-1 hidden h-[92px] w-[92px] -rotate-[8deg] opacity-90 lg:block xl:left-5 xl:h-[105px] xl:w-[105px]"
+            className="pointer-events-none absolute right-3 top-1 hidden h-[92px] w-[92px] rotate-[8deg] opacity-90 lg:block xl:right-5 xl:h-[105px] xl:w-[105px]"
           >
             <Image
               src="/images/services/bee.webp"
               alt=""
               fill
               sizes="105px"
-              className="-scale-x-100 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
+              className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.45)]"
             />
           </div>
 
-          <div className="relative z-10 grid gap-5 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-8">
-            <div className="relative flex min-h-[210px] items-center justify-center sm:min-h-[260px] lg:min-h-[320px] lg:justify-start">
-              <div className="relative w-[116%] max-w-[820px] translate-y-5 sm:w-[120%] sm:translate-y-7 lg:w-[128%] lg:max-w-[920px] lg:-translate-x-10 lg:translate-y-10">
-                <Image
-                  src="/images/services/kinez2.webp"
-                  alt="ОРМЕД-Кинезо"
-                  width={1448}
-                  height={1086}
-                  sizes="(max-width: 1023px) 100vw, 50vw"
-                  className="pointer-events-none h-auto w-full select-none object-contain mix-blend-screen drop-shadow-[0_20px_42px_rgba(0,0,0,0.48)]"
-                />
-              </div>
-            </div>
-
+          <div className="relative z-10 grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-start xl:gap-8">
             <div className="min-w-0">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
+              <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-left sm:text-[11px]">
                 Оборудование
               </p>
 
               <h2
-                className="max-w-[760px] text-[clamp(1.8rem,3vw,3.2rem)] font-normal uppercase leading-[1.08] tracking-[0.02em] text-[#e2b45b]"
+                className="max-w-[760px] text-center text-[clamp(1.8rem,3vw,3.2rem)] font-normal uppercase leading-[1.08] tracking-[0.02em] text-[#e2b45b] sm:text-left"
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
                 }}
@@ -237,7 +193,7 @@ export default function OrmedKinezoSection() {
                 ОРМЕД-Кинезо
               </h2>
 
-              <div className="mt-3 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
+              <div className="mx-auto mt-3 h-px w-28 bg-gradient-to-r from-transparent via-[#d8ad56]/80 to-transparent sm:mx-0 sm:bg-gradient-to-r sm:from-[#d8ad56]/80 sm:via-[#d8ad56]/80 sm:to-transparent" />
 
               <div className="mt-4 max-w-[860px] space-y-3 text-[12px] font-medium leading-6 text-[#e8ddc8]/90 sm:text-[13px] sm:leading-7 lg:text-[14px]">
                 <p>
@@ -261,14 +217,31 @@ export default function OrmedKinezoSection() {
                 </p>
               </div>
             </div>
+
+            <div className="relative flex min-h-[190px] items-start justify-center sm:min-h-[220px] lg:min-h-[250px] lg:justify-end">
+              <div className="relative w-[112%] max-w-[680px] translate-y-5 sm:w-[116%] sm:translate-y-7 lg:w-[125%] lg:max-w-[820px] lg:translate-y-10">
+                <Image
+                  src="/images/services/kinez2.webp"
+                  alt="ОРМЕД-Кинезо"
+                  width={1448}
+                  height={1086}
+                  sizes="(max-width: 1023px) 100vw, 48vw"
+                  className="pointer-events-none h-auto w-full select-none object-contain mix-blend-screen drop-shadow-[0_20px_42px_rgba(0,0,0,0.48)]"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="relative z-10 my-6 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-7 lg:my-8" />
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center xl:gap-12">
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-12">
+            <div className="min-w-0">
+              <KinezoVideo />
+            </div>
+
             <div className="relative flex flex-col justify-center">
               <div className="mb-7">
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                <h3 className="text-center text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-left sm:text-[12px]">
                   Особенности процедуры
                 </h3>
 
@@ -289,7 +262,7 @@ export default function OrmedKinezoSection() {
               </div>
 
               <div>
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                <h3 className="text-center text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-left sm:text-[12px]">
                   Применение
                 </h3>
 
@@ -307,12 +280,6 @@ export default function OrmedKinezoSection() {
                   </p>
                 </div>
               </div>
-            </div>
-
-            <div className="min-w-0">
-              <VideoVineFrame mirrored>
-                <KinezoVideo />
-              </VideoVineFrame>
             </div>
           </div>
         </div>

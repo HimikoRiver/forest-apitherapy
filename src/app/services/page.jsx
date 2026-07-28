@@ -50,7 +50,7 @@ export default function ServicesPage() {
     >
       <ApidomikHero />
 
-      <div className="grid gap-5 sm:gap-6 lg:gap-6">
+      <div className="grid gap-5 max-sm:[&_h2]:text-center max-sm:[&_h3]:text-center sm:gap-6 lg:gap-6">
         <section className="relative -mt-px overflow-hidden">
           <Image
             src="/images/services/fon22.webp"

@@ -24,7 +24,7 @@ export default function ApidomikDescription() {
       <div className="flex min-w-0 w-full flex-col justify-center px-2 py-5 sm:px-5 sm:py-7 lg:px-8 lg:py-8 xl:px-12 2xl:px-16">
         <div className="w-full max-w-[860px]">
           <h2
-            className="text-[clamp(1.8rem,2.6vw,3rem)] leading-tight text-[#e0b45b]"
+            className="text-center text-[clamp(1.8rem,2.6vw,3rem)] leading-tight text-[#e0b45b] sm:text-left"
             style={{
               fontFamily: "Georgia, 'Times New Roman', serif",
             }}
@@ -32,7 +32,7 @@ export default function ApidomikDescription() {
             Что такое апидомик?
           </h2>
 
-          <div className="mt-4">
+          <div className="mt-4 flex justify-center sm:block">
             <DecorativeDivider />
           </div>
 

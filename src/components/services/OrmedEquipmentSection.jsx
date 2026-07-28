@@ -40,15 +40,15 @@ function VideoVineFrame({ children, mirrored = false }) {
     <div
       className={`relative ${
         mirrored
-          ? "pr-[36px] pb-[48px] pt-[22px] sm:pr-[46px] sm:pb-[60px] sm:pt-[26px] lg:pr-[56px] lg:pb-[72px] lg:pt-[30px]"
-          : "pl-[36px] pb-[48px] pt-[22px] sm:pl-[46px] sm:pb-[60px] sm:pt-[26px] lg:pl-[56px] lg:pb-[72px] lg:pt-[30px]"
+          ? "sm:pr-[46px] sm:pb-[60px] sm:pt-[26px] lg:pr-[56px] lg:pb-[72px] lg:pt-[30px]"
+          : "sm:pl-[46px] sm:pb-[60px] sm:pt-[26px] lg:pl-[56px] lg:pb-[72px] lg:pt-[30px]"
       }`}
     >
       <div
         aria-hidden="true"
-        className={`pointer-events-none absolute z-20 ${
+        className={`pointer-events-none absolute z-20 hidden sm:block ${
           mirrored ? "-right-[120px]" : "-left-[120px]"
-        } -bottom-[8%] w-[136%] sm:w-[138%] lg:w-[140%]`}
+        } -bottom-[8%] w-[138%] lg:w-[140%]`}
       >
         <Image
           src="/images/services/vine.webp"
@@ -212,12 +212,12 @@ export default function OrmedEquipmentSection() {
 
           <div className="relative z-10 grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-start xl:gap-8">
             <div className="min-w-0">
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-[11px]">
+              <p className="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.34em] text-[#d7aa51]/82 sm:text-left sm:text-[11px]">
                 Оборудование
               </p>
 
               <h2
-                className="max-w-[760px] text-[clamp(1.8rem,3vw,3.2rem)] font-normal uppercase leading-[1.08] tracking-[0.02em] text-[#e2b45b]"
+                className="max-w-[760px] text-center text-[clamp(1.8rem,3vw,3.2rem)] font-normal uppercase leading-[1.08] tracking-[0.02em] text-[#e2b45b] sm:text-left"
                 style={{
                   fontFamily: "Georgia, 'Times New Roman', serif",
                 }}
@@ -225,7 +225,7 @@ export default function OrmedEquipmentSection() {
                 ORMED-Тракцион
               </h2>
 
-              <div className="mt-3 h-px w-28 bg-gradient-to-r from-[#d8ad56]/80 to-transparent" />
+              <div className="mx-auto mt-3 h-px w-28 bg-gradient-to-r from-transparent via-[#d8ad56]/80 to-transparent sm:mx-0 sm:bg-gradient-to-r sm:from-[#d8ad56]/80 sm:via-[#d8ad56]/80 sm:to-transparent" />
 
               <div className="mt-4 max-w-[860px] space-y-3 text-[12px] font-medium leading-6 text-[#e8ddc8]/90 sm:text-[13px] sm:leading-7 lg:text-[14px]">
                 <p>
@@ -268,7 +268,7 @@ export default function OrmedEquipmentSection() {
           <div className="relative z-10 my-6 h-px w-full bg-gradient-to-r from-transparent via-[#a57833]/35 to-transparent sm:my-7 lg:my-8" />
 
           <div className="relative z-10 grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center xl:gap-12">
-            <div className="min-w-0">
+            <div className="-mx-2 min-w-0 sm:mx-0">
               <VideoVineFrame>
                 <OrmedVideo />
               </VideoVineFrame>
@@ -276,7 +276,7 @@ export default function OrmedEquipmentSection() {
 
             <div className="relative flex flex-col justify-center">
               <div className="mb-7">
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                <h3 className="text-center text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-left sm:text-[12px]">
                   Описание процедуры
                 </h3>
 
@@ -298,7 +298,7 @@ export default function OrmedEquipmentSection() {
               </div>
 
               <div>
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-[12px]">
+                <h3 className="text-center text-[11px] font-bold uppercase tracking-[0.3em] text-[#d7aa51] sm:text-left sm:text-[12px]">
                   Показания и эффект
                 </h3>
 

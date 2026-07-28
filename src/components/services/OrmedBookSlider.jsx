@@ -11,6 +11,8 @@ import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
+import OrmedBookSliderMobile from "./OrmedBookSliderMobile";
+import OrmedBookSliderTablet from "./OrmedBookSliderTablet";
 
 const TURN_DURATION = 0.5;
 const SETTLE_HOLD_DURATION = 0;
@@ -1120,7 +1122,7 @@ function TurningPageCanvas({
   );
 }
 
-export default function OrmedBookSlider() {
+function OrmedBookSliderDesktop() {
   const reactId = useId();
 
   const safeId = reactId.replace(
@@ -1536,5 +1538,23 @@ export default function OrmedBookSlider() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function OrmedBookSlider() {
+  return (
+    <>
+      <div className="sm:hidden">
+        <OrmedBookSliderMobile />
+      </div>
+
+      <div className="hidden sm:block xl:hidden">
+        <OrmedBookSliderTablet />
+      </div>
+
+      <div className="hidden xl:block">
+        <OrmedBookSliderDesktop />
+      </div>
+    </>
   );
 }

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
-import MobileHeroMenu from "./MobileHeroMenu";
 
 const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
 const LOGO_IMAGE = "/images/logo1.webp";
@@ -51,8 +50,6 @@ export default function HeroTablet() {
           </span>
         </div>
       </header>
-
-      <MobileHeroMenu />
 
       <div className="hero-tablet-content absolute inset-x-0 z-20 px-10">
         <div className="mx-auto w-full max-w-[620px] text-center">

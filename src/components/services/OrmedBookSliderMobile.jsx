@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 const SLIDE_DURATION = 560;
+const SWIPE_DISTANCE = 45;
+const SWIPE_VELOCITY = 0.35;
 
 function NavigationArrow({ direction = "left", onClick, disabled }) {
   const isLeft = direction === "left";
@@ -30,6 +32,7 @@ function NavigationArrow({ direction = "left", onClick, disabled }) {
           strokeWidth="1.45"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           {isLeft ? (
             <path d="M14.5 5.5 8 12l6.5 6.5" />
@@ -87,6 +90,14 @@ export default function OrmedBookSliderMobile() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(null);
 
+  const swipeRef = useRef({
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    horizontal: false,
+  });
+
   const visibleIndex = transition?.toIndex ?? currentIndex;
   const progressPercent = ((visibleIndex + 1) / photos.length) * 100;
 
@@ -125,10 +136,94 @@ export default function OrmedBookSliderMobile() {
     setTransition(null);
   };
 
+  const resetSwipe = () => {
+    swipeRef.current = {
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+      horizontal: false,
+    };
+  };
+
+  const handlePointerDown = (event) => {
+    if (transition || event.pointerType === "mouse") {
+      return;
+    }
+
+    swipeRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startTime: performance.now(),
+      horizontal: false,
+    };
+
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handlePointerMove = (event) => {
+    const swipe = swipeRef.current;
+
+    if (swipe.pointerId !== event.pointerId || transition) {
+      return;
+    }
+
+    const deltaX = event.clientX - swipe.startX;
+    const deltaY = event.clientY - swipe.startY;
+
+    if (
+      !swipe.horizontal &&
+      Math.abs(deltaX) > 8 &&
+      Math.abs(deltaX) > Math.abs(deltaY)
+    ) {
+      swipe.horizontal = true;
+    }
+
+    if (swipe.horizontal) {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerEnd = (event) => {
+    const swipe = swipeRef.current;
+
+    if (swipe.pointerId !== event.pointerId || transition) {
+      resetSwipe();
+      return;
+    }
+
+    const deltaX = event.clientX - swipe.startX;
+    const deltaY = event.clientY - swipe.startY;
+    const duration = Math.max(performance.now() - swipe.startTime, 1);
+    const velocity = Math.abs(deltaX) / duration;
+
+    const isHorizontal =
+      Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
+
+    const shouldSwipe =
+      isHorizontal &&
+      (Math.abs(deltaX) >= SWIPE_DISTANCE ||
+        velocity >= SWIPE_VELOCITY);
+
+    if (shouldSwipe) {
+      if (deltaX < 0) {
+        showNext();
+      } else {
+        showPrev();
+      }
+    }
+
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    resetSwipe();
+  };
+
   const currentPhoto = photos[currentIndex];
+
   const outgoingPhoto = transition
     ? photos[transition.fromIndex]
     : currentPhoto;
+
   const incomingPhoto = transition
     ? photos[transition.toIndex]
     : null;
@@ -206,7 +301,13 @@ export default function OrmedBookSliderMobile() {
       <div className="mx-auto mt-7 w-full max-w-[430px]">
         <div className="relative overflow-hidden rounded-[24px] border border-[#a57833]/58 bg-[linear-gradient(180deg,rgba(2,15,11,0.94)_0%,rgba(1,10,8,0.98)_100%)] p-4 shadow-[0_18px_42px_rgba(0,0,0,0.42)]">
           <div className="relative overflow-hidden rounded-[20px] border border-[#d0a34a]/36 bg-[#020706] shadow-[0_14px_30px_rgba(0,0,0,0.35)]">
-            <div className="relative aspect-[4/3] overflow-hidden">
+            <div
+              className="relative aspect-[4/3] touch-pan-y select-none overflow-hidden"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={handlePointerEnd}
+            >
               <div
                 className="absolute inset-0 will-change-transform"
                 style={
@@ -226,8 +327,9 @@ export default function OrmedBookSliderMobile() {
                   alt={outgoingPhoto.alt}
                   fill
                   priority={currentIndex === 0}
+                  draggable={false}
                   sizes="(max-width: 639px) 100vw, 420px"
-                  className="object-cover object-center"
+                  className="pointer-events-none object-cover object-center"
                 />
               </div>
 
@@ -247,8 +349,9 @@ export default function OrmedBookSliderMobile() {
                     src={incomingPhoto.src}
                     alt={incomingPhoto.alt}
                     fill
+                    draggable={false}
                     sizes="(max-width: 639px) 100vw, 420px"
-                    className="object-cover object-center"
+                    className="pointer-events-none object-cover object-center"
                   />
                 </div>
               ) : null}

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
-import MobileHeroMenu from "./MobileHeroMenu";
 
 const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
 
@@ -32,8 +31,6 @@ export default function HeroMobile() {
           APIDARB
         </span>
       </header>
-
-      <MobileHeroMenu />
 
       <div
         className="absolute inset-x-0 z-20 px-5"

@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import Image from "next/image";
 
 const SLIDE_DURATION = 600;
+const SWIPE_DISTANCE = 55;
+const SWIPE_VELOCITY = 0.38;
 
 function NavigationButton({ direction = "left", onClick, disabled }) {
   const isLeft = direction === "left";
@@ -81,6 +83,14 @@ export default function OrmedBookSliderTablet() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transition, setTransition] = useState(null);
 
+  const swipeRef = useRef({
+    pointerId: null,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    horizontal: false,
+  });
+
   const visibleIndex = transition?.toIndex ?? currentIndex;
   const progressPercent = ((visibleIndex + 1) / photos.length) * 100;
 
@@ -134,6 +144,88 @@ export default function OrmedBookSliderTablet() {
 
     setCurrentIndex(transition.toIndex);
     setTransition(null);
+  };
+
+  const resetSwipe = () => {
+    swipeRef.current = {
+      pointerId: null,
+      startX: 0,
+      startY: 0,
+      startTime: 0,
+      horizontal: false,
+    };
+  };
+
+  const handlePointerDown = (event) => {
+    if (transition || event.pointerType === "mouse") {
+      return;
+    }
+
+    swipeRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startTime: performance.now(),
+      horizontal: false,
+    };
+
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handlePointerMove = (event) => {
+    const swipe = swipeRef.current;
+
+    if (swipe.pointerId !== event.pointerId || transition) {
+      return;
+    }
+
+    const deltaX = event.clientX - swipe.startX;
+    const deltaY = event.clientY - swipe.startY;
+
+    if (
+      !swipe.horizontal &&
+      Math.abs(deltaX) > 8 &&
+      Math.abs(deltaX) > Math.abs(deltaY)
+    ) {
+      swipe.horizontal = true;
+    }
+
+    if (swipe.horizontal) {
+      event.preventDefault();
+    }
+  };
+
+  const handlePointerEnd = (event) => {
+    const swipe = swipeRef.current;
+
+    if (swipe.pointerId !== event.pointerId || transition) {
+      resetSwipe();
+      return;
+    }
+
+    const deltaX = event.clientX - swipe.startX;
+    const deltaY = event.clientY - swipe.startY;
+    const duration = Math.max(performance.now() - swipe.startTime, 1);
+    const velocity = Math.abs(deltaX) / duration;
+
+    const isHorizontal =
+      Math.abs(deltaX) > Math.abs(deltaY) * 1.15;
+
+    const shouldSwipe =
+      isHorizontal &&
+      (Math.abs(deltaX) >= SWIPE_DISTANCE ||
+        velocity >= SWIPE_VELOCITY);
+
+    if (shouldSwipe) {
+      if (deltaX < 0) {
+        showNext();
+      } else {
+        showPrev();
+      }
+    }
+
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    resetSwipe();
   };
 
   const outgoingPhoto = photos[transition?.fromIndex ?? currentIndex];
@@ -208,7 +300,13 @@ export default function OrmedBookSliderTablet() {
       <div className="mx-auto mt-8 w-full max-w-[980px]">
         <div className="relative overflow-hidden rounded-[28px] border border-[#a57833]/58 bg-[linear-gradient(180deg,rgba(2,15,11,0.94)_0%,rgba(1,10,8,0.98)_100%)] px-5 py-6 shadow-[0_18px_42px_rgba(0,0,0,0.42)]">
           <div className="relative overflow-hidden rounded-[22px] border border-[#d0a34a]/36 bg-[#020706] shadow-[0_14px_30px_rgba(0,0,0,0.35)]">
-            <div className="relative aspect-[16/9] overflow-hidden">
+            <div
+              className="relative aspect-[16/9] touch-pan-y select-none overflow-hidden"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={handlePointerEnd}
+            >
               <div
                 className="absolute inset-0 will-change-transform"
                 style={
@@ -228,8 +326,9 @@ export default function OrmedBookSliderTablet() {
                   alt={outgoingPhoto.alt}
                   fill
                   priority={currentIndex === 0}
+                  draggable={false}
                   sizes="(max-width: 1279px) 90vw, 980px"
-                  className="object-cover object-center"
+                  className="pointer-events-none object-cover object-center"
                 />
               </div>
 
@@ -249,8 +348,9 @@ export default function OrmedBookSliderTablet() {
                     src={incomingPhoto.src}
                     alt={incomingPhoto.alt}
                     fill
+                    draggable={false}
                     sizes="(max-width: 1279px) 90vw, 980px"
-                    className="object-cover object-center"
+                    className="pointer-events-none object-cover object-center"
                   />
                 </div>
               ) : null}
@@ -299,8 +399,9 @@ export default function OrmedBookSliderTablet() {
                       src={photo.src}
                       alt={photo.alt}
                       fill
+                      draggable={false}
                       sizes="220px"
-                      className="object-cover object-center"
+                      className="pointer-events-none object-cover object-center"
                     />
 
                     <div

@@ -105,17 +105,32 @@ export default function ServicesPage() {
           <div className="relative overflow-hidden rounded-[20px] border border-[#a57833]/60 bg-[linear-gradient(135deg,rgba(2,15,11,0.98),rgba(3,24,16,0.92))] shadow-[0_20px_50px_rgba(0,0,0,0.38)]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_50%,rgba(24,89,56,0.12),transparent_36%),radial-gradient(circle_at_84%_50%,rgba(216,173,86,0.06),transparent_30%)]" />
 
+            {/* ПЧЕЛА ДЛЯ МОБИЛКИ / ПЛАНШЕТКИ — НА РАЗДЕЛИТЕЛЬНОЙ ЛИНИИ СПРАВА */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-3 top-[34.5%] z-20 h-[54px] w-[54px] -translate-y-1/2 opacity-92 sm:right-5 sm:top-[36%] sm:h-[74px] sm:w-[74px] md:right-6 md:top-[37%] md:h-[82px] md:w-[82px] lg:hidden"
+            >
+              <Image
+                src="/images/services/bee.webp"
+                alt=""
+                fill
+                sizes="(max-width: 639px) 54px, 82px"
+                className="object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.48)]"
+              />
+            </div>
+
             <div className="relative z-10 grid lg:grid-cols-2">
               <div className="relative flex items-center px-5 py-6 sm:px-7 lg:px-8 lg:pr-28">
-                <p className="text-[11px] font-semibold leading-6 text-[#d7aa51] sm:text-[12px] lg:text-[13px]">
+                <p className="pr-10 text-[11px] font-semibold leading-6 text-[#d7aa51] sm:pr-20 sm:text-[12px] lg:pr-0 lg:text-[13px]">
                   Не откладывайте заботу о своём здоровье на потом — обратитесь
                   к нам прямо сейчас и начните путь к более свободному движению
                   и комфортной жизни.
                 </p>
 
+                {/* ПЧЕЛА ДЛЯ ДЕСКТОПА */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute bottom-1 right-4 hidden h-[82px] w-[82px] -scale-x-100 rotate-[9deg] opacity-90 sm:block"
+                  className="pointer-events-none absolute bottom-1 right-4 hidden h-[82px] w-[82px] -scale-x-100 rotate-[9deg] opacity-90 lg:block"
                 >
                   <Image
                     src="/images/services/bee.webp"

@@ -1,8 +1,9 @@
 import { Comfortaa } from "next/font/google";
 
 import HeroMenu from "@/components/home/hero-menu/HeroMenu";
-import MobileHeroMenu from "@/components/home/hero/MobileHeroMenu";
+import MobileStickyMenu from "@/components/home/hero/MobileStickyMenu";
 import RoutePageLogo from "@/components/shared/PageLogo";
+import ScrollDirectionButton from "@/components/shared/ScrollDirectionButton";
 
 import "./globals.css";
 
@@ -23,10 +24,11 @@ export default function RootLayout({ children }) {
     <html lang="ru" className={`${comfortaa.variable} h-full antialiased`}>
       <body className="font-comfortaa relative min-h-full bg-[#030b0c] text-[#f3efe5]">
         <RoutePageLogo />
-        <MobileHeroMenu />
+        <MobileStickyMenu />
 
         {children}
 
+        <ScrollDirectionButton />
         <HeroMenu />
       </body>
     </html>

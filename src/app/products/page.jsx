@@ -105,6 +105,25 @@ export default async function ProductsPage() {
     },
   });
 
+  let isAdmin = false;
+
+  if (products.length === 0) {
+    const session = await getCurrentSession();
+
+    if (session?.user?.id) {
+      const currentUser = await prisma.user.findUnique({
+        where: {
+          id: session.user.id,
+        },
+        select: {
+          role: true,
+        },
+      });
+
+      isAdmin = currentUser?.role === "ADMIN";
+    }
+  }
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
@@ -146,17 +165,20 @@ export default async function ProductsPage() {
             </div>
 
             <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              Пока нет активных товаров. Добавим их через административную
-              панель.
+              {isAdmin
+                ? "Пока нет активных товаров. Добавим их через административную панель."
+                : "Пока нет доступных товаров. Каталог скоро будет пополнен."}
             </p>
 
-            <Link
-              href="/admin/products"
-              className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/35 bg-[#030b0c] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#071b18] hover:text-[#f3d98d]"
-            >
-              Перейти в панель
-              <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
-            </Link>
+            {isAdmin && (
+              <Link
+                href="/admin/products"
+                className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/35 bg-[#030b0c] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#071b18] hover:text-[#f3d98d]"
+              >
+                Перейти в панель
+                <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -218,7 +240,9 @@ export default async function ProductsPage() {
                         <div className="min-w-0">
                           {product.oldPriceKopecks && (
                             <p className="m-0 text-sm text-[#f3efe5]/42 line-through">
-                              {formatPriceFromKopecks(product.oldPriceKopecks)}
+                              {formatPriceFromKopecks(
+                                product.oldPriceKopecks
+                              )}
                             </p>
                           )}
 

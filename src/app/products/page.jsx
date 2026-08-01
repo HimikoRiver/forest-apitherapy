@@ -128,7 +128,7 @@ export default async function ProductsPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto w-full max-w-7xl">
+      <section className="relative z-10 mx-auto w-full max-w-[1500px]">
         <CabinetTopNav />
 
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -181,7 +181,7 @@ export default async function ProductsPage() {
             )}
           </div>
         ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product) => {
               const isOutOfStock = product.stock <= 0;
               const productHref = `/products/${product.slug}`;
@@ -189,7 +189,7 @@ export default async function ProductsPage() {
               return (
                 <article
                   key={product.id}
-                  className="group flex min-h-[420px] flex-col overflow-hidden rounded-[28px] border border-[#d8b66a]/18 bg-[#030b0c] shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-[#07120f] hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
+                  className="group flex min-h-[360px] flex-col overflow-hidden rounded-[24px] border border-[#d8b66a]/18 bg-[#030b0c] shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-[#07120f] hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
                 >
                   <Link
                     href={productHref}
@@ -201,57 +201,57 @@ export default async function ProductsPage() {
                         src={product.image}
                         alt={product.title}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         className="object-cover transition duration-500 group-hover:scale-105"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center bg-[#030b0c]">
-                        <div className="flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#071b18] text-[#f3d98d]">
-                          <PackageCheck className="size-6" />
+                        <div className="flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#071b18] text-[#f3d98d]">
+                          <PackageCheck className="size-5" />
                         </div>
                       </div>
                     )}
 
                     {product.category?.name && (
-                      <p className="absolute left-4 top-4 m-0 rounded-full border border-[#d8b66a]/18 bg-[#030b0c] px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#d8b66a]">
+                      <p className="absolute left-3 top-3 m-0 rounded-full border border-[#d8b66a]/18 bg-[#030b0c] px-3 py-1 text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]">
                         {product.category.name}
                       </p>
                     )}
                   </Link>
 
-                  <div className="flex flex-1 flex-col p-5">
+                  <div className="flex flex-1 flex-col p-4">
                     <Link
                       href={productHref}
                       className="w-fit transition duration-300 hover:text-[#fff1b8]"
                     >
-                      <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                      <h2 className="m-0 text-lg font-bold tracking-[-0.05em] text-[#f3d98d]">
                         {product.title}
                       </h2>
                     </Link>
 
                     {product.shortDescription && (
-                      <p className="mt-3 text-sm leading-7 text-[#f3efe5]/72">
+                      <p className="mt-2 text-[0.8rem] leading-6 text-[#f3efe5]/72">
                         {product.shortDescription}
                       </p>
                     )}
 
-                    <div className="mt-auto pt-5">
-                      <div className="flex items-end justify-between gap-3">
+                    <div className="mt-auto pt-4">
+                      <div className="flex items-end justify-between gap-2">
                         <div className="min-w-0">
                           {product.oldPriceKopecks && (
-                            <p className="m-0 text-sm text-[#f3efe5]/42 line-through">
+                            <p className="m-0 text-xs text-[#f3efe5]/42 line-through">
                               {formatPriceFromKopecks(
                                 product.oldPriceKopecks
                               )}
                             </p>
                           )}
 
-                          <p className="m-0 flex items-center gap-2 text-xl font-bold text-[#d8b66a]">
-                            <BadgeRussianRuble className="size-5" />
+                          <p className="m-0 flex items-center gap-1.5 text-lg font-bold text-[#d8b66a]">
+                            <BadgeRussianRuble className="size-4.5" />
                             {formatPriceFromKopecks(product.priceKopecks)}
                           </p>
 
-                          <p className="mt-2 inline-flex rounded-full border border-[#d8b66a]/14 bg-black/18 px-3 py-1 text-xs text-[#f3efe5]/58">
+                          <p className="mt-1.5 inline-flex rounded-full border border-[#d8b66a]/14 bg-black/18 px-2.5 py-1 text-[0.68rem] text-[#f3efe5]/58">
                             Остаток: {product.stock}
                           </p>
                         </div>
@@ -272,9 +272,9 @@ export default async function ProductsPage() {
                                 : `Добавить ${product.title} в корзину`
                             }
                             title={isOutOfStock ? "Нет в наличии" : "Купить"}
-                            className="group/button inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#d8b66a]/30 bg-[#d8b66a]/10 px-4 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#f3d98d] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a] hover:text-[#07110f] disabled:cursor-not-allowed disabled:border-[#d8b66a]/12 disabled:bg-[#d8b66a]/8 disabled:text-[#d8b66a]/36"
+                            className="group/button inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#d8b66a]/30 bg-[#d8b66a]/10 px-3 text-[0.62rem] font-bold uppercase tracking-[0.13em] text-[#f3d98d] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a] hover:text-[#07110f] disabled:cursor-not-allowed disabled:border-[#d8b66a]/12 disabled:bg-[#d8b66a]/8 disabled:text-[#d8b66a]/36"
                           >
-                            <ShoppingCart className="size-4 transition duration-300 group-hover/button:scale-110" />
+                            <ShoppingCart className="size-3.5 transition duration-300 group-hover/button:scale-110" />
                             {isOutOfStock ? "Нет" : "Купить"}
                           </button>
                         </form>

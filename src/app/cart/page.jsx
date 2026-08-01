@@ -23,7 +23,10 @@ async function updateCartItemQuantity(formData) {
   const user = await requireUser();
 
   const cartItemId = String(formData.get("cartItemId") || "");
-  const requestedQuantity = Math.max(1, Number(formData.get("quantity") || 1));
+  const requestedQuantity = Math.max(
+    1,
+    Number(formData.get("quantity") || 1)
+  );
 
   const cartItem = await prisma.cartItem.findFirst({
     where: {
@@ -158,14 +161,14 @@ export default async function CartPage() {
                 >
                   <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between">
                     <div className="flex min-w-0 flex-col gap-4 sm:flex-row">
-                      <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/16 bg-black/28 sm:w-32">
+                      <div className="relative aspect-square w-full shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/16 bg-[#030b0c] sm:h-32 sm:w-32">
                         {item.product.image ? (
                           <Image
                             src={item.product.image}
                             alt={item.product.title}
                             fill
-                            sizes="128px"
-                            className="object-cover transition duration-500 group-hover:scale-105"
+                            sizes="(max-width: 639px) calc(100vw - 72px), 128px"
+                            className="object-contain p-2 transition duration-500 group-hover:scale-[1.03] sm:p-1"
                           />
                         ) : (
                           <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
@@ -193,7 +196,9 @@ export default async function CartPage() {
 
                         <p className="mt-4 flex items-center gap-2 text-lg font-bold text-[#d8b66a]">
                           <BadgeRussianRuble className="size-5" />
-                          {formatPriceFromKopecks(item.product.priceKopecks)}
+                          {formatPriceFromKopecks(
+                            item.product.priceKopecks
+                          )}
                         </p>
                       </div>
                     </div>

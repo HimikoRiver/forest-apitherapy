@@ -37,7 +37,8 @@ function OrderStatusBadge({ status }) {
   const statusStyles = {
     PENDING: "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
     PROCESSING: "border-blue-300/22 bg-blue-400/10 text-blue-100",
-    COMPLETED: "border-emerald-300/22 bg-emerald-400/10 text-emerald-100",
+    COMPLETED:
+      "border-emerald-300/22 bg-emerald-400/10 text-emerald-100",
     CANCELED: "border-red-300/22 bg-red-400/10 text-red-100",
   };
 
@@ -92,12 +93,12 @@ export default async function ProfilePage() {
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav showAdminLinks={user?.role === "ADMIN"} />
 
-        <div className="mb-6 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
+        <div className="mb-3 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
           <div className="relative px-5 py-7 sm:px-7 lg:px-8">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(216,182,106,0.14),transparent_34%)]" />
 
             <div className="relative">
-              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
                 <UserRound className="size-4" />
                 Личный кабинет
               </div>
@@ -106,7 +107,7 @@ export default async function ProfilePage() {
                 Добро пожаловать
               </h1>
 
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base sm:leading-8">
                 Здесь хранятся данные профиля, история заказов и быстрые
                 переходы к покупкам.
               </p>
@@ -114,11 +115,11 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+        <div className="grid gap-3 lg:grid-cols-[360px_1fr]">
           <aside className="h-fit overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
             <div className="border-b border-[#d8b66a]/12 px-5 py-5">
-              <div className="flex items-center gap-3">
-                <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+              <div className="flex items-center gap-4">
+                <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
                   <UserRound className="size-5" />
                 </div>
 
@@ -127,34 +128,37 @@ export default async function ProfilePage() {
                     Пользователь
                   </p>
 
-                  <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                  <h2 className="mt-1.5 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
                     Профиль
                   </h2>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4 p-5">
+            <div className="space-y-5 p-5">
               <div className="rounded-[24px] border border-[#d8b66a]/10 bg-black/22 p-4">
-                <div className="space-y-3 text-sm leading-6 text-[#f3efe5]/82">
-                  <p className="m-0 flex items-start gap-2">
-                    <UserRound className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                <div className="space-y-4 text-sm leading-7 text-[#f3efe5]/82">
+                  <p className="m-0 flex items-start gap-2.5">
+                    <UserRound className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
+
                     <span>
                       <span className="text-[#d8b66a]/82">Имя:</span>{" "}
                       {user?.name || "Не указано"}
                     </span>
                   </p>
 
-                  <p className="m-0 flex items-start gap-2">
-                    <Mail className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                  <p className="m-0 flex items-start gap-2.5">
+                    <Mail className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
+
                     <span>
                       <span className="text-[#d8b66a]/82">Email:</span>{" "}
                       {user?.email || sessionUser.email}
                     </span>
                   </p>
 
-                  <p className="m-0 flex items-start gap-2">
-                    <LayoutDashboard className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
+                  <p className="m-0 flex items-start gap-2.5">
+                    <LayoutDashboard className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
+
                     <span>
                       <span className="text-[#d8b66a]/82">Роль:</span>{" "}
                       {user?.role || "USER"}
@@ -169,9 +173,9 @@ export default async function ProfilePage() {
 
           <section className="overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
             <div className="border-b border-[#d8b66a]/12 px-5 py-5">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
                     <ClipboardList className="size-5" />
                   </div>
 
@@ -180,13 +184,13 @@ export default async function ProfilePage() {
                       История заказов
                     </p>
 
-                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                    <h2 className="mt-1.5 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
                       Ваши заказы
                     </h2>
                   </div>
                 </div>
 
-                <p className="m-0 rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1 text-xs text-[#f3efe5]/58">
+                <p className="m-0 rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1.5 text-xs text-[#f3efe5]/58">
                   Всего: {orders.length}
                 </p>
               </div>
@@ -195,14 +199,14 @@ export default async function ProfilePage() {
             {orders.length === 0 ? (
               <div className="p-5">
                 <div className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
-                  <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
+                  <p className="m-0 text-sm leading-7 text-[#f3efe5]/72 sm:leading-8">
                     Заказов пока нет. Добавьте товар в корзину и оформите первый
                     заказ.
                   </p>
 
                   <Link
                     href="/products"
-                    className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
+                    className="group mt-6 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/24 bg-black/24 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/60 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
                   >
                     Смотреть товары
                     <ArrowRight className="size-4 transition group-hover:translate-x-0.5" />
@@ -221,11 +225,11 @@ export default async function ProfilePage() {
                       <div>
                         <OrderStatusBadge status={order.status} />
 
-                        <h3 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d] transition duration-300 group-hover/order:text-[#fff1b8]">
+                        <h3 className="mt-4 text-xl font-bold tracking-[-0.05em] text-[#f3d98d] transition duration-300 group-hover/order:text-[#fff1b8]">
                           Заказ от {formatOrderDate(order.createdAt)}
                         </h3>
 
-                        <p className="mt-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a]/70">
+                        <p className="mt-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a]/70">
                           Подробнее
                           <ArrowRight className="size-3.5 transition duration-300 group-hover/order:translate-x-0.5" />
                         </p>
@@ -236,7 +240,7 @@ export default async function ProfilePage() {
                       </p>
                     </div>
 
-                    <div className="mt-5 space-y-2.5">
+                    <div className="mt-6 space-y-3">
                       {order.items.map((item) => (
                         <div
                           key={item.id}
@@ -259,12 +263,12 @@ export default async function ProfilePage() {
                               )}
                             </div>
 
-                            <span className="font-bold text-[#f3d98d]">
+                            <span className="font-bold leading-6 text-[#f3d98d]">
                               {item.productTitle}
                             </span>
                           </div>
 
-                          <span className="shrink-0 text-[#f3efe5]/62">
+                          <span className="shrink-0 leading-6 text-[#f3efe5]/62">
                             {item.quantity} ×{" "}
                             {formatPriceFromKopecks(item.priceKopecks)}
                           </span>

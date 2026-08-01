@@ -11,12 +11,12 @@ import {
   MapPin,
   MessageSquareText,
   PackageCheck,
-  Phone,
   Send,
   ShoppingBag,
   UserRound,
 } from "lucide-react";
 import { z } from "zod";
+import PhoneCountryField from "@/components/checkout/PhoneCountryField";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { requireUser } from "@/lib/auth-guards";
@@ -24,11 +24,17 @@ import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
 
 const checkoutSchema = z.object({
-  customerName: z.string().trim().min(2),
-  customerPhone: z.string().trim().min(5),
+  customerName: z.string().trim().min(2).max(100),
+  customerPhone: z
+    .string()
+    .trim()
+    .regex(
+      /^\+[1-9]\d{7,14}$/,
+      "Телефон должен быть указан в международном формате"
+    ),
   customerEmail: z.string().trim().email().optional().or(z.literal("")),
-  deliveryAddress: z.string().trim().optional(),
-  comment: z.string().trim().optional(),
+  deliveryAddress: z.string().trim().max(1000).optional(),
+  comment: z.string().trim().max(2000).optional(),
 });
 
 async function createOrder(formData) {
@@ -257,7 +263,7 @@ export default async function CheckoutPage() {
                       Данные клиента
                     </p>
 
-                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                    <h2 className="mt-1 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
                       Контактные данные
                     </h2>
                   </div>
@@ -274,13 +280,7 @@ export default async function CheckoutPage() {
                   placeholder="Ваше имя"
                 />
 
-                <CheckoutTextField
-                  icon={Phone}
-                  label="Телефон"
-                  name="customerPhone"
-                  required
-                  placeholder="+7..."
-                />
+                <PhoneCountryField />
 
                 <CheckoutTextField
                   icon={Mail}
@@ -329,7 +329,7 @@ export default async function CheckoutPage() {
                       Состав заказа
                     </p>
 
-                    <h2 className="m-0 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                    <h2 className="mt-1 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
                       Товары
                     </h2>
                   </div>

@@ -1,7 +1,6 @@
 export const dynamic = "force-dynamic";
 
 import Image from "next/image";
-import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import { BadgeRussianRuble, PackageCheck, ShoppingCart } from "lucide-react";
@@ -108,19 +107,19 @@ export default async function ProductPage({ params }) {
         <CabinetTopNav />
 
         <article className="overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_30px_90px_rgba(0,0,0,0.52)]">
-          <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(380px,0.82fr)]">
-            <div className="relative min-h-[320px] border-b border-[#d8b66a]/14 bg-black/28 lg:min-h-[620px] lg:border-b-0 lg:border-r">
+          <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1fr)]">
+            <div className="relative aspect-square w-full self-start overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 sm:aspect-[4/3] lg:aspect-square lg:max-h-[590px] lg:border-b-0 lg:border-r">
               {product.image ? (
                 <Image
                   src={product.image}
                   alt={product.title}
                   fill
                   priority
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 48vw"
+                  className="object-contain p-2 sm:p-4 lg:p-5"
                 />
               ) : (
-                <div className="flex h-full min-h-[320px] w-full items-center justify-center">
+                <div className="flex h-full w-full items-center justify-center">
                   <div className="flex size-20 items-center justify-center rounded-[28px] border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
                     <PackageCheck className="size-9" />
                   </div>
@@ -128,13 +127,13 @@ export default async function ProductPage({ params }) {
               )}
 
               {product.category?.name && (
-                <p className="absolute left-5 top-5 m-0 rounded-full border border-[#d8b66a]/18 bg-black/58 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.24em] text-[#d8b66a] backdrop-blur-sm">
+                <p className="absolute left-4 top-4 m-0 rounded-full border border-[#d8b66a]/18 bg-black/58 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a] backdrop-blur-sm sm:left-5 sm:top-5 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.24em]">
                   {product.category.name}
                 </p>
               )}
             </div>
 
-            <div className="flex flex-col p-5 sm:p-7 lg:p-8">
+            <div className="flex min-w-0 flex-col p-5 sm:p-7 lg:p-8">
               <div>
                 <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#d8b66a]">
                   <PackageCheck className="size-4" />
@@ -187,13 +186,16 @@ export default async function ProductPage({ params }) {
                 </div>
               )}
 
-              <form action={addProductToCart} className="mt-7">
+              <form
+                action={addProductToCart}
+                className="mt-7 w-full sm:w-auto sm:self-start"
+              >
                 <input type="hidden" name="productId" value={product.id} />
 
                 <button
                   type="submit"
                   disabled={isOutOfStock}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-4 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44"
+                  className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-7 py-4 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:min-w-[250px] sm:w-auto lg:min-w-[270px]"
                 >
                   <ShoppingCart className="size-4 transition duration-300 group-hover:scale-110" />
                   {isOutOfStock ? "Нет в наличии" : "В корзину"}

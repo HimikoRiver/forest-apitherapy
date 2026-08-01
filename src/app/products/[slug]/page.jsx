@@ -3,7 +3,11 @@ export const dynamic = "force-dynamic";
 import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
-import { BadgeRussianRuble, PackageCheck, ShoppingCart } from "lucide-react";
+import {
+  BadgeRussianRuble,
+  PackageCheck,
+  ShoppingCart,
+} from "lucide-react";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { getCurrentSession } from "@/lib/auth-guards";
@@ -108,7 +112,7 @@ export default async function ProductPage({ params }) {
 
         <article className="overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_30px_90px_rgba(0,0,0,0.52)]">
           <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1fr)]">
-            <div className="relative aspect-square w-full self-start overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 sm:aspect-[4/3] lg:aspect-square lg:max-h-[590px] lg:border-b-0 lg:border-r">
+            <div className="relative aspect-square w-full overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 sm:aspect-[4/3] lg:aspect-square lg:max-h-[590px] lg:border-b-0 lg:border-r">
               {product.image ? (
                 <Image
                   src={product.image}
@@ -173,35 +177,37 @@ export default async function ProductPage({ params }) {
                   Остаток: {product.stock}
                 </p>
               </div>
-
-              {product.description && (
-                <div className="mt-6 rounded-[28px] border border-[#d8b66a]/14 bg-black/24 p-5">
-                  <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/82">
-                    Описание
-                  </p>
-
-                  <p className="mt-4 whitespace-pre-line text-sm leading-7 text-[#f3efe5]/72">
-                    {product.description}
-                  </p>
-                </div>
-              )}
-
-              <form
-                action={addProductToCart}
-                className="mt-7 w-full sm:w-auto sm:self-start"
-              >
-                <input type="hidden" name="productId" value={product.id} />
-
-                <button
-                  type="submit"
-                  disabled={isOutOfStock}
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-7 py-4 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:min-w-[250px] sm:w-auto lg:min-w-[270px]"
-                >
-                  <ShoppingCart className="size-4 transition duration-300 group-hover:scale-110" />
-                  {isOutOfStock ? "Нет в наличии" : "В корзину"}
-                </button>
-              </form>
             </div>
+          </div>
+
+          <div className="border-t border-[#d8b66a]/14 p-5 sm:p-7 lg:p-8">
+            {product.description && (
+              <div className="rounded-[28px] border border-[#d8b66a]/14 bg-black/24 p-5 sm:p-6">
+                <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/82">
+                  Описание
+                </p>
+
+                <p className="mt-4 whitespace-pre-line text-sm leading-7 text-[#f3efe5]/72 sm:text-base sm:leading-8">
+                  {product.description}
+                </p>
+              </div>
+            )}
+
+            <form
+              action={addProductToCart}
+              className={`${product.description ? "mt-7" : ""} flex justify-center lg:justify-end`}
+            >
+              <input type="hidden" name="productId" value={product.id} />
+
+              <button
+                type="submit"
+                disabled={isOutOfStock}
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-7 py-4 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:w-auto sm:min-w-[250px] lg:min-w-[270px]"
+              >
+                <ShoppingCart className="size-4 transition duration-300 group-hover:scale-110" />
+                {isOutOfStock ? "Нет в наличии" : "В корзину"}
+              </button>
+            </form>
           </div>
         </article>
       </section>

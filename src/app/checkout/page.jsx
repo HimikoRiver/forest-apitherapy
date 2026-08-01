@@ -307,13 +307,15 @@ export default async function CheckoutPage() {
                   placeholder="Дополнительные пожелания к заказу"
                 />
 
-                <button
-                  type="submit"
-                  className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
-                >
-                  <Send className="size-4 transition duration-300 group-hover:scale-110" />
-                  Подтвердить заказ
-                </button>
+                <div className="flex justify-center pt-1">
+                  <button
+                    type="submit"
+                    className="group inline-flex w-auto min-w-[220px] max-w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 sm:min-w-[250px] sm:px-7 sm:text-sm"
+                  >
+                    <Send className="size-4 transition duration-300 group-hover:scale-110" />
+                    Подтвердить заказ
+                  </button>
+                </div>
               </div>
             </form>
 

@@ -26,19 +26,19 @@ enum OrderStatus {
 }
 
 model User {
-  id            String     @id
+  id            String   @id
   name          String
-  email         String     @unique
-  emailVerified Boolean    @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  role          UserRole   @default(USER)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  role          UserRole @default(USER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  sessions      Session[]
-  accounts      Account[]
-  cartItems     CartItem[]
-  orders        Order[]
+  sessions  Session[]
+  accounts  Account[]
+  cartItems CartItem[]
+  orders    Order[]
 
   @@map("user")
 }
@@ -52,8 +52,8 @@ model Session {
   ipAddress String?
   userAgent String?
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("session")
@@ -71,10 +71,10 @@ model Account {
   refreshTokenExpiresAt DateTime?
   scope                 String?
   password              String?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("account")
@@ -92,14 +92,14 @@ model Verification {
 }
 
 model Category {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  slug        String    @unique
+  slug        String   @unique
   description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  products    Product[]
+  products Product[]
 }
 
 model Product {
@@ -117,11 +117,11 @@ model Product {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  categoryId       String?
-  category         Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 
-  cartItems        CartItem[]
-  orderItems       OrderItem[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
 
   @@index([categoryId])
   @@index([status])
@@ -136,8 +136,8 @@ model CartItem {
   userId    String
   productId String
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([userId, productId])
   @@index([userId])
@@ -157,27 +157,29 @@ model Order {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  userId          String
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items           OrderItem[]
+  items OrderItem[]
 
-  @@index([userId])
-  @@index([status])
+  @@index([userId, createdAt(sort: Desc)], map: "Order_userId_createdAt_idx")
+  @@index([userId, status, createdAt(sort: Desc)], map: "Order_userId_status_createdAt_idx")
+  @@index([status, createdAt(sort: Desc)], map: "Order_status_createdAt_idx")
+  @@index([createdAt(sort: Desc)], map: "Order_createdAt_idx")
 }
 
 model OrderItem {
-  id                 String  @id @default(cuid())
-  quantity           Int
-  priceKopecks       Int
-  productTitle       String
-  productSlug        String?
+  id           String  @id @default(cuid())
+  quantity     Int
+  priceKopecks Int
+  productTitle String
+  productSlug  String?
 
-  orderId            String
-  productId          String?
+  orderId   String
+  productId String?
 
-  order              Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product            Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 
   @@index([orderId])
   @@index([productId])

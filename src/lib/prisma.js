@@ -19,22 +19,43 @@ if (!isDirectPostgresUrl) {
   );
 }
 
-function createPrismaClient() {
-  const adapter = new PrismaPg({
-    connectionString,
-    max: 10,
-    connectionTimeoutMillis: 10_000,
-    idleTimeoutMillis: 1_000,
-  });
+const isLocalDatabase =
+  connectionString.includes("localhost") ||
+  connectionString.includes("127.0.0.1");
 
-  return new PrismaClient({
-    adapter,
+function createPrismaAdapter() {
+  return new PrismaPg({
+    connectionString,
+
+    // Локальная Prisma Postgres работает стабильнее
+    // с одним соединением.
+    max: isLocalDatabase ? 1 : 10,
+
+    // Сохраняем одно локальное соединение в пуле.
+    min: isLocalDatabase ? 1 : 0,
+
+    // Не ждём подключение бесконечно.
+    connectionTimeoutMillis: 10_000,
+
+    // Раньше здесь была 1 секунда.
+    idleTimeoutMillis: 30_000,
+
+    // Поддерживаем TCP-соединение активным.
+    keepAlive: true,
+    keepAliveInitialDelayMillis: 10_000,
   });
 }
 
+const adapter =
+  globalForPrisma.prismaAdapter ?? createPrismaAdapter();
+
 export const prisma =
-  globalForPrisma.prisma ?? createPrismaClient();
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    adapter,
+  });
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
+  globalForPrisma.prismaAdapter = adapter;
 }

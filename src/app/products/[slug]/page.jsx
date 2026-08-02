@@ -104,90 +104,90 @@ export default async function ProductPage({ params }) {
   const isOutOfStock = product.stock <= 0;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-3 py-3 text-[#f3efe5] sm:px-5 sm:py-4 lg:px-8">
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
-        <article className="overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_30px_90px_rgba(0,0,0,0.52)]">
-          <div className="grid gap-0 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1fr)]">
-            <div className="relative aspect-square w-full overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 sm:aspect-[4/3] lg:aspect-square lg:max-h-[590px] lg:border-b-0 lg:border-r">
+        <article className="overflow-hidden rounded-[26px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_24px_70px_rgba(0,0,0,0.48)] sm:rounded-[28px]">
+          <div className="grid gap-0 md:grid-cols-[40%_60%]">
+            <div className="relative aspect-square w-full self-start overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 md:border-b-0 md:border-r">
               {product.image ? (
                 <Image
                   src={product.image}
                   alt={product.title}
                   fill
                   priority
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 48vw"
-                  className="object-contain p-2 sm:p-4 lg:p-5"
+                  sizes="(max-width: 767px) 100vw, 40vw"
+                  className="object-cover"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center">
-                  <div className="flex size-20 items-center justify-center rounded-[28px] border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
-                    <PackageCheck className="size-9" />
+                  <div className="flex size-16 items-center justify-center rounded-[22px] border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                    <PackageCheck className="size-7" />
                   </div>
                 </div>
               )}
 
               {product.category?.name && (
-                <p className="absolute left-4 top-4 m-0 rounded-full border border-[#d8b66a]/18 bg-black/58 px-3 py-2 text-[0.62rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a] backdrop-blur-sm sm:left-5 sm:top-5 sm:px-4 sm:text-[0.68rem] sm:tracking-[0.24em]">
+                <p className="absolute left-3 top-3 m-0 rounded-full border border-[#d8b66a]/18 bg-black/62 px-3 py-1.5 text-[0.54rem] font-bold uppercase tracking-[0.16em] text-[#d8b66a] backdrop-blur-sm sm:left-4 sm:top-4 sm:text-[0.6rem]">
                   {product.category.name}
                 </p>
               )}
             </div>
 
-            <div className="flex min-w-0 flex-col p-5 sm:p-7 lg:p-8">
+            <div className="flex min-w-0 flex-col p-4 sm:p-5 md:p-4 lg:p-6">
               <div>
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#d8b66a]">
-                  <PackageCheck className="size-4" />
+                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[#d8b66a]/18 bg-black/24 px-3 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a] sm:text-[0.62rem]">
+                  <PackageCheck className="size-3.5" />
                   Товар
                 </div>
 
-                <h1 className="m-0 text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
+                <h1 className="m-0 text-2xl font-bold leading-[1.12] tracking-[-0.055em] text-[#f3d98d] sm:text-3xl md:text-[1.7rem] lg:text-[2.35rem]">
                   {product.title}
                 </h1>
 
                 {product.shortDescription && (
-                  <p className="mt-5 text-sm leading-7 text-[#f3efe5]/76 sm:text-base">
+                  <p className="mt-3 max-w-3xl text-[0.78rem] leading-5 text-[#f3efe5]/74 sm:text-[0.82rem] md:text-[0.72rem] md:leading-5 lg:text-sm lg:leading-6">
                     {product.shortDescription}
                   </p>
                 )}
               </div>
 
-              <div className="mt-7 rounded-[28px] border border-[#d8b66a]/14 bg-black/24 p-5">
-                <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/82">
+              <div className="mt-4 rounded-[20px] border border-[#d8b66a]/14 bg-black/24 p-3.5 sm:mt-5 sm:rounded-[22px] sm:p-4 md:mt-4 md:p-3.5 lg:mt-5 lg:p-4">
+                <p className="m-0 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/82 sm:text-[0.64rem]">
                   Стоимость
                 </p>
 
-                <div className="mt-4 flex flex-wrap items-end gap-3">
-                  <p className="m-0 flex items-center gap-2 text-3xl font-bold tracking-[-0.05em] text-[#d8b66a]">
-                    <BadgeRussianRuble className="size-7" />
+                <div className="mt-2.5 flex flex-wrap items-end gap-2 sm:mt-3 sm:gap-2.5">
+                  <p className="m-0 flex items-center gap-1.5 text-xl font-bold tracking-[-0.05em] text-[#d8b66a] sm:text-2xl md:text-xl lg:text-2xl">
+                    <BadgeRussianRuble className="size-4.5 sm:size-5" />
                     {formatPriceFromKopecks(product.priceKopecks)}
                   </p>
 
                   {product.oldPriceKopecks && (
-                    <p className="mb-1 text-base text-[#f3efe5]/40 line-through">
+                    <p className="mb-0.5 text-xs text-[#f3efe5]/40 line-through sm:text-sm md:text-xs lg:text-sm">
                       {formatPriceFromKopecks(product.oldPriceKopecks)}
                     </p>
                   )}
                 </div>
 
-                <p className="mt-4 inline-flex rounded-full border border-[#d8b66a]/18 bg-black/20 px-3 py-1 text-xs text-[#f3efe5]/66">
+                <p className="mt-2.5 inline-flex rounded-full border border-[#d8b66a]/18 bg-black/20 px-2.5 py-1 text-[0.62rem] text-[#f3efe5]/64 sm:mt-3 sm:text-[0.68rem]">
                   Остаток: {product.stock}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-[#d8b66a]/14 p-5 sm:p-7 lg:p-8">
+          <div className="border-t border-[#d8b66a]/14 p-4 sm:p-5 lg:p-6">
             {product.description && (
-              <div className="rounded-[28px] border border-[#d8b66a]/14 bg-black/24 p-5 sm:p-6">
-                <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/82">
+              <div className="rounded-[20px] border border-[#d8b66a]/14 bg-black/24 p-4 sm:rounded-[22px] sm:p-5">
+                <p className="m-0 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/82 sm:text-[0.64rem]">
                   Описание
                 </p>
 
-                <p className="mt-4 whitespace-pre-line text-sm leading-7 text-[#f3efe5]/72 sm:text-base sm:leading-8">
+                <p className="mt-3 whitespace-pre-line text-[0.78rem] leading-5 text-[#f3efe5]/70 sm:text-[0.82rem] sm:leading-6 lg:text-sm">
                   {product.description}
                 </p>
               </div>
@@ -195,16 +195,19 @@ export default async function ProductPage({ params }) {
 
             <form
               action={addProductToCart}
-              className={`${product.description ? "mt-7" : ""} flex justify-center lg:justify-end`}
+              className={`${
+                product.description ? "mt-4 sm:mt-5" : ""
+              } flex justify-center md:justify-end`}
             >
               <input type="hidden" name="productId" value={product.id} />
 
               <button
                 type="submit"
                 disabled={isOutOfStock}
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-7 py-4 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:w-auto sm:min-w-[250px] lg:min-w-[270px]"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:w-auto sm:min-w-[200px] sm:px-6 sm:py-3 sm:text-xs lg:min-w-[220px]"
               >
                 <ShoppingCart className="size-4 transition duration-300 group-hover:scale-110" />
+
                 {isOutOfStock ? "Нет в наличии" : "В корзину"}
               </button>
             </form>

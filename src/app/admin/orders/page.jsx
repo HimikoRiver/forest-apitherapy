@@ -1,42 +1,112 @@
 import Link from "next/link";
-import { ArrowLeft, ClipboardList, PackageCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  ClipboardList,
+  PackageCheck,
+} from "lucide-react";
+
 import AdminOrdersManager from "@/components/admin/AdminOrdersManager";
 import { requireAdmin } from "@/lib/auth-guards";
+import {
+  createOrderFilterCounts,
+  createOrderWhere,
+  getTotalPages,
+  normalizeOrderFilter,
+  normalizePage,
+  ORDERS_PER_PAGE,
+  readSearchParam,
+} from "@/lib/order-pagination";
 import { prisma } from "@/lib/prisma";
 
-export const dynamic = "force-dynamic";
+export const dynamic =
+  "force-dynamic";
 
-export default async function AdminOrdersPage() {
+export default async function AdminOrdersPage({
+  searchParams,
+}) {
   await requireAdmin();
 
-  const orders = await prisma.order.findMany({
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      user: {
-        select: {
-          name: true,
-          email: true,
-        },
+  const resolvedSearchParams =
+    (await searchParams) || {};
+
+  const groupedCounts =
+    await prisma.order.groupBy({
+      by: ["status"],
+      _count: {
+        _all: true,
       },
-      items: {
-        include: {
-          product: {
-            select: {
-              image: true,
+    });
+
+  const filterCounts =
+    createOrderFilterCounts(
+      groupedCounts
+    );
+
+  const activeFilter =
+    normalizeOrderFilter(
+      readSearchParam(
+        resolvedSearchParams.status
+      ),
+      "ACTIVE"
+    );
+
+  const totalFilteredOrders =
+    filterCounts[activeFilter] || 0;
+
+  const totalPages = getTotalPages(
+    totalFilteredOrders
+  );
+
+  const requestedPage = normalizePage(
+    resolvedSearchParams.page
+  );
+
+  const currentPage = Math.min(
+    requestedPage,
+    totalPages
+  );
+
+  const orders =
+    await prisma.order.findMany({
+      where:
+        createOrderWhere(
+          activeFilter
+        ),
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip:
+        (currentPage - 1) *
+        ORDERS_PER_PAGE,
+      take: ORDERS_PER_PAGE,
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+        items: {
+          include: {
+            product: {
+              select: {
+                image: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  const preparedOrders = orders.map((order) => ({
-    ...order,
-    createdAt: order.createdAt.toISOString(),
-    updatedAt: order.updatedAt.toISOString(),
-  }));
+  const preparedOrders = orders.map(
+    (order) => ({
+      ...order,
+      createdAt:
+        order.createdAt.toISOString(),
+      updatedAt:
+        order.updatedAt.toISOString(),
+    })
+  );
 
   return (
     <main className="min-h-screen px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
@@ -49,7 +119,8 @@ export default async function AdminOrdersPage() {
               <div>
                 <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
                   <ClipboardList className="size-4" />
-                  Административная панель
+                  Административная
+                  панель
                 </div>
 
                 <h1 className="m-0 max-w-3xl text-3xl font-bold tracking-[-0.06em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
@@ -57,8 +128,11 @@ export default async function AdminOrdersPage() {
                 </h1>
 
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
-                  Просматривайте заявки, контактные данные клиентов, состав
-                  заказа и обновляйте статус обработки.
+                  Просматривайте заявки,
+                  контактные данные
+                  клиентов, состав заказа
+                  и обновляйте статус
+                  обработки.
                 </p>
               </div>
 
@@ -83,7 +157,24 @@ export default async function AdminOrdersPage() {
           </div>
         </div>
 
-        <AdminOrdersManager initialOrders={preparedOrders} />
+        <AdminOrdersManager
+          initialOrders={
+            preparedOrders
+          }
+          filterCounts={
+            filterCounts
+          }
+          activeFilter={
+            activeFilter
+          }
+          currentPage={
+            currentPage
+          }
+          totalPages={totalPages}
+          totalFilteredOrders={
+            totalFilteredOrders
+          }
+        />
       </section>
     </main>
   );

@@ -3,81 +3,175 @@
   Mail,
   UserRound,
 } from "lucide-react";
+
 import SignOutButton from "@/components/auth/SignOutButton";
 import ProfileOrdersList from "@/components/profile/ProfileOrdersList";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
 import { requireUser } from "@/lib/auth-guards";
+import {
+  createOrderFilterCounts,
+  createOrderWhere,
+  getTotalPages,
+  normalizeOrderFilter,
+  normalizePage,
+  ORDERS_PER_PAGE,
+  readSearchParam,
+} from "@/lib/order-pagination";
 import { prisma } from "@/lib/prisma";
 
 function formatOrderDate(date) {
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Europe/Moscow",
-  }).format(date);
+  return new Intl.DateTimeFormat(
+    "ru-RU",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: "Europe/Moscow",
+    }
+  ).format(date);
 }
 
-export default async function ProfilePage() {
-  const sessionUser = await requireUser();
+export default async function ProfilePage({
+  searchParams,
+}) {
+  const sessionUser =
+    await requireUser();
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: sessionUser.id,
-    },
-    select: {
-      name: true,
-      email: true,
-      role: true,
-      orders: {
-        orderBy: {
-          createdAt: "desc",
+  const resolvedSearchParams =
+    (await searchParams) || {};
+
+  const [user, groupedCounts] =
+    await Promise.all([
+      prisma.user.findUnique({
+        where: {
+          id: sessionUser.id,
         },
-        include: {
-          items: {
-            include: {
-              product: {
-                select: {
-                  image: true,
-                },
+        select: {
+          name: true,
+          email: true,
+          role: true,
+        },
+      }),
+
+      prisma.order.groupBy({
+        by: ["status"],
+        where: {
+          userId: sessionUser.id,
+        },
+        _count: {
+          _all: true,
+        },
+      }),
+    ]);
+
+  const filterCounts =
+    createOrderFilterCounts(
+      groupedCounts
+    );
+
+  const defaultFilter =
+    filterCounts.ACTIVE > 0
+      ? "ACTIVE"
+      : "ALL";
+
+  const activeFilter =
+    normalizeOrderFilter(
+      readSearchParam(
+        resolvedSearchParams.status
+      ),
+      defaultFilter
+    );
+
+  const totalFilteredOrders =
+    filterCounts[activeFilter] || 0;
+
+  const totalPages = getTotalPages(
+    totalFilteredOrders
+  );
+
+  const requestedPage = normalizePage(
+    resolvedSearchParams.page
+  );
+
+  const currentPage = Math.min(
+    requestedPage,
+    totalPages
+  );
+
+  const orderWhere =
+    createOrderWhere(activeFilter, {
+      userId: sessionUser.id,
+    });
+
+  const orders =
+    await prisma.order.findMany({
+      where: orderWhere,
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip:
+        (currentPage - 1) *
+        ORDERS_PER_PAGE,
+      take: ORDERS_PER_PAGE,
+      include: {
+        items: {
+          include: {
+            product: {
+              select: {
+                image: true,
               },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  const orders = user?.orders || [];
-
-  const preparedOrders = orders.map((order) => ({
-    id: order.id,
-    status: order.status,
-    totalKopecks: order.totalKopecks,
-    createdAtLabel: formatOrderDate(order.createdAt),
-    items: order.items.map((item) => ({
-      id: item.id,
-      quantity: item.quantity,
-      priceKopecks: item.priceKopecks,
-      productTitle: item.productTitle,
-      productSlug: item.productSlug,
-      product: item.product
-        ? {
-            image: item.product.image,
-          }
-        : null,
-    })),
-  }));
+  const preparedOrders = orders.map(
+    (order) => ({
+      id: order.id,
+      status: order.status,
+      totalKopecks:
+        order.totalKopecks,
+      createdAtLabel:
+        formatOrderDate(
+          order.createdAt
+        ),
+      items: order.items.map(
+        (item) => ({
+          id: item.id,
+          quantity:
+            item.quantity,
+          priceKopecks:
+            item.priceKopecks,
+          productTitle:
+            item.productTitle,
+          productSlug:
+            item.productSlug,
+          product: item.product
+            ? {
+                image:
+                  item.product
+                    .image,
+              }
+            : null,
+        })
+      ),
+    })
+  );
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-3 text-[#f3efe5] sm:px-6 sm:py-4 lg:px-8">
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
-        <CabinetTopNav showAdminLinks={user?.role === "ADMIN"} />
+        <CabinetTopNav
+          showAdminLinks={
+            user?.role === "ADMIN"
+          }
+        />
 
         <div className="mb-3 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
           <div className="relative px-5 py-7 sm:px-7 lg:px-8">
@@ -94,8 +188,10 @@ export default async function ProfilePage() {
               </h1>
 
               <p className="mt-5 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base sm:leading-8">
-                Здесь хранятся данные профиля, история заказов и быстрые
-                переходы к покупкам.
+                Здесь хранятся данные
+                профиля, история заказов
+                и быстрые переходы к
+                покупкам.
               </p>
             </div>
           </div>
@@ -128,8 +224,11 @@ export default async function ProfilePage() {
                     <UserRound className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
 
                     <span>
-                      <span className="text-[#d8b66a]/82">Имя:</span>{" "}
-                      {user?.name || "Не указано"}
+                      <span className="text-[#d8b66a]/82">
+                        Имя:
+                      </span>{" "}
+                      {user?.name ||
+                        "Не указано"}
                     </span>
                   </p>
 
@@ -137,8 +236,11 @@ export default async function ProfilePage() {
                     <Mail className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
 
                     <span>
-                      <span className="text-[#d8b66a]/82">Email:</span>{" "}
-                      {user?.email || sessionUser.email}
+                      <span className="text-[#d8b66a]/82">
+                        Email:
+                      </span>{" "}
+                      {user?.email ||
+                        sessionUser.email}
                     </span>
                   </p>
 
@@ -146,8 +248,11 @@ export default async function ProfilePage() {
                     <LayoutDashboard className="mt-1.5 size-4 shrink-0 text-[#d8b66a]/72" />
 
                     <span>
-                      <span className="text-[#d8b66a]/82">Роль:</span>{" "}
-                      {user?.role || "USER"}
+                      <span className="text-[#d8b66a]/82">
+                        Роль:
+                      </span>{" "}
+                      {user?.role ||
+                        "USER"}
                     </span>
                   </p>
                 </div>
@@ -157,7 +262,24 @@ export default async function ProfilePage() {
             </div>
           </aside>
 
-          <ProfileOrdersList initialOrders={preparedOrders} />
+          <ProfileOrdersList
+            initialOrders={
+              preparedOrders
+            }
+            filterCounts={
+              filterCounts
+            }
+            activeFilter={
+              activeFilter
+            }
+            currentPage={
+              currentPage
+            }
+            totalPages={totalPages}
+            totalFilteredOrders={
+              totalFilteredOrders
+            }
+          />
         </div>
       </section>
     </main>

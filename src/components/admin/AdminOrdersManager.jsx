@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import {
+  useRouter,
+} from "next/navigation";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   CheckCircle2,
   ClipboardList,
@@ -20,11 +28,18 @@ import {
   UserRound,
   XCircle,
 } from "lucide-react";
+
 import { updateOrderStatus } from "@/app/admin/orders/actions";
 import OrderContactActions from "@/components/shared/OrderContactActions";
+import OrdersPagination from "@/components/shared/OrdersPagination";
 import { formatPriceFromKopecks } from "@/lib/money";
 
-const ORDER_STATUSES = ["PENDING", "PROCESSING", "COMPLETED", "CANCELED"];
+const ORDER_STATUSES = [
+  "PENDING",
+  "PROCESSING",
+  "COMPLETED",
+  "CANCELED",
+];
 
 const ORDER_STATUS_LABELS = {
   PENDING: "Новый",
@@ -54,17 +69,20 @@ const FILTERS = [
   {
     id: "PROCESSING",
     label: "В обработке",
-    title: "Заказы в обработке",
+    title:
+      "Заказы в обработке",
   },
   {
     id: "COMPLETED",
     label: "Завершённые",
-    title: "Завершённые заказы",
+    title:
+      "Завершённые заказы",
   },
   {
     id: "CANCELED",
     label: "Отменённые",
-    title: "Отменённые заказы",
+    title:
+      "Отменённые заказы",
   },
   {
     id: "ALL",
@@ -73,42 +91,83 @@ const FILTERS = [
   },
 ];
 
-function createDraftStatuses(orders) {
-  return Object.fromEntries(orders.map((order) => [order.id, order.status]));
+function createDraftStatuses(
+  orders
+) {
+  return Object.fromEntries(
+    orders.map((order) => [
+      order.id,
+      order.status,
+    ])
+  );
+}
+
+function orderMatchesFilter(
+  order,
+  filter
+) {
+  if (filter === "ALL") {
+    return true;
+  }
+
+  if (filter === "ACTIVE") {
+    return (
+      order.status === "PENDING" ||
+      order.status === "PROCESSING"
+    );
+  }
+
+  return order.status === filter;
 }
 
 function formatOrderDate(date) {
-  return new Intl.DateTimeFormat("ru-RU", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(date));
+  return new Intl.DateTimeFormat(
+    "ru-RU",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  ).format(new Date(date));
 }
 
-function OrderStatusBadge({ status }) {
+function OrderStatusBadge({
+  status,
+}) {
   const statusStyles = {
-    PENDING: "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
-    PROCESSING: "border-blue-300/22 bg-blue-400/10 text-blue-100",
+    PENDING:
+      "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
+    PROCESSING:
+      "border-blue-300/22 bg-blue-400/10 text-blue-100",
     COMPLETED:
       "border-emerald-300/22 bg-emerald-400/10 text-emerald-100",
-    CANCELED: "border-red-300/22 bg-red-400/10 text-red-100",
+    CANCELED:
+      "border-red-300/22 bg-red-400/10 text-red-100",
   };
 
   return (
     <span
       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] ${
-        statusStyles[status] || statusStyles.PENDING
+        statusStyles[status] ||
+        statusStyles.PENDING
       }`}
     >
       <Clock3 className="size-3.5" />
-      {ORDER_STATUS_LABELS[status] || status}
+
+      {ORDER_STATUS_LABELS[
+        status
+      ] || status}
     </span>
   );
 }
 
-function ContactRow({ icon: Icon, label, value }) {
+function ContactRow({
+  icon: Icon,
+  label,
+  value,
+}) {
   if (!value) {
     return null;
   }
@@ -118,7 +177,10 @@ function ContactRow({ icon: Icon, label, value }) {
       <Icon className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
 
       <span>
-        <span className="text-[#d8b66a]/82">{label}:</span> {value}
+        <span className="text-[#d8b66a]/82">
+          {label}:
+        </span>{" "}
+        {value}
       </span>
     </p>
   );
@@ -131,7 +193,8 @@ function OrderCard({
   onStatusChange,
   onSave,
 }) {
-  const hasChanges = selectedStatus !== order.status;
+  const hasChanges =
+    selectedStatus !== order.status;
 
   return (
     <article className="group rounded-[30px] border border-[#d8b66a]/12 bg-black/24 p-5 transition duration-300 hover:border-[#d8b66a]/30 hover:bg-black/32 hover:shadow-[0_20px_54px_rgba(0,0,0,0.28)]">
@@ -139,10 +202,15 @@ function OrderCard({
         <div>
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div>
-              <OrderStatusBadge status={order.status} />
+              <OrderStatusBadge
+                status={order.status}
+              />
 
               <h3 className="mt-3 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                Заказ от {formatOrderDate(order.createdAt)}
+                Заказ от{" "}
+                {formatOrderDate(
+                  order.createdAt
+                )}
               </h3>
 
               <p className="mt-2 break-all text-xs uppercase tracking-[0.16em] text-[#f3efe5]/38">
@@ -151,7 +219,9 @@ function OrderCard({
             </div>
 
             <p className="m-0 text-2xl font-bold tracking-[-0.04em] text-[#d8b66a]">
-              {formatPriceFromKopecks(order.totalKopecks)}
+              {formatPriceFromKopecks(
+                order.totalKopecks
+              )}
             </p>
           </div>
 
@@ -159,27 +229,42 @@ function OrderCard({
             <ContactRow
               icon={UserRound}
               label="Клиент"
-              value={order.customerName}
+              value={
+                order.customerName
+              }
             />
 
             <ContactRow
               icon={Phone}
               label="Телефон"
-              value={order.customerPhone}
+              value={
+                order.customerPhone
+              }
             />
 
             <ContactRow
               icon={Mail}
               label="Email"
-              value={order.customerEmail}
+              value={
+                order.customerEmail
+              }
             />
 
             <ContactRow
-              icon={LayoutDashboard}
+              icon={
+                LayoutDashboard
+              }
               label="Аккаунт"
               value={
                 order.user?.email
-                  ? `${order.user.name || "Пользователь"} · ${order.user.email}`
+                  ? `${
+                      order.user
+                        .name ||
+                      "Пользователь"
+                    } · ${
+                      order.user
+                        .email
+                    }`
                   : null
               }
             />
@@ -187,11 +272,15 @@ function OrderCard({
             <ContactRow
               icon={MapPin}
               label="Адрес / получение"
-              value={order.deliveryAddress}
+              value={
+                order.deliveryAddress
+              }
             />
 
             <ContactRow
-              icon={MessageSquareText}
+              icon={
+                MessageSquareText
+              }
               label="Комментарий"
               value={order.comment}
             />
@@ -203,47 +292,66 @@ function OrderCard({
             </p>
 
             <div className="mt-3 space-y-2.5">
-              {order.items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex flex-col gap-3 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
-                >
-                  <div className="flex min-w-0 items-center gap-3">
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/14 bg-black/28">
-                      {item.product?.image ? (
-                        <Image
-                          src={item.product.image}
-                          alt={item.productTitle}
-                          fill
-                          sizes="64px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
-                          <PackageCheck className="size-5" />
-                        </div>
-                      )}
-                    </div>
+              {order.items.map(
+                (item) => (
+                  <div
+                    key={item.id}
+                    className="flex flex-col gap-3 rounded-2xl border border-[#d8b66a]/10 bg-black/18 px-4 py-3 text-sm md:flex-row md:items-center md:justify-between"
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/14 bg-black/28">
+                        {item.product
+                          ?.image ? (
+                          <Image
+                            src={
+                              item
+                                .product
+                                .image
+                            }
+                            alt={
+                              item.productTitle
+                            }
+                            fill
+                            sizes="64px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[#f3d98d]">
+                            <PackageCheck className="size-5" />
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="min-w-0">
-                      <p className="m-0 font-bold text-[#f3d98d]">
-                        {item.productTitle}
-                      </p>
-
-                      {item.productSlug && (
-                        <p className="mt-1 break-all text-xs text-[#f3efe5]/42">
-                          /products/{item.productSlug}
+                      <div className="min-w-0">
+                        <p className="m-0 font-bold text-[#f3d98d]">
+                          {
+                            item.productTitle
+                          }
                         </p>
-                      )}
-                    </div>
-                  </div>
 
-                  <p className="m-0 shrink-0 text-[#f3efe5]/64">
-                    {item.quantity} ×{" "}
-                    {formatPriceFromKopecks(item.priceKopecks)}
-                  </p>
-                </div>
-              ))}
+                        {item.productSlug && (
+                          <p className="mt-1 break-all text-xs text-[#f3efe5]/42">
+                            /products/
+                            {
+                              item.productSlug
+                            }
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="m-0 shrink-0 text-[#f3efe5]/64">
+                      {
+                        item.quantity
+                      }{" "}
+                      ×{" "}
+                      {formatPriceFromKopecks(
+                        item.priceKopecks
+                      )}
+                    </p>
+                  </div>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -253,7 +361,11 @@ function OrderCard({
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
                 <RefreshCw
-                  className={`size-4 ${isSaving ? "animate-spin" : ""}`}
+                  className={`size-4 ${
+                    isSaving
+                      ? "animate-spin"
+                      : ""
+                  }`}
                 />
               </div>
 
@@ -281,24 +393,43 @@ function OrderCard({
                 </span>
 
                 <select
-                  value={selectedStatus}
+                  value={
+                    selectedStatus
+                  }
                   disabled={isSaving}
                   onChange={(event) =>
-                    onStatusChange(order.id, event.target.value)
+                    onStatusChange(
+                      order.id,
+                      event.target
+                        .value
+                    )
                   }
                   className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)] disabled:cursor-wait disabled:opacity-60"
                 >
-                  {ORDER_STATUSES.map((status) => (
-                    <option key={status} value={status}>
-                      {ORDER_STATUS_LABELS[status] || status}
-                    </option>
-                  ))}
+                  {ORDER_STATUSES.map(
+                    (status) => (
+                      <option
+                        key={status}
+                        value={
+                          status
+                        }
+                      >
+                        {ORDER_STATUS_LABELS[
+                          status
+                        ] ||
+                          status}
+                      </option>
+                    )
+                  )}
                 </select>
               </label>
 
               <button
                 type="submit"
-                disabled={!hasChanges || isSaving}
+                disabled={
+                  !hasChanges ||
+                  isSaving
+                }
                 className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/48 bg-[#d8b66a] px-5 py-3 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#07110f] shadow-[0_14px_38px_rgba(216,182,106,0.14)] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_20px_52px_rgba(216,182,106,0.2)] disabled:cursor-not-allowed disabled:border-[#d8b66a]/18 disabled:bg-[#d8b66a]/24 disabled:text-[#f3efe5]/42 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:brightness-100"
               >
                 {isSaving ? (
@@ -317,7 +448,10 @@ function OrderCard({
               </button>
 
               <p className="m-0 text-xs leading-5 text-[#f3efe5]/42">
-                После сохранения статус обновится в личном кабинете клиента.
+                После сохранения
+                статус обновится в
+                личном кабинете
+                клиента.
               </p>
             </form>
           </section>
@@ -326,10 +460,18 @@ function OrderCard({
             mode="admin"
             compact
             orderId={order.id}
-            orderStatus={order.status}
-            customerName={order.customerName}
-            customerPhone={order.customerPhone}
-            customerEmail={order.customerEmail}
+            orderStatus={
+              order.status
+            }
+            customerName={
+              order.customerName
+            }
+            customerPhone={
+              order.customerPhone
+            }
+            customerEmail={
+              order.customerEmail
+            }
           />
         </aside>
       </div>
@@ -337,79 +479,93 @@ function OrderCard({
   );
 }
 
-export default function AdminOrdersManager({ initialOrders }) {
+export default function AdminOrdersManager({
+  initialOrders,
+  filterCounts,
+  activeFilter,
+  currentPage,
+  totalPages,
+  totalFilteredOrders,
+}) {
   const router = useRouter();
-  const toastTimerRef = useRef(null);
 
-  const [orders, setOrders] = useState(initialOrders);
-  const [activeFilter, setActiveFilter] = useState("ACTIVE");
-  const [draftStatuses, setDraftStatuses] = useState(() =>
-    createDraftStatuses(initialOrders)
+  const toastTimerRef =
+    useRef(null);
+
+  const [orders, setOrders] =
+    useState(initialOrders);
+
+  const [
+    draftStatuses,
+    setDraftStatuses,
+  ] = useState(() =>
+    createDraftStatuses(
+      initialOrders
+    )
   );
-  const [savingOrderId, setSavingOrderId] = useState(null);
-  const [toast, setToast] = useState(null);
+
+  const [
+    savingOrderId,
+    setSavingOrderId,
+  ] = useState(null);
+
+  const [toast, setToast] =
+    useState(null);
 
   useEffect(() => {
     setOrders(initialOrders);
-    setDraftStatuses(createDraftStatuses(initialOrders));
+
+    setDraftStatuses(
+      createDraftStatuses(
+        initialOrders
+      )
+    );
   }, [initialOrders]);
 
   useEffect(() => {
     return () => {
-      if (toastTimerRef.current) {
-        window.clearTimeout(toastTimerRef.current);
+      if (
+        toastTimerRef.current
+      ) {
+        window.clearTimeout(
+          toastTimerRef.current
+        );
       }
     };
   }, []);
 
-  const filterCounts = useMemo(() => {
-    const pending = orders.filter(
-      (order) => order.status === "PENDING"
-    ).length;
-
-    const processing = orders.filter(
-      (order) => order.status === "PROCESSING"
-    ).length;
-
-    const completed = orders.filter(
-      (order) => order.status === "COMPLETED"
-    ).length;
-
-    const canceled = orders.filter(
-      (order) => order.status === "CANCELED"
-    ).length;
-
-    return {
-      ACTIVE: pending + processing,
-      PENDING: pending,
-      PROCESSING: processing,
-      COMPLETED: completed,
-      CANCELED: canceled,
-      ALL: orders.length,
-    };
-  }, [orders]);
-
-  const filteredOrders = useMemo(() => {
-    if (activeFilter === "ALL") {
-      return orders;
-    }
-
-    if (activeFilter === "ACTIVE") {
-      return orders.filter(
-        (order) =>
-          order.status === "PENDING" || order.status === "PROCESSING"
-      );
-    }
-
-    return orders.filter((order) => order.status === activeFilter);
-  }, [activeFilter, orders]);
+  const visibleOrders =
+    useMemo(
+      () =>
+        orders.filter((order) =>
+          orderMatchesFilter(
+            order,
+            activeFilter
+          )
+        ),
+      [activeFilter, orders]
+    );
 
   const activeFilterData =
-    FILTERS.find((filter) => filter.id === activeFilter) || FILTERS[0];
+    FILTERS.find(
+      (filter) =>
+        filter.id ===
+        activeFilter
+    ) || FILTERS[0];
 
-  function showToast(message, type = "success") {
-    if (toastTimerRef.current) {
-      window.clearTimeout(toastTimerRef.current);
+  const totalOrders =
+    filterCounts.ALL || 0;
+
+  function showToast(
+    message,
+    type = "success"
+  ) {
+    if (
+      toastTimerRef.current
+    ) {
+      window.clearTimeout(
+        toastTimerRef.current
+      );
     }
 
     setToast({
@@ -417,64 +573,101 @@ export default function AdminOrdersManager({ initialOrders }) {
       type,
     });
 
-    toastTimerRef.current = window.setTimeout(() => {
-      setToast(null);
-    }, 4200);
+    toastTimerRef.current =
+      window.setTimeout(() => {
+        setToast(null);
+      }, 4200);
   }
 
-  function handleStatusChange(orderId, status) {
-    setDraftStatuses((currentStatuses) => ({
-      ...currentStatuses,
-      [orderId]: status,
-    }));
+  function handleStatusChange(
+    orderId,
+    status
+  ) {
+    setDraftStatuses(
+      (currentStatuses) => ({
+        ...currentStatuses,
+        [orderId]: status,
+      })
+    );
   }
 
-  async function handleSave(orderId) {
+  async function handleSave(
+    orderId
+  ) {
     const order = orders.find(
-      (currentOrder) => currentOrder.id === orderId
+      (currentOrder) =>
+        currentOrder.id ===
+        orderId
     );
 
-    const nextStatus = draftStatuses[orderId];
+    const nextStatus =
+      draftStatuses[orderId];
 
-    if (!order || !nextStatus || nextStatus === order.status || savingOrderId) {
+    if (
+      !order ||
+      !nextStatus ||
+      nextStatus ===
+        order.status ||
+      savingOrderId
+    ) {
       return;
     }
 
     setSavingOrderId(orderId);
 
     try {
-      const result = await updateOrderStatus(orderId, nextStatus);
+      const result =
+        await updateOrderStatus(
+          orderId,
+          nextStatus
+        );
 
       if (!result?.ok) {
-        setDraftStatuses((currentStatuses) => ({
-          ...currentStatuses,
-          [orderId]: order.status,
-        }));
+        setDraftStatuses(
+          (
+            currentStatuses
+          ) => ({
+            ...currentStatuses,
+            [orderId]:
+              order.status,
+          })
+        );
 
         showToast(
-          result?.message || "Не удалось сохранить статус.",
+          result?.message ||
+            "Не удалось сохранить статус.",
           "error"
         );
 
         return;
       }
 
-      setOrders((currentOrders) =>
-        currentOrders.map((currentOrder) =>
-          currentOrder.id === orderId
-            ? {
-                ...currentOrder,
-                status: nextStatus,
-                updatedAt: new Date().toISOString(),
-              }
-            : currentOrder
-        )
+      setOrders(
+        (currentOrders) =>
+          currentOrders.map(
+            (currentOrder) =>
+              currentOrder.id ===
+              orderId
+                ? {
+                    ...currentOrder,
+                    status:
+                      nextStatus,
+                    updatedAt:
+                      new Date().toISOString(),
+                  }
+                : currentOrder
+          )
       );
 
-      setDraftStatuses((currentStatuses) => ({
-        ...currentStatuses,
-        [orderId]: nextStatus,
-      }));
+      setDraftStatuses(
+        (
+          currentStatuses
+        ) => ({
+          ...currentStatuses,
+          [orderId]:
+            nextStatus,
+        })
+      );
 
       showToast(
         `${result.message} Заказ находится в разделе «${ORDER_STATUS_DESTINATIONS[nextStatus]}».`
@@ -482,12 +675,20 @@ export default function AdminOrdersManager({ initialOrders }) {
 
       router.refresh();
     } catch (error) {
-      console.error("Failed to update order status:", error);
+      console.error(
+        "Failed to update order status:",
+        error
+      );
 
-      setDraftStatuses((currentStatuses) => ({
-        ...currentStatuses,
-        [orderId]: order.status,
-      }));
+      setDraftStatuses(
+        (
+          currentStatuses
+        ) => ({
+          ...currentStatuses,
+          [orderId]:
+            order.status,
+        })
+      );
 
       showToast(
         "Не удалось сохранить статус. Попробуйте ещё раз.",
@@ -500,7 +701,10 @@ export default function AdminOrdersManager({ initialOrders }) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/76 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
+      <div
+        id="orders"
+        className="scroll-mt-24 overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/76 shadow-[0_24px_70px_rgba(0,0,0,0.44)]"
+      >
         <div className="border-b border-[#d8b66a]/12">
           <div className="flex flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex min-w-0 items-center gap-3">
@@ -514,51 +718,79 @@ export default function AdminOrdersManager({ initialOrders }) {
                 </p>
 
                 <h2 className="mt-1 text-lg font-bold tracking-[-0.04em] text-[#f3d98d]">
-                  {activeFilterData.title}
+                  {
+                    activeFilterData.title
+                  }
                 </h2>
               </div>
             </div>
 
             <p className="m-0 w-fit shrink-0 rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1.5 text-xs text-[#f3efe5]/58">
-              Показано: {filteredOrders.length} из {orders.length}
+              На странице:{" "}
+              {visibleOrders.length} из{" "}
+              {totalFilteredOrders}
             </p>
           </div>
 
-          <div className="border-t border-[#d8b66a]/8 px-5 py-4">
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">
-              {FILTERS.map((filter) => {
-                const isActive = activeFilter === filter.id;
+          {totalOrders > 0 && (
+            <div className="border-t border-[#d8b66a]/8 px-5 py-4">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-6">
+                {FILTERS.map(
+                  (filter) => {
+                    const isActive =
+                      activeFilter ===
+                      filter.id;
 
-                return (
-                  <button
-                    key={filter.id}
-                    type="button"
-                    onClick={() => setActiveFilter(filter.id)}
-                    className={`flex min-h-10 min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-[0.58rem] font-bold uppercase tracking-[0.1em] transition duration-300 sm:text-[0.6rem] ${
-                      isActive
-                        ? "border-[#d8b66a]/58 bg-[#d8b66a] text-[#07110f] shadow-[0_10px_28px_rgba(216,182,106,0.14)]"
-                        : "border-[#d8b66a]/14 bg-black/22 text-[#f3efe5]/58 hover:border-[#d8b66a]/38 hover:bg-[#d8b66a]/8 hover:text-[#f3d98d]"
-                    }`}
-                  >
-                    <span className="min-w-0 truncate">{filter.label}</span>
+                    return (
+                      <Link
+                        key={
+                          filter.id
+                        }
+                        href={`/admin/orders?status=${filter.id}&page=1#orders`}
+                        scroll={
+                          false
+                        }
+                        prefetch={
+                          false
+                        }
+                        aria-current={
+                          isActive
+                            ? "page"
+                            : undefined
+                        }
+                        className={`flex min-h-10 min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-[0.58rem] font-bold uppercase tracking-[0.1em] transition duration-300 sm:text-[0.6rem] ${
+                          isActive
+                            ? "border-[#d8b66a]/58 bg-[#d8b66a] text-[#07110f] shadow-[0_10px_28px_rgba(216,182,106,0.14)]"
+                            : "border-[#d8b66a]/14 bg-black/22 text-[#f3efe5]/58 hover:border-[#d8b66a]/38 hover:bg-[#d8b66a]/8 hover:text-[#f3d98d]"
+                        }`}
+                      >
+                        <span className="min-w-0 truncate">
+                          {
+                            filter.label
+                          }
+                        </span>
 
-                    <span
-                      className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[0.56rem] ${
-                        isActive
-                          ? "bg-black/14 text-[#07110f]"
-                          : "bg-black/30 text-[#d8b66a]/78"
-                      }`}
-                    >
-                      {filterCounts[filter.id]}
-                    </span>
-                  </button>
-                );
-              })}
+                        <span
+                          className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[0.56rem] ${
+                            isActive
+                              ? "bg-black/14 text-[#07110f]"
+                              : "bg-black/30 text-[#d8b66a]/78"
+                          }`}
+                        >
+                          {filterCounts[
+                            filter.id
+                          ] || 0}
+                        </span>
+                      </Link>
+                    );
+                  }
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
-        {orders.length === 0 ? (
+        {totalOrders === 0 ? (
           <div className="p-5">
             <div className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
               <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
@@ -566,30 +798,64 @@ export default function AdminOrdersManager({ initialOrders }) {
               </p>
             </div>
           </div>
-        ) : filteredOrders.length === 0 ? (
+        ) : visibleOrders.length ===
+          0 ? (
           <div className="p-5">
             <div className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
               <div className="flex items-start gap-3">
                 <ClipboardList className="mt-0.5 size-5 shrink-0 text-[#d8b66a]/72" />
 
                 <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-                  В разделе «{activeFilterData.label}» заказов пока нет.
+                  В разделе «
+                  {
+                    activeFilterData.label
+                  }
+                  » заказов пока нет.
                 </p>
               </div>
             </div>
           </div>
         ) : (
-          <div className="space-y-4 p-5">
-            {filteredOrders.map((order) => (
-              <OrderCard
-                key={order.id}
-                order={order}
-                selectedStatus={draftStatuses[order.id] || order.status}
-                isSaving={savingOrderId === order.id}
-                onStatusChange={handleStatusChange}
-                onSave={handleSave}
-              />
-            ))}
+          <div className="p-5">
+            <div className="space-y-4">
+              {visibleOrders.map(
+                (order) => (
+                  <OrderCard
+                    key={order.id}
+                    order={order}
+                    selectedStatus={
+                      draftStatuses[
+                        order.id
+                      ] ||
+                      order.status
+                    }
+                    isSaving={
+                      savingOrderId ===
+                      order.id
+                    }
+                    onStatusChange={
+                      handleStatusChange
+                    }
+                    onSave={
+                      handleSave
+                    }
+                  />
+                )
+              )}
+            </div>
+
+            <OrdersPagination
+              basePath="/admin/orders"
+              activeFilter={
+                activeFilter
+              }
+              currentPage={
+                currentPage
+              }
+              totalPages={
+                totalPages
+              }
+            />
           </div>
         )}
       </div>
@@ -599,7 +865,8 @@ export default function AdminOrdersManager({ initialOrders }) {
           role="status"
           aria-live="polite"
           className={`fixed right-4 top-4 z-[80] flex max-w-[calc(100vw-2rem)] items-start gap-3 rounded-[22px] border px-4 py-3 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:right-6 sm:top-6 sm:max-w-md ${
-            toast.type === "error"
+            toast.type ===
+            "error"
               ? "border-red-300/24 bg-[#2a0c0d]/92 text-red-100"
               : "border-emerald-300/24 bg-[#071b16]/92 text-emerald-100"
           }`}
@@ -612,7 +879,10 @@ export default function AdminOrdersManager({ initialOrders }) {
 
           <div>
             <p className="m-0 text-sm font-bold">
-              {toast.type === "error" ? "Ошибка" : "Готово"}
+              {toast.type ===
+              "error"
+                ? "Ошибка"
+                : "Готово"}
             </p>
 
             <p className="mt-1 text-sm leading-6 opacity-80">

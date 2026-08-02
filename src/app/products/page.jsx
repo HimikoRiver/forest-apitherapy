@@ -128,7 +128,7 @@ export default async function ProductsPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <section className="relative z-10 mx-auto w-full max-w-[1500px]">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
         <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">

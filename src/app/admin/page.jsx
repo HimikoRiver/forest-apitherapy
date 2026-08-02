@@ -14,14 +14,16 @@ const adminCards = [
   {
     title: "Каталог",
     label: "Товары",
-    description: "Добавление, редактирование, фото, статусы и контроль остатков.",
+    description:
+      "Добавление, редактирование, фото, статусы и контроль остатков.",
     href: "/admin/products",
     icon: Boxes,
   },
   {
     title: "Заявки",
     label: "Заказы",
-    description: "Просмотр заказов, контактов клиентов, состава и статусов.",
+    description:
+      "Просмотр заказов, контактов клиентов, состава и статусов.",
     href: "/admin/orders",
     icon: ClipboardList,
   },
@@ -32,7 +34,7 @@ export default async function AdminPage() {
 
   return (
     <main className="min-h-screen px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
-      <section className="mx-auto flex min-h-[calc(100vh-64px)] w-full max-w-6xl items-center justify-center">
+      <section className="mx-auto flex min-h-[calc(100vh-64px)] w-full max-w-7xl items-center justify-center">
         <div className="w-full overflow-hidden rounded-[34px] border border-[#d8b66a]/18 bg-[#030b0c]/72 shadow-[0_30px_90px_rgba(0,0,0,0.52)] backdrop-blur-md">
           <div className="relative border-b border-[#d8b66a]/12 px-5 py-7 sm:px-7 lg:px-8">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(216,182,106,0.16),transparent_34%)]" />
@@ -146,7 +148,8 @@ export default async function AdminPage() {
                 </p>
 
                 <p className="m-0">
-                  <span className="text-[#d8b66a]/82">Email:</span> {user.email}
+                  <span className="text-[#d8b66a]/82">Email:</span>{" "}
+                  {user.email}
                 </p>
 
                 <p className="m-0">

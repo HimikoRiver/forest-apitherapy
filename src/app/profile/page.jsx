@@ -87,7 +87,7 @@ export default async function ProfilePage() {
   const orders = user?.orders || [];
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-3 text-[#f3efe5] sm:px-6 sm:py-4 lg:px-8">
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
@@ -214,7 +214,7 @@ export default async function ProfilePage() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-4 p-5">
+              <div className="space-y-3 p-5">
                 {orders.map((order) => (
                   <Link
                     key={order.id}

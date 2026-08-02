@@ -196,13 +196,13 @@ export default async function CheckoutPage() {
   }, 0);
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-3 text-[#f3efe5] sm:px-6 sm:py-4 lg:px-8">
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
-        <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div className="mb-3 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#d8b66a]">
               <ClipboardList className="size-4" />
@@ -247,7 +247,7 @@ export default async function CheckoutPage() {
             </Link>
           </div>
         ) : (
-          <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+          <div className="grid gap-3 lg:grid-cols-[1fr_340px]">
             <form
               action={createOrder}
               className="overflow-hidden rounded-[30px] border border-[#d8b66a]/18 bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.42)]"

@@ -1,8 +1,10 @@
+import { createHash } from "node:crypto";
 import Link from "next/link";
 import Image from "next/image";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import {
+  AlertTriangle,
   ArrowLeft,
   ArrowRight,
   BadgeRussianRuble,
@@ -11,11 +13,11 @@ import {
   MapPin,
   MessageSquareText,
   PackageCheck,
-  Send,
   ShoppingBag,
   UserRound,
 } from "lucide-react";
 import { z } from "zod";
+import CheckoutSubmitButton from "@/components/checkout/CheckoutSubmitButton";
 import PhoneCountryField from "@/components/checkout/PhoneCountryField";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
@@ -23,8 +25,15 @@ import { requireUser } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
 
+const STOCK_CHANGED_ERROR = "ORDER_STOCK_CHANGED";
+
 const checkoutSchema = z.object({
+  checkoutToken: z
+    .string()
+    .regex(/^[a-f0-9]{64}$/, "Некорректный ключ оформления заказа"),
+
   customerName: z.string().trim().min(2).max(100),
+
   customerPhone: z
     .string()
     .trim()
@@ -32,10 +41,63 @@ const checkoutSchema = z.object({
       /^\+[1-9]\d{7,14}$/,
       "Телефон должен быть указан в международном формате"
     ),
+
   customerEmail: z.string().trim().email().optional().or(z.literal("")),
+
   deliveryAddress: z.string().trim().max(1000).optional(),
+
   comment: z.string().trim().max(2000).optional(),
 });
+
+const CHECKOUT_NOTICES = {
+  "cart-changed":
+    "Состав корзины или наличие товара изменились. Проверьте заказ и нажмите кнопку ещё раз.",
+};
+
+function createCheckoutToken(userId, cartItems) {
+  const cartSignature = cartItems
+    .map((item) => {
+      return [
+        item.id,
+        item.productId,
+        item.quantity,
+        item.product.priceKopecks,
+      ].join(":");
+    })
+    .sort()
+    .join("|");
+
+  return createHash("sha256")
+    .update(`${userId}|${cartSignature}`)
+    .digest("hex");
+}
+
+function isUniqueConstraintError(error) {
+  return Boolean(
+    error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "P2002"
+  );
+}
+
+async function findExistingOrder(userId, checkoutToken) {
+  const existingOrder = await prisma.order.findUnique({
+    where: {
+      checkoutToken,
+    },
+    select: {
+      id: true,
+      userId: true,
+    },
+  });
+
+  if (!existingOrder || existingOrder.userId !== userId) {
+    return null;
+  }
+
+  return existingOrder;
+}
 
 async function createOrder(formData) {
   "use server";
@@ -43,6 +105,7 @@ async function createOrder(formData) {
   const user = await requireUser();
 
   const parsed = checkoutSchema.parse({
+    checkoutToken: String(formData.get("checkoutToken") || ""),
     customerName: String(formData.get("customerName") || ""),
     customerPhone: String(formData.get("customerPhone") || ""),
     customerEmail: String(formData.get("customerEmail") || ""),
@@ -50,71 +113,186 @@ async function createOrder(formData) {
     comment: String(formData.get("comment") || ""),
   });
 
-  const cartItems = await prisma.cartItem.findMany({
-    where: {
-      userId: user.id,
-    },
-    include: {
-      product: true,
-    },
-  });
+  /*
+   * Повторный запрос может прийти уже после того,
+   * как первый заказ был полностью создан.
+   */
+  const previouslyCreatedOrder = await findExistingOrder(
+    user.id,
+    parsed.checkoutToken
+  );
 
-  if (cartItems.length === 0) {
-    redirect("/cart");
+  if (previouslyCreatedOrder) {
+    redirect(`/profile/orders/${previouslyCreatedOrder.id}`);
   }
 
-  const totalKopecks = cartItems.reduce((sum, item) => {
-    return sum + item.product.priceKopecks * item.quantity;
-  }, 0);
+  let transactionResult;
 
-  await prisma.$transaction(async (tx) => {
-    for (const item of cartItems) {
-      const updatedProduct = await tx.product.updateMany({
+  try {
+    transactionResult = await prisma.$transaction(async (tx) => {
+      /*
+       * Корзину читаем повторно внутри транзакции.
+       * Данные со страницы могли измениться после её открытия.
+       */
+      const cartItems = await tx.cartItem.findMany({
         where: {
-          id: item.productId,
-          stock: {
-            gte: item.quantity,
+          userId: user.id,
+        },
+        orderBy: {
+          productId: "asc",
+        },
+        include: {
+          product: true,
+        },
+      });
+
+      if (cartItems.length === 0) {
+        return {
+          type: "EMPTY",
+        };
+      }
+
+      const currentCheckoutToken = createCheckoutToken(
+        user.id,
+        cartItems
+      );
+
+      /*
+       * Если количество, цена или состав корзины изменились,
+       * старую форму использовать нельзя.
+       */
+      if (currentCheckoutToken !== parsed.checkoutToken) {
+        return {
+          type: "CART_CHANGED",
+        };
+      }
+
+      const unavailableItem = cartItems.find((item) => {
+        return (
+          item.quantity < 1 ||
+          item.product.status !== "ACTIVE" ||
+          item.product.stock < item.quantity
+        );
+      });
+
+      if (unavailableItem) {
+        return {
+          type: "CART_CHANGED",
+        };
+      }
+
+      const totalKopecks = cartItems.reduce((sum, item) => {
+        return (
+          sum +
+          item.product.priceKopecks * item.quantity
+        );
+      }, 0);
+
+      /*
+       * Заказ создаётся до списания остатков.
+       * Уникальный checkoutToken не позволит второму
+       * параллельному запросу создать ещё один заказ.
+       */
+      const order = await tx.order.create({
+        data: {
+          checkoutToken: currentCheckoutToken,
+          userId: user.id,
+          totalKopecks,
+          customerName: parsed.customerName,
+          customerPhone: parsed.customerPhone,
+          customerEmail: parsed.customerEmail || null,
+          deliveryAddress: parsed.deliveryAddress || null,
+          comment: parsed.comment || null,
+
+          items: {
+            create: cartItems.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              priceKopecks: item.product.priceKopecks,
+              productTitle: item.product.title,
+              productSlug: item.product.slug,
+            })),
           },
         },
-        data: {
-          stock: {
-            decrement: item.quantity,
+        select: {
+          id: true,
+        },
+      });
+
+      for (const item of cartItems) {
+        const updatedProduct = await tx.product.updateMany({
+          where: {
+            id: item.productId,
+            status: "ACTIVE",
+            stock: {
+              gte: item.quantity,
+            },
+          },
+          data: {
+            stock: {
+              decrement: item.quantity,
+            },
+          },
+        });
+
+        if (updatedProduct.count !== 1) {
+          throw new Error(STOCK_CHANGED_ERROR);
+        }
+      }
+
+      /*
+       * Удаляем только те позиции, которые вошли в заказ.
+       * Новый товар, добавленный параллельно, останется в корзине.
+       */
+      await tx.cartItem.deleteMany({
+        where: {
+          userId: user.id,
+          id: {
+            in: cartItems.map((item) => item.id),
           },
         },
       });
 
-      if (updatedProduct.count !== 1) {
-        throw new Error(`Недостаточно товара: ${item.product.title}`);
+      return {
+        type: "CREATED",
+        orderId: order.id,
+      };
+    });
+  } catch (error) {
+    /*
+     * Два параллельных запроса с одним checkoutToken:
+     * первый создаёт заказ, второй получает P2002.
+     */
+    if (isUniqueConstraintError(error)) {
+      const existingOrder = await findExistingOrder(
+        user.id,
+        parsed.checkoutToken
+      );
+
+      if (existingOrder) {
+        transactionResult = {
+          type: "EXISTING",
+          orderId: existingOrder.id,
+        };
+      } else {
+        throw error;
       }
+    } else if (error?.message === STOCK_CHANGED_ERROR) {
+      transactionResult = {
+        type: "CART_CHANGED",
+      };
+    } else {
+      throw error;
     }
+  }
 
-    await tx.order.create({
-      data: {
-        userId: user.id,
-        totalKopecks,
-        customerName: parsed.customerName,
-        customerPhone: parsed.customerPhone,
-        customerEmail: parsed.customerEmail || null,
-        deliveryAddress: parsed.deliveryAddress || null,
-        comment: parsed.comment || null,
-        items: {
-          create: cartItems.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            priceKopecks: item.product.priceKopecks,
-            productTitle: item.product.title,
-            productSlug: item.product.slug,
-          })),
-        },
-      },
-    });
+  if (transactionResult.type === "EMPTY") {
+    redirect("/cart");
+  }
 
-    await tx.cartItem.deleteMany({
-      where: {
-        userId: user.id,
-      },
-    });
-  });
+  if (transactionResult.type === "CART_CHANGED") {
+    redirect("/checkout?notice=cart-changed");
+  }
 
   revalidatePath("/cart");
   revalidatePath("/checkout");
@@ -122,8 +300,13 @@ async function createOrder(formData) {
   revalidatePath("/profile");
   revalidatePath("/admin/products");
   revalidatePath("/admin/orders");
+  revalidatePath(
+    `/profile/orders/${transactionResult.orderId}`
+  );
 
-  redirect("/profile");
+  redirect(
+    `/profile/orders/${transactionResult.orderId}`
+  );
 }
 
 function CheckoutTextField({
@@ -154,7 +337,13 @@ function CheckoutTextField({
   );
 }
 
-function CheckoutTextarea({ icon: Icon, label, name, rows, placeholder }) {
+function CheckoutTextarea({
+  icon: Icon,
+  label,
+  name,
+  rows,
+  placeholder,
+}) {
   return (
     <label className="block">
       <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[#d8b66a]/88">
@@ -172,8 +361,20 @@ function CheckoutTextarea({ icon: Icon, label, name, rows, placeholder }) {
   );
 }
 
-export default async function CheckoutPage() {
+export default async function CheckoutPage({
+  searchParams,
+}) {
   const user = await requireUser();
+  const resolvedSearchParams = await searchParams;
+
+  const noticeValue = Array.isArray(
+    resolvedSearchParams?.notice
+  )
+    ? resolvedSearchParams.notice[0]
+    : resolvedSearchParams?.notice;
+
+  const noticeMessage =
+    CHECKOUT_NOTICES[noticeValue] || null;
 
   const cartItems = await prisma.cartItem.findMany({
     where: {
@@ -192,8 +393,16 @@ export default async function CheckoutPage() {
   });
 
   const totalKopecks = cartItems.reduce((sum, item) => {
-    return sum + item.product.priceKopecks * item.quantity;
+    return (
+      sum +
+      item.product.priceKopecks * item.quantity
+    );
   }, 0);
+
+  const checkoutToken =
+    cartItems.length > 0
+      ? createCheckoutToken(user.id, cartItems)
+      : "";
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-3 text-[#f3efe5] sm:px-6 sm:py-4 lg:px-8">
@@ -214,7 +423,8 @@ export default async function CheckoutPage() {
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Проверьте состав корзины и оставьте контактные данные для связи.
+              Проверьте состав корзины и оставьте контактные
+              данные для связи.
             </p>
           </div>
 
@@ -228,6 +438,16 @@ export default async function CheckoutPage() {
           </Link>
         </div>
 
+        {noticeMessage && (
+          <div className="mb-3 flex items-start gap-3 rounded-[22px] border border-amber-300/24 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
+            <AlertTriangle className="mt-0.5 size-5 shrink-0 text-[#f3d98d]" />
+
+            <p className="m-0">
+              {noticeMessage}
+            </p>
+          </div>
+        )}
+
         {cartItems.length === 0 ? (
           <div className="rounded-[30px] border border-[#d8b66a]/18 bg-black/40 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
             <div className="mb-4 flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
@@ -235,7 +455,8 @@ export default async function CheckoutPage() {
             </div>
 
             <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              Корзина пустая. Сначала добавьте товары из каталога.
+              Корзина пустая. Сначала добавьте товары из
+              каталога.
             </p>
 
             <Link
@@ -243,6 +464,7 @@ export default async function CheckoutPage() {
               className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/35 bg-black/24 px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
             >
               Смотреть товары
+
               <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
             </Link>
           </div>
@@ -252,6 +474,12 @@ export default async function CheckoutPage() {
               action={createOrder}
               className="overflow-hidden rounded-[30px] border border-[#d8b66a]/18 bg-black/40 shadow-[0_24px_70px_rgba(0,0,0,0.42)]"
             >
+              <input
+                type="hidden"
+                name="checkoutToken"
+                value={checkoutToken}
+              />
+
               <div className="border-b border-[#d8b66a]/12 px-5 py-5">
                 <div className="flex items-center gap-3">
                   <div className="flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
@@ -308,13 +536,7 @@ export default async function CheckoutPage() {
                 />
 
                 <div className="flex justify-center pt-1">
-                  <button
-                    type="submit"
-                    className="group inline-flex w-auto min-w-[220px] max-w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 sm:min-w-[250px] sm:px-7 sm:text-sm"
-                  >
-                    <Send className="size-4 transition duration-300 group-hover:scale-110" />
-                    Подтвердить заказ
-                  </button>
+                  <CheckoutSubmitButton />
                 </div>
               </div>
             </form>
@@ -368,8 +590,11 @@ export default async function CheckoutPage() {
 
                         <p className="mt-2 flex items-center gap-2 text-sm leading-6 text-[#f3efe5]/62">
                           <BadgeRussianRuble className="size-4 shrink-0 text-[#d8b66a]/72" />
+
                           {item.quantity} ×{" "}
-                          {formatPriceFromKopecks(item.product.priceKopecks)}
+                          {formatPriceFromKopecks(
+                            item.product.priceKopecks
+                          )}
                         </p>
                       </div>
                     </div>
@@ -382,7 +607,9 @@ export default async function CheckoutPage() {
                   </p>
 
                   <p className="mt-3 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                    {formatPriceFromKopecks(totalKopecks)}
+                    {formatPriceFromKopecks(
+                      totalKopecks
+                    )}
                   </p>
                 </div>
               </div>

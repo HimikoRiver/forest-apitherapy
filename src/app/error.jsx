@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect } from "react";
 import {
   AlertTriangle,
@@ -7,9 +8,15 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-export default function ErrorPage({ error, reset }) {
+export default function ErrorPage({
+  error,
+  reset,
+}) {
   useEffect(() => {
-    console.error("Application route error:", error);
+    console.error(
+      "Application route error:",
+      error
+    );
   }, [error]);
 
   function handleReload() {
@@ -53,8 +60,10 @@ export default function ErrorPage({ error, reset }) {
           </h1>
 
           <p className="relative mx-auto mt-4 max-w-md text-sm leading-7 text-[#f3efe5]/68">
-            Не удалось получить необходимые данные. Это может быть временная
-            ошибка соединения. Повторите загрузку страницы.
+            Не удалось получить необходимые
+            данные. Это может быть временная
+            ошибка соединения. Повторите
+            загрузку страницы.
           </p>
 
           {error?.digest && (
@@ -71,6 +80,7 @@ export default function ErrorPage({ error, reset }) {
             className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/44 bg-[#d8b66a] px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
           >
             <RefreshCw className="size-4 transition duration-300 group-hover:rotate-45" />
+
             Попробовать снова
           </button>
 
@@ -80,16 +90,18 @@ export default function ErrorPage({ error, reset }) {
             className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/20 bg-black/24 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/52 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
           >
             <RefreshCw className="size-4 transition duration-300 group-hover:rotate-180" />
+
             Обновить страницу
           </button>
 
-          <a
+          <Link
             href="/"
             className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/20 bg-black/24 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/52 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] sm:col-span-2"
           >
             <Home className="size-4 transition duration-300 group-hover:scale-110" />
+
             Вернуться на главную
-          </a>
+          </Link>
         </div>
       </section>
     </main>

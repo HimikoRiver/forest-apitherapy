@@ -1,3 +1,6 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateEnum
 CREATE TYPE "UserRole" AS ENUM ('USER', 'ADMIN');
 
@@ -113,6 +116,7 @@ CREATE TABLE "CartItem" (
 -- CreateTable
 CREATE TABLE "Order" (
     "id" TEXT NOT NULL,
+    "checkoutToken" TEXT,
     "status" "OrderStatus" NOT NULL DEFAULT 'PENDING',
     "totalKopecks" INTEGER NOT NULL,
     "customerName" TEXT NOT NULL,
@@ -174,10 +178,19 @@ CREATE INDEX "CartItem_productId_idx" ON "CartItem"("productId");
 CREATE UNIQUE INDEX "CartItem_userId_productId_key" ON "CartItem"("userId", "productId");
 
 -- CreateIndex
-CREATE INDEX "Order_userId_idx" ON "Order"("userId");
+CREATE UNIQUE INDEX "Order_checkoutToken_key" ON "Order"("checkoutToken");
 
 -- CreateIndex
-CREATE INDEX "Order_status_idx" ON "Order"("status");
+CREATE INDEX "Order_userId_createdAt_idx" ON "Order"("userId", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Order_userId_status_createdAt_idx" ON "Order"("userId", "status", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Order_status_createdAt_idx" ON "Order"("status", "createdAt" DESC);
+
+-- CreateIndex
+CREATE INDEX "Order_createdAt_idx" ON "Order"("createdAt" DESC);
 
 -- CreateIndex
 CREATE INDEX "OrderItem_orderId_idx" ON "OrderItem"("orderId");

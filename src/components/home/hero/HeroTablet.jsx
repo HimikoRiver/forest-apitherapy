@@ -2,7 +2,6 @@ import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
 
 const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
-const LOGO_IMAGE = "/images/logo1.webp";
 
 export default function HeroTablet() {
   return (
@@ -27,28 +26,10 @@ export default function HeroTablet() {
         className="pointer-events-none absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0)_35%,rgba(0,0,0,0.12)_100%)]"
       />
 
-      <header className="absolute left-0 right-0 top-0 z-20 flex items-start justify-between gap-6 px-10 pt-[calc(env(safe-area-inset-top)+28px)]">
-        <div className="flex items-center gap-4">
-          <span className="relative block size-[74px] shrink-0 overflow-hidden rounded-full shadow-[0_0_22px_rgba(216,182,106,0.24)]">
-            <Image
-              src={LOGO_IMAGE}
-              alt="APIDARB"
-              fill
-              sizes="74px"
-              className="object-cover"
-            />
-          </span>
-
-          <span className="block pt-1">
-            <span className="block text-[2.15rem] font-semibold uppercase leading-none tracking-[0.14em] text-[#e5c56f] drop-shadow-[0_0_14px_rgba(216,182,106,0.24)]">
-              APIDARB
-            </span>
-
-            <span className="mt-2 block text-[0.78rem] font-semibold uppercase tracking-[0.24em] text-[#d8b66a]/92">
-              Центр апитерапии
-            </span>
-          </span>
-        </div>
+      <header className="absolute inset-x-0 top-0 z-20 px-5 pt-[calc(env(safe-area-inset-top)+22px)]">
+        <span className="block text-[1.68rem] font-semibold uppercase leading-none tracking-[0.15em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
+          APIDARB
+        </span>
       </header>
 
       <div className="hero-tablet-content absolute inset-x-0 z-20 px-10">

@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
 
 function PauseIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[18px] w-[18px] translate-x-[1px] sm:h-[22px] sm:w-[22px]"
+      className="h-[18px] w-[18px] translate-x-[1px] sm:h-[22px] sm:w-[22px] lg:h-[23px] lg:w-[23px]"
       fill="none"
       aria-hidden="true"
     >
@@ -25,7 +26,7 @@ function PlayIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-[18px] w-[18px] translate-x-[2px] sm:h-[22px] sm:w-[22px]"
+      className="h-[18px] w-[18px] translate-x-[2px] sm:h-[22px] sm:w-[22px] lg:h-[23px] lg:w-[23px]"
       fill="currentColor"
       aria-hidden="true"
     >
@@ -47,16 +48,36 @@ function CircleVideoButton({
       aria-label={ariaLabel}
       aria-pressed={pressed}
       onClick={onClick}
-      className={`group relative flex h-[54px] w-[54px] items-center justify-center rounded-full border border-[#d6a950]/80 bg-[radial-gradient(circle_at_30%_30%,rgba(18,56,38,0.98),rgba(5,22,15,0.98))] text-[#e8bc63] shadow-[0_10px_28px_rgba(0,0,0,0.42),0_0_0_1px_rgba(216,173,86,0.16)] transition duration-300 hover:scale-[1.03] hover:shadow-[0_12px_30px_rgba(0,0,0,0.5),0_0_18px_rgba(216,173,86,0.25)] active:scale-[0.98] sm:h-[66px] sm:w-[66px] lg:h-[72px] lg:w-[72px] ${
+      className={`group relative flex h-[54px] w-[54px] items-center justify-center rounded-full border border-[#d6a950]/80 bg-[radial-gradient(circle_at_30%_30%,rgba(18,56,38,0.98),rgba(5,22,15,0.98))] text-[#e8bc63] shadow-[0_10px_28px_rgba(0,0,0,0.42),0_0_0_1px_rgba(216,173,86,0.16)] transition duration-300 hover:scale-[1.03] hover:shadow-[0_12px_30px_rgba(0,0,0,0.5),0_0_18px_rgba(216,173,86,0.25)] active:scale-[0.98] sm:h-[66px] sm:w-[66px] ${
         hiddenOnDesktopHover ? "opacity-0 hover:opacity-100" : ""
       }`}
     >
       <span className="pointer-events-none absolute inset-[3px] rounded-full border border-[#f4d487]/18 sm:inset-[4px]" />
+
       <span className="pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_35%,rgba(255,232,173,0.12),transparent_46%)]" />
+
       <span className="relative z-10 flex items-center justify-center">
         {icon}
       </span>
     </button>
+  );
+}
+
+function DesktopVideoButton({
+  onClick,
+  ariaLabel,
+  icon,
+  pressed = false,
+}) {
+  return (
+    <LuxuryButton
+      type="button"
+      aria-label={ariaLabel}
+      aria-pressed={pressed}
+      onClick={onClick}
+      className="!flex !h-[72px] !w-[72px] !min-w-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden"
+      icon={icon}
+    />
   );
 }
 
@@ -91,22 +112,76 @@ function BeeEmblem() {
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M30 18c-6-6-12-7-17-3 0 0-2 7 6 12" opacity="0.85" />
-        <path d="M66 18c6-6 12-7 17-3 0 0 2 7-6 12" opacity="0.85" />
-        <path d="M21 13c-1-4-4-6-7-8" opacity="0.7" />
-        <path d="M75 13c1-4 4-6 7-8" opacity="0.7" />
-        <ellipse cx="48" cy="30" rx="12" ry="15" />
+        <path
+          d="M30 18c-6-6-12-7-17-3 0 0-2 7 6 12"
+          opacity="0.85"
+        />
+
+        <path
+          d="M66 18c6-6 12-7 17-3 0 0 2 7-6 12"
+          opacity="0.85"
+        />
+
+        <path
+          d="M21 13c-1-4-4-6-7-8"
+          opacity="0.7"
+        />
+
+        <path
+          d="M75 13c1-4 4-6 7-8"
+          opacity="0.7"
+        />
+
+        <ellipse
+          cx="48"
+          cy="30"
+          rx="12"
+          ry="15"
+        />
+
         <path d="M39 27h18" />
         <path d="M38 33h20" />
         <path d="M41 21h14" />
-        <path d="M48 15v-6" opacity="0.85" />
-        <path d="M44 10 40 6" opacity="0.8" />
-        <path d="M52 10 56 6" opacity="0.8" />
-        <path d="M36 28h-8" opacity="0.75" />
-        <path d="M60 28h8" opacity="0.75" />
-        <path d="M43 45 39 50" opacity="0.8" />
-        <path d="M53 45 57 50" opacity="0.8" />
-        <path d="m48 45 3 6-3 2-3-2 3-6Z" opacity="0.9" />
+
+        <path
+          d="M48 15v-6"
+          opacity="0.85"
+        />
+
+        <path
+          d="M44 10 40 6"
+          opacity="0.8"
+        />
+
+        <path
+          d="M52 10 56 6"
+          opacity="0.8"
+        />
+
+        <path
+          d="M36 28h-8"
+          opacity="0.75"
+        />
+
+        <path
+          d="M60 28h8"
+          opacity="0.75"
+        />
+
+        <path
+          d="M43 45 39 50"
+          opacity="0.8"
+        />
+
+        <path
+          d="M53 45 57 50"
+          opacity="0.8"
+        />
+
+        <path
+          d="m48 45 3 6-3 2-3-2 3-6Z"
+          opacity="0.9"
+        />
       </g>
     </svg>
   );
@@ -161,7 +236,9 @@ function MobileTabletVideoFrame({ children }) {
 
           <div className="-mt-1 flex items-center">
             <span className="h-px w-16 bg-gradient-to-r from-transparent to-[#e6b95c]/85 sm:w-24" />
+
             <span className="mx-2 h-[3px] w-[3px] rotate-45 bg-[#f3d17f]" />
+
             <span className="h-px w-16 bg-gradient-to-l from-transparent to-[#e6b95c]/85 sm:w-24" />
           </div>
         </div>
@@ -170,6 +247,7 @@ function MobileTabletVideoFrame({ children }) {
           aria-hidden="true"
           className="pointer-events-none absolute left-[6px] top-1/2 z-10 hidden h-16 w-8 -translate-y-1/2 rounded-r-full border-b border-r border-t border-[#d8ad56]/18 sm:block lg:hidden"
         />
+
         <div
           aria-hidden="true"
           className="pointer-events-none absolute right-[6px] top-1/2 z-10 hidden h-16 w-8 -translate-y-1/2 rounded-l-full border-b border-l border-t border-[#d8ad56]/18 sm:block lg:hidden"
@@ -186,20 +264,25 @@ function MobileTabletVideoFrame({ children }) {
               aria-hidden="true"
               className="pointer-events-none absolute left-0 top-0 h-12 w-12 rounded-br-[28px] border-b border-r border-[#efcb78]/18 lg:hidden"
             />
+
             <div
               aria-hidden="true"
               className="pointer-events-none absolute right-0 top-0 h-12 w-12 rounded-bl-[28px] border-b border-l border-[#efcb78]/18 lg:hidden"
             />
+
             <div
               aria-hidden="true"
               className="pointer-events-none absolute bottom-0 left-0 h-12 w-12 rounded-tr-[28px] border-r border-t border-[#efcb78]/18 lg:hidden"
             />
+
             <div
               aria-hidden="true"
               className="pointer-events-none absolute bottom-0 right-0 h-12 w-12 rounded-tl-[28px] border-l border-t border-[#efcb78]/18 lg:hidden"
             />
 
-            <div className="relative z-10">{children}</div>
+            <div className="relative z-10">
+              {children}
+            </div>
           </div>
         </div>
 
@@ -208,7 +291,9 @@ function MobileTabletVideoFrame({ children }) {
           className="pointer-events-none absolute inset-x-[17%] bottom-2 flex items-center justify-center gap-2 lg:hidden"
         >
           <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#c28a35]/60 to-[#f1cf83]/55" />
+
           <span className="h-[6px] w-[6px] rotate-45 border border-[#e8bd67]/75 bg-[#052016]" />
+
           <span className="h-px flex-1 bg-gradient-to-l from-transparent via-[#c28a35]/60 to-[#f1cf83]/55" />
         </div>
       </div>
@@ -216,7 +301,10 @@ function MobileTabletVideoFrame({ children }) {
   );
 }
 
-function VideoVineFrame({ children, mirrored = false }) {
+function VideoVineFrame({
+  children,
+  mirrored = false,
+}) {
   return (
     <div
       className={
@@ -228,7 +316,9 @@ function VideoVineFrame({ children, mirrored = false }) {
       <div
         aria-hidden="true"
         className={`pointer-events-none absolute z-20 hidden lg:block ${
-          mirrored ? "-right-[120px]" : "-left-[120px]"
+          mirrored
+            ? "-right-[120px]"
+            : "-left-[20%]"
         } -bottom-[8%] w-[140%]`}
       >
         <Image
@@ -244,7 +334,9 @@ function VideoVineFrame({ children, mirrored = false }) {
       </div>
 
       <div className="relative z-10">
-        <MobileTabletVideoFrame>{children}</MobileTabletVideoFrame>
+        <MobileTabletVideoFrame>
+          {children}
+        </MobileTabletVideoFrame>
       </div>
     </div>
   );
@@ -252,8 +344,10 @@ function VideoVineFrame({ children, mirrored = false }) {
 
 function OrmedVideo() {
   const videoRef = useRef(null);
-  const [hasStarted, setHasStarted] = useState(false);
-  const [isPaused, setIsPaused] = useState(true);
+  const [hasStarted, setHasStarted] =
+    useState(false);
+  const [isPaused, setIsPaused] =
+    useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -273,14 +367,36 @@ function OrmedVideo() {
       setIsPaused(true);
     };
 
-    video.addEventListener("play", handlePlay);
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("ended", handleEnded);
+    video.addEventListener(
+      "play",
+      handlePlay
+    );
+
+    video.addEventListener(
+      "pause",
+      handlePause
+    );
+
+    video.addEventListener(
+      "ended",
+      handleEnded
+    );
 
     return () => {
-      video.removeEventListener("play", handlePlay);
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("ended", handleEnded);
+      video.removeEventListener(
+        "play",
+        handlePlay
+      );
+
+      video.removeEventListener(
+        "pause",
+        handlePause
+      );
+
+      video.removeEventListener(
+        "ended",
+        handleEnded
+      );
     };
   }, []);
 
@@ -298,7 +414,7 @@ function OrmedVideo() {
   };
 
   return (
-    <div className="relative aspect-video overflow-hidden rounded-[17px] border border-[#d0a34a]/45 bg-[#020706] shadow-[0_18px_42px_rgba(0,0,0,0.36)] sm:rounded-[19px]">
+    <div className="relative aspect-video overflow-hidden rounded-[17px] border border-[#d0a34a]/45 bg-[#020706] shadow-[0_18px_42px_rgba(0,0,0,0.36)] sm:rounded-[19px] lg:rounded-none lg:shadow-[0_18px_42px_rgba(0,0,0,0.32)]">
       <video
         ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
@@ -308,42 +424,83 @@ function OrmedVideo() {
         controls={hasStarted}
         controlsList="nodownload noremoteplayback"
         disablePictureInPicture
-        onContextMenu={(event) => event.preventDefault()}
+        onContextMenu={(event) =>
+          event.preventDefault()
+        }
       >
-        <source src="/videos/services-vid1.mp4" type="video/mp4" />
-        Ваш браузер не поддерживает воспроизведение видео.
+        <source
+          src="/videos/services-vid1.mp4"
+          type="video/mp4"
+        />
+
+        Ваш браузер не поддерживает воспроизведение
+        видео.
       </video>
 
       <div
-        className={`pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(1,7,5,0.04)_0%,rgba(1,7,5,0.01)_58%,rgba(1,7,5,0.25)_100%)] transition-opacity duration-300 ${
-          hasStarted && !isPaused ? "opacity-0" : "opacity-100"
+        className={`pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(1,7,5,0.04)_0%,rgba(1,7,5,0.01)_58%,rgba(1,7,5,0.25)_100%)] transition-opacity duration-300 lg:bg-[linear-gradient(180deg,rgba(1,7,5,0.02)_0%,rgba(1,7,5,0.01)_58%,rgba(1,7,5,0.24)_100%)] ${
+          hasStarted && !isPaused
+            ? "opacity-0"
+            : "opacity-100"
         }`}
       />
 
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,173,86,0.045),transparent_42%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,173,86,0.045),transparent_42%)] lg:hidden" />
 
       {(!hasStarted || isPaused) && (
         <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-          <CircleVideoButton
-            onClick={toggleVideo}
-            ariaLabel={
-              hasStarted ? "Продолжить воспроизведение" : "Запустить видео"
-            }
-            pressed={hasStarted && !isPaused}
-            icon={<PlayIcon />}
-          />
+          <div className="lg:hidden">
+            <CircleVideoButton
+              onClick={toggleVideo}
+              ariaLabel={
+                hasStarted
+                  ? "Продолжить воспроизведение"
+                  : "Запустить видео"
+              }
+              pressed={
+                hasStarted && !isPaused
+              }
+              icon={<PlayIcon />}
+            />
+          </div>
+
+          <div className="hidden lg:block">
+            <DesktopVideoButton
+              onClick={toggleVideo}
+              ariaLabel={
+                hasStarted
+                  ? "Продолжить воспроизведение"
+                  : "Запустить видео"
+              }
+              pressed={
+                hasStarted && !isPaused
+              }
+              icon={<PlayIcon />}
+            />
+          </div>
         </div>
       )}
 
       {hasStarted && !isPaused && (
         <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 hover:opacity-100">
-          <CircleVideoButton
-            onClick={toggleVideo}
-            ariaLabel="Остановить видео"
-            pressed
-            icon={<PauseIcon />}
-            hiddenOnDesktopHover
-          />
+          <div className="lg:hidden">
+            <CircleVideoButton
+              onClick={toggleVideo}
+              ariaLabel="Остановить видео"
+              pressed
+              icon={<PauseIcon />}
+              hiddenOnDesktopHover
+            />
+          </div>
+
+          <div className="hidden lg:block">
+            <DesktopVideoButton
+              onClick={toggleVideo}
+              ariaLabel="Остановить видео"
+              pressed
+              icon={<PauseIcon />}
+            />
+          </div>
         </div>
       )}
     </div>
@@ -363,6 +520,7 @@ export default function OrmedEquipmentSection() {
       />
 
       <div className="pointer-events-none absolute inset-0 -z-20 bg-[#03180f]/14" />
+
       <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_center,rgba(24,88,55,0.12),transparent_64%)]" />
 
       <div
@@ -398,7 +556,10 @@ export default function OrmedEquipmentSection() {
 
               <h2
                 className="max-w-[760px] text-center text-[clamp(1.8rem,3vw,3.2rem)] font-normal uppercase leading-[1.08] tracking-[0.02em] text-[#e2b45b] sm:text-left"
-                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                style={{
+                  fontFamily:
+                    "Georgia, 'Times New Roman', serif",
+                }}
               >
                 ORMED-Тракцион
               </h2>
@@ -407,25 +568,30 @@ export default function OrmedEquipmentSection() {
 
               <div className="mt-4 max-w-[860px] space-y-3 text-[12px] font-medium leading-6 text-[#e8ddc8]/90 sm:text-[13px] sm:leading-7 lg:text-[14px]">
                 <p>
-                  В центре используется современная система ORMED для
-                  контролируемой работы с шейным и поясничным отделами
-                  позвоночника. Параметры воздействия регулируются специалистом
-                  с учётом состояния человека и задач восстановительной
-                  программы.
+                  В центре используется современная
+                  система ORMED для контролируемой работы
+                  с шейным и поясничным отделами
+                  позвоночника. Параметры воздействия
+                  регулируются специалистом с учётом
+                  состояния человека и задач
+                  восстановительной программы.
                 </p>
 
                 <p>
-                  Дозированное вытяжение способствует снижению нагрузки на
-                  позвоночник, расслаблению перенапряжённых мышц и
-                  восстановлению естественной подвижности. Комфортная кушетка и
-                  мягкое тепловое воздействие помогают подготовить тело к
-                  процедуре.
+                  Дозированное вытяжение способствует
+                  снижению нагрузки на позвоночник,
+                  расслаблению перенапряжённых мышц и
+                  восстановлению естественной
+                  подвижности. Комфортная кушетка и мягкое
+                  тепловое воздействие помогают
+                  подготовить тело к процедуре.
                 </p>
 
                 <p>
-                  ORMED может применяться как самостоятельная методика или
-                  становиться частью комплексной программы вместе с другими
-                  процедурами центра.
+                  ORMED может применяться как
+                  самостоятельная методика или становиться
+                  частью комплексной программы вместе с
+                  другими процедурами центра.
                 </p>
               </div>
             </div>
@@ -461,17 +627,22 @@ export default function OrmedEquipmentSection() {
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
-                    Аппарат позволяет проводить дозированное вытяжение шейного и
-                    поясничного отделов позвоночника. Интенсивность и
-                    продолжительность воздействия подбираются специалистом
+                    Аппарат позволяет проводить
+                    дозированное вытяжение шейного и
+                    поясничного отделов позвоночника.
+                    Интенсивность и продолжительность
+                    воздействия подбираются специалистом
                     индивидуально.
                   </p>
 
                   <p>
-                    Инфракрасный подогрев поверхности кушетки способствует
-                    расслаблению мышц и подготовке тканей к вытяжению. Тепловое
-                    воздействие поддерживает местное кровообращение, помогает
-                    уменьшить напряжение и делает процедуру комфортнее.
+                    Инфракрасный подогрев поверхности
+                    кушетки способствует расслаблению мышц
+                    и подготовке тканей к вытяжению.
+                    Тепловое воздействие поддерживает
+                    местное кровообращение, помогает
+                    уменьшить напряжение и делает
+                    процедуру комфортнее.
                   </p>
                 </div>
               </div>
@@ -483,17 +654,23 @@ export default function OrmedEquipmentSection() {
 
                 <div className="mt-4 space-y-4 text-[12px] font-medium leading-7 text-[#e8ddc8]/88 sm:text-[13px] lg:text-[14px]">
                   <p>
-                    Тракционная методика может использоваться в комплексных
-                    программах при протрузиях, межпозвонковых грыжах,
-                    дегенеративных изменениях позвоночника, нарушениях осанки,
-                    сколиозе и мышечном перенапряжении.
+                    Тракционная методика может
+                    использоваться в комплексных
+                    программах при протрузиях,
+                    межпозвонковых грыжах, дегенеративных
+                    изменениях позвоночника, нарушениях
+                    осанки, сколиозе и мышечном
+                    перенапряжении.
                   </p>
 
                   <p>
-                    Процедуры направлены на уменьшение избыточной нагрузки,
-                    поддержку подвижности позвоночника и профилактику
-                    дальнейшего развития нарушений. Возможность проведения курса
-                    определяется после консультации специалиста.
+                    Процедуры направлены на уменьшение
+                    избыточной нагрузки, поддержку
+                    подвижности позвоночника и
+                    профилактику дальнейшего развития
+                    нарушений. Возможность проведения
+                    курса определяется после консультации
+                    специалиста.
                   </p>
                 </div>
               </div>

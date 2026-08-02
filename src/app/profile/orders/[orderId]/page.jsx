@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
+import OrderContactActions from "@/components/shared/OrderContactActions";
 import { requireUser } from "@/lib/auth-guards";
 import { formatPriceFromKopecks } from "@/lib/money";
 import { prisma } from "@/lib/prisma";
@@ -417,6 +418,12 @@ export default async function ProfileOrderPage({ params }) {
                 </div>
               </div>
             </section>
+
+            <OrderContactActions
+              mode="customer"
+              orderId={order.id}
+              orderStatus={order.status}
+            />
 
             <section className="overflow-hidden rounded-[32px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.44)]">
               <div className="border-b border-[#d8b66a]/12 px-5 py-5">

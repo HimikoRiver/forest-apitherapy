@@ -21,6 +21,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { updateOrderStatus } from "@/app/admin/orders/actions";
+import OrderContactActions from "@/components/shared/OrderContactActions";
 import { formatPriceFromKopecks } from "@/lib/money";
 
 const ORDER_STATUSES = ["PENDING", "PROCESSING", "COMPLETED", "CANCELED"];
@@ -247,77 +248,89 @@ function OrderCard({
           </div>
         </div>
 
-        <aside className="h-fit rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
-              <RefreshCw
-                className={`size-4 ${isSaving ? "animate-spin" : ""}`}
-              />
+        <aside className="h-fit space-y-3">
+          <section className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-4">
+            <div className="flex items-center gap-3">
+              <div className="flex size-10 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                <RefreshCw
+                  className={`size-4 ${isSaving ? "animate-spin" : ""}`}
+                />
+              </div>
+
+              <div>
+                <p className="m-0 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]/74">
+                  Обработка
+                </p>
+
+                <h4 className="m-0 text-base font-bold text-[#f3d98d]">
+                  Статус заказа
+                </h4>
+              </div>
             </div>
 
-            <div>
-              <p className="m-0 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]/74">
-                Обработка
-              </p>
-
-              <h4 className="m-0 text-base font-bold text-[#f3d98d]">
-                Статус заказа
-              </h4>
-            </div>
-          </div>
-
-          <form
-            className="mt-4 space-y-3"
-            onSubmit={(event) => {
-              event.preventDefault();
-              onSave(order.id);
-            }}
-          >
-            <label className="block">
-              <span className="mb-2 block text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]/88">
-                Статус
-              </span>
-
-              <select
-                value={selectedStatus}
-                disabled={isSaving}
-                onChange={(event) =>
-                  onStatusChange(order.id, event.target.value)
-                }
-                className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)] disabled:cursor-wait disabled:opacity-60"
-              >
-                {ORDER_STATUSES.map((status) => (
-                  <option key={status} value={status}>
-                    {ORDER_STATUS_LABELS[status] || status}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <button
-              type="submit"
-              disabled={!hasChanges || isSaving}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/48 bg-[#d8b66a] px-5 py-3 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#07110f] shadow-[0_14px_38px_rgba(216,182,106,0.14)] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_20px_52px_rgba(216,182,106,0.2)] disabled:cursor-not-allowed disabled:border-[#d8b66a]/18 disabled:bg-[#d8b66a]/24 disabled:text-[#f3efe5]/42 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:brightness-100"
+            <form
+              className="mt-4 space-y-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                onSave(order.id);
+              }}
             >
-              {isSaving ? (
-                <LoaderCircle className="size-4 animate-spin" />
-              ) : hasChanges ? (
-                <Save className="size-4 transition duration-300 group-hover:scale-110" />
-              ) : (
-                <CheckCircle2 className="size-4" />
-              )}
+              <label className="block">
+                <span className="mb-2 block text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]/88">
+                  Статус
+                </span>
 
-              {isSaving
-                ? "Сохраняем..."
-                : hasChanges
-                  ? "Сохранить статус"
-                  : "Статус сохранён"}
-            </button>
+                <select
+                  value={selectedStatus}
+                  disabled={isSaving}
+                  onChange={(event) =>
+                    onStatusChange(order.id, event.target.value)
+                  }
+                  className="w-full rounded-2xl border border-[#d8b66a]/14 bg-black/36 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 focus:border-[#d8b66a]/58 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)] disabled:cursor-wait disabled:opacity-60"
+                >
+                  {ORDER_STATUSES.map((status) => (
+                    <option key={status} value={status}>
+                      {ORDER_STATUS_LABELS[status] || status}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <p className="m-0 text-xs leading-5 text-[#f3efe5]/42">
-              После сохранения статус обновится в личном кабинете клиента.
-            </p>
-          </form>
+              <button
+                type="submit"
+                disabled={!hasChanges || isSaving}
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/48 bg-[#d8b66a] px-5 py-3 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#07110f] shadow-[0_14px_38px_rgba(216,182,106,0.14)] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-[0_20px_52px_rgba(216,182,106,0.2)] disabled:cursor-not-allowed disabled:border-[#d8b66a]/18 disabled:bg-[#d8b66a]/24 disabled:text-[#f3efe5]/42 disabled:shadow-none disabled:hover:translate-y-0 disabled:hover:brightness-100"
+              >
+                {isSaving ? (
+                  <LoaderCircle className="size-4 animate-spin" />
+                ) : hasChanges ? (
+                  <Save className="size-4 transition duration-300 group-hover:scale-110" />
+                ) : (
+                  <CheckCircle2 className="size-4" />
+                )}
+
+                {isSaving
+                  ? "Сохраняем..."
+                  : hasChanges
+                    ? "Сохранить статус"
+                    : "Статус сохранён"}
+              </button>
+
+              <p className="m-0 text-xs leading-5 text-[#f3efe5]/42">
+                После сохранения статус обновится в личном кабинете клиента.
+              </p>
+            </form>
+          </section>
+
+          <OrderContactActions
+            mode="admin"
+            compact
+            orderId={order.id}
+            orderStatus={order.status}
+            customerName={order.customerName}
+            customerPhone={order.customerPhone}
+            customerEmail={order.customerEmail}
+          />
         </aside>
       </div>
     </article>

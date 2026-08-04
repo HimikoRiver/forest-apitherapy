@@ -19,14 +19,10 @@ const ORDER_STATUS_LABELS = {
 };
 
 const ORDER_STATUS_DESCRIPTIONS = {
-  PENDING:
-    "Заказ создан и ожидает начала обработки.",
-  PROCESSING:
-    "Администратор уже занимается вашим заказом.",
-  COMPLETED:
-    "Заказ успешно выполнен.",
-  CANCELED:
-    "Заказ был отменён.",
+  PENDING: "Заказ создан и ожидает начала обработки.",
+  PROCESSING: "Администратор уже занимается вашим заказом.",
+  COMPLETED: "Заказ успешно выполнен.",
+  CANCELED: "Заказ был отменён.",
 };
 
 const FILTERS = [
@@ -43,20 +39,17 @@ const FILTERS = [
   {
     id: "PROCESSING",
     label: "В обработке",
-    title:
-      "Заказы в обработке",
+    title: "Заказы в обработке",
   },
   {
     id: "COMPLETED",
     label: "Завершённые",
-    title:
-      "Завершённые заказы",
+    title: "Завершённые заказы",
   },
   {
     id: "CANCELED",
     label: "Отменённые",
-    title:
-      "Отменённые заказы",
+    title: "Отменённые заказы",
   },
   {
     id: "ALL",
@@ -65,9 +58,7 @@ const FILTERS = [
   },
 ];
 
-function OrderStatusBadge({
-  status,
-}) {
+function OrderStatusBadge({ status }) {
   const statusStyles = {
     PENDING:
       "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
@@ -82,15 +73,12 @@ function OrderStatusBadge({
   return (
     <span
       className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] ${
-        statusStyles[status] ||
-        statusStyles.PENDING
+        statusStyles[status] || statusStyles.PENDING
       }`}
     >
       <Clock3 className="size-3.5" />
 
-      {ORDER_STATUS_LABELS[
-        status
-      ] || status}
+      {ORDER_STATUS_LABELS[status] || status}
     </span>
   );
 }
@@ -103,21 +91,14 @@ function OrderCard({ order }) {
     >
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
-          <OrderStatusBadge
-            status={order.status}
-          />
+          <OrderStatusBadge status={order.status} />
 
           <h3 className="mt-4 text-xl font-bold tracking-[-0.05em] text-[#f3d98d] transition duration-300 group-hover/order:text-[#fff1b8]">
-            Заказ от{" "}
-            {order.createdAtLabel}
+            Заказ от {order.createdAtLabel}
           </h3>
 
           <p className="mt-2 max-w-xl text-sm leading-6 text-[#f3efe5]/58">
-            {
-              ORDER_STATUS_DESCRIPTIONS[
-                order.status
-              ]
-            }
+            {ORDER_STATUS_DESCRIPTIONS[order.status]}
           </p>
 
           <p className="mt-3 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.16em] text-[#d8b66a]/72">
@@ -128,9 +109,7 @@ function OrderCard({ order }) {
         </div>
 
         <p className="m-0 shrink-0 text-2xl font-bold tracking-[-0.04em] text-[#d8b66a]">
-          {formatPriceFromKopecks(
-            order.totalKopecks
-          )}
+          {formatPriceFromKopecks(order.totalKopecks)}
         </p>
       </div>
 
@@ -142,18 +121,15 @@ function OrderCard({ order }) {
           >
             <div className="flex min-w-0 items-center gap-3">
               <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-2xl border border-[#d8b66a]/14 bg-black/28">
-                {item.product
-                  ?.image ? (
+                {item.product?.image ? (
                   <Image
-                    src={
-                      item.product
-                        .image
-                    }
-                    alt={
-                      item.productTitle
-                    }
+                    src={item.product.image}
+                    alt={item.productTitle}
                     fill
                     sizes="64px"
+                    unoptimized={item.product.image.startsWith(
+                      "/uploads/products/"
+                    )}
                     className="object-cover"
                   />
                 ) : (
@@ -164,17 +140,13 @@ function OrderCard({ order }) {
               </div>
 
               <span className="font-bold leading-6 text-[#f3d98d]">
-                {
-                  item.productTitle
-                }
+                {item.productTitle}
               </span>
             </div>
 
             <span className="shrink-0 leading-6 text-[#f3efe5]/62">
               {item.quantity} ×{" "}
-              {formatPriceFromKopecks(
-                item.priceKopecks
-              )}
+              {formatPriceFromKopecks(item.priceKopecks)}
             </span>
           </div>
         ))}
@@ -192,14 +164,10 @@ export default function ProfileOrdersList({
   totalFilteredOrders,
 }) {
   const activeFilterData =
-    FILTERS.find(
-      (filter) =>
-        filter.id ===
-        activeFilter
-    ) || FILTERS[0];
+    FILTERS.find((filter) => filter.id === activeFilter) ||
+    FILTERS[0];
 
-  const totalOrders =
-    filterCounts.ALL || 0;
+  const totalOrders = filterCounts.ALL || 0;
 
   return (
     <section
@@ -219,16 +187,13 @@ export default function ProfileOrdersList({
               </p>
 
               <h2 className="mt-1 text-xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                {
-                  activeFilterData.title
-                }
+                {activeFilterData.title}
               </h2>
             </div>
           </div>
 
           <p className="m-0 w-fit rounded-full border border-[#d8b66a]/14 bg-black/22 px-3 py-1.5 text-xs text-[#f3efe5]/58">
-            На странице:{" "}
-            {initialOrders.length} из{" "}
+            На странице: {initialOrders.length} из{" "}
             {totalFilteredOrders}
           </p>
         </div>
@@ -236,52 +201,38 @@ export default function ProfileOrdersList({
         {totalOrders > 0 && (
           <div className="border-t border-[#d8b66a]/8 px-5 py-4">
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 2xl:grid-cols-6">
-              {FILTERS.map(
-                (filter) => {
-                  const isActive =
-                    activeFilter ===
-                    filter.id;
+              {FILTERS.map((filter) => {
+                const isActive = activeFilter === filter.id;
 
-                  return (
-                    <Link
-                      key={
-                        filter.id
-                      }
-                      href={`/profile?status=${filter.id}&page=1#orders`}
-                      scroll={false}
-                      prefetch={false}
-                      aria-current={
+                return (
+                  <Link
+                    key={filter.id}
+                    href={`/profile?status=${filter.id}&page=1#orders`}
+                    scroll={false}
+                    prefetch={false}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`flex min-h-10 min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-[0.58rem] font-bold uppercase tracking-[0.1em] transition duration-300 ${
+                      isActive
+                        ? "border-[#d8b66a]/58 bg-[#d8b66a] text-[#07110f] shadow-[0_10px_28px_rgba(216,182,106,0.14)]"
+                        : "border-[#d8b66a]/14 bg-black/22 text-[#f3efe5]/58 hover:border-[#d8b66a]/38 hover:bg-[#d8b66a]/8 hover:text-[#f3d98d]"
+                    }`}
+                  >
+                    <span className="min-w-0 truncate">
+                      {filter.label}
+                    </span>
+
+                    <span
+                      className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[0.56rem] ${
                         isActive
-                          ? "page"
-                          : undefined
-                      }
-                      className={`flex min-h-10 min-w-0 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-left text-[0.58rem] font-bold uppercase tracking-[0.1em] transition duration-300 ${
-                        isActive
-                          ? "border-[#d8b66a]/58 bg-[#d8b66a] text-[#07110f] shadow-[0_10px_28px_rgba(216,182,106,0.14)]"
-                          : "border-[#d8b66a]/14 bg-black/22 text-[#f3efe5]/58 hover:border-[#d8b66a]/38 hover:bg-[#d8b66a]/8 hover:text-[#f3d98d]"
+                          ? "bg-black/14 text-[#07110f]"
+                          : "bg-black/30 text-[#d8b66a]/78"
                       }`}
                     >
-                      <span className="min-w-0 truncate">
-                        {
-                          filter.label
-                        }
-                      </span>
-
-                      <span
-                        className={`flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[0.56rem] ${
-                          isActive
-                            ? "bg-black/14 text-[#07110f]"
-                            : "bg-black/30 text-[#d8b66a]/78"
-                        }`}
-                      >
-                        {filterCounts[
-                          filter.id
-                        ] || 0}
-                      </span>
-                    </Link>
-                  );
-                }
-              )}
+                      {filterCounts[filter.id] || 0}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
@@ -291,10 +242,8 @@ export default function ProfileOrdersList({
         <div className="p-5">
           <div className="rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
             <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              Заказов пока нет.
-              Добавьте товар в
-              корзину и оформите
-              первый заказ.
+              Заказов пока нет. Добавьте товар в корзину и
+              оформите первый заказ.
             </p>
 
             <Link
@@ -307,42 +256,29 @@ export default function ProfileOrdersList({
             </Link>
           </div>
         </div>
-      ) : initialOrders.length ===
-        0 ? (
+      ) : initialOrders.length === 0 ? (
         <div className="p-5">
           <div className="flex items-start gap-3 rounded-[26px] border border-[#d8b66a]/12 bg-black/22 p-5">
             <ListFilter className="mt-0.5 size-5 shrink-0 text-[#d8b66a]/72" />
 
             <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              В разделе «
-              {
-                activeFilterData.label
-              }
-              » заказов пока нет.
+              В разделе «{activeFilterData.label}» заказов пока
+              нет.
             </p>
           </div>
         </div>
       ) : (
         <div className="p-5">
           <div className="space-y-3">
-            {initialOrders.map(
-              (order) => (
-                <OrderCard
-                  key={order.id}
-                  order={order}
-                />
-              )
-            )}
+            {initialOrders.map((order) => (
+              <OrderCard key={order.id} order={order} />
+            ))}
           </div>
 
           <OrdersPagination
             basePath="/profile"
-            activeFilter={
-              activeFilter
-            }
-            currentPage={
-              currentPage
-            }
+            activeFilter={activeFilter}
+            currentPage={currentPage}
             totalPages={totalPages}
           />
         </div>

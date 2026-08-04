@@ -40,22 +40,27 @@ async function addProductToCart(formData) {
     },
   });
 
-  if (!product || product.status !== "ACTIVE" || product.stock <= 0) {
+  if (
+    !product ||
+    product.status !== "ACTIVE" ||
+    product.stock <= 0
+  ) {
     redirect("/products");
   }
 
-  const existingCartItem = await prisma.cartItem.findUnique({
-    where: {
-      userId_productId: {
-        userId: session.user.id,
-        productId: product.id,
+  const existingCartItem =
+    await prisma.cartItem.findUnique({
+      where: {
+        userId_productId: {
+          userId: session.user.id,
+          productId: product.id,
+        },
       },
-    },
-    select: {
-      id: true,
-      quantity: true,
-    },
-  });
+      select: {
+        id: true,
+        quantity: true,
+      },
+    });
 
   const nextQuantity = Math.min(
     (existingCartItem?.quantity || 0) + 1,
@@ -143,8 +148,8 @@ export default async function ProductsPage() {
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Здесь будут товары, которые можно добавить в корзину и оформить
-              через личный кабинет.
+              Здесь будут товары, которые можно добавить в
+              корзину и оформить через личный кабинет.
             </p>
           </div>
 
@@ -176,6 +181,7 @@ export default async function ProductsPage() {
                 className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/35 bg-[#030b0c] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#071b18] hover:text-[#f3d98d]"
               >
                 Перейти в панель
+
                 <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
               </Link>
             )}
@@ -189,13 +195,15 @@ export default async function ProductsPage() {
               return (
                 <article
                   key={product.id}
-                  className="group flex min-h-[360px] flex-col overflow-hidden rounded-[24px] border border-[#d8b66a]/18 bg-[#030b0c] shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-[#07120f] hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
+                  className="group relative flex min-h-[360px] flex-col overflow-hidden rounded-[24px] border border-[#d8b66a]/18 bg-[#030b0c] shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-[#07120f] hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
                 >
                   <Link
                     href={productHref}
                     aria-label={`Открыть товар ${product.title}`}
-                    className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-[#030b0c]"
-                  >
+                    className="absolute inset-0 z-10 rounded-[24px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d8b66a]/70 focus-visible:ring-inset"
+                  />
+
+                  <div className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-[#030b0c]">
                     {product.image ? (
                       <Image
                         src={product.image}
@@ -220,17 +228,12 @@ export default async function ProductsPage() {
                         {product.category.name}
                       </p>
                     )}
-                  </Link>
+                  </div>
 
                   <div className="flex flex-1 flex-col p-4">
-                    <Link
-                      href={productHref}
-                      className="w-fit transition duration-300 hover:text-[#fff1b8]"
-                    >
-                      <h2 className="m-0 text-lg font-bold tracking-[-0.05em] text-[#f3d98d]">
-                        {product.title}
-                      </h2>
-                    </Link>
+                    <h2 className="m-0 text-lg font-bold tracking-[-0.05em] text-[#f3d98d] transition duration-300 group-hover:text-[#fff1b8]">
+                      {product.title}
+                    </h2>
 
                     {product.shortDescription && (
                       <p className="mt-2 text-[0.8rem] leading-6 text-[#f3efe5]/72">
@@ -251,7 +254,10 @@ export default async function ProductsPage() {
 
                           <p className="m-0 flex items-center gap-1.5 text-lg font-bold text-[#d8b66a]">
                             <BadgeRussianRuble className="size-4.5" />
-                            {formatPriceFromKopecks(product.priceKopecks)}
+
+                            {formatPriceFromKopecks(
+                              product.priceKopecks
+                            )}
                           </p>
 
                           <p className="mt-1.5 inline-flex rounded-full border border-[#d8b66a]/14 bg-black/18 px-2.5 py-1 text-[0.68rem] text-[#f3efe5]/58">
@@ -259,7 +265,10 @@ export default async function ProductsPage() {
                           </p>
                         </div>
 
-                        <form action={addProductToCart} className="shrink-0">
+                        <form
+                          action={addProductToCart}
+                          className="relative z-20 shrink-0"
+                        >
                           <input
                             type="hidden"
                             name="productId"
@@ -274,10 +283,15 @@ export default async function ProductsPage() {
                                 ? `${product.title} нет в наличии`
                                 : `Добавить ${product.title} в корзину`
                             }
-                            title={isOutOfStock ? "Нет в наличии" : "Купить"}
+                            title={
+                              isOutOfStock
+                                ? "Нет в наличии"
+                                : "Купить"
+                            }
                             className="group/button inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#d8b66a]/30 bg-[#d8b66a]/10 px-3 text-[0.62rem] font-bold uppercase tracking-[0.13em] text-[#f3d98d] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a] hover:text-[#07110f] disabled:cursor-not-allowed disabled:border-[#d8b66a]/12 disabled:bg-[#d8b66a]/8 disabled:text-[#d8b66a]/36"
                           >
                             <ShoppingCart className="size-3.5 transition duration-300 group-hover/button:scale-110" />
+
                             {isOutOfStock ? "Нет" : "Купить"}
                           </button>
                         </form>

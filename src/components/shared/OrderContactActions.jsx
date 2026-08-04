@@ -1,6 +1,10 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Check,
   Copy,
@@ -11,7 +15,11 @@ import {
 import { homeContent } from "@/data/homeContent";
 
 function findAdminContact(label) {
-  return homeContent.contactItems.find((item) => item.label === label) || null;
+  return (
+    homeContent.contactItems.find(
+      (item) => item.label === label
+    ) || null
+  );
 }
 
 function normalizePhoneNumber(value) {
@@ -21,7 +29,10 @@ function normalizePhoneNumber(value) {
     return "";
   }
 
-  if (digits.length === 11 && digits.startsWith("8")) {
+  if (
+    digits.length === 11 &&
+    digits.startsWith("8")
+  ) {
     return `7${digits.slice(1)}`;
   }
 
@@ -52,14 +63,26 @@ function createWhatsAppLink(baseHref, message) {
   return `${cleanHref}?text=${encodeURIComponent(message)}`;
 }
 
-function createMailLink(email, subject, body) {
-  if (!email) {
+function createGmailComposeLink(
+  email,
+  subject,
+  body
+) {
+  const cleanEmail = String(email || "").trim();
+
+  if (!cleanEmail) {
     return null;
   }
 
-  return `mailto:${email}?subject=${encodeURIComponent(
-    subject
-  )}&body=${encodeURIComponent(body)}`;
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: cleanEmail,
+    su: subject,
+    body,
+  });
+
+  return `https://mail.google.com/mail/?${params.toString()}`;
 }
 
 function extractEmail(contact) {
@@ -67,11 +90,14 @@ function extractEmail(contact) {
     return "";
   }
 
-  return contact.href.replace(/^mailto:/, "").split("?")[0];
+  return contact.href
+    .replace(/^mailto:/, "")
+    .split("?")[0];
 }
 
 function copyWithFallback(value) {
-  const textarea = document.createElement("textarea");
+  const textarea =
+    document.createElement("textarea");
 
   textarea.value = value;
   textarea.setAttribute("readonly", "");
@@ -82,12 +108,15 @@ function copyWithFallback(value) {
   document.body.appendChild(textarea);
   textarea.select();
 
-  const copied = document.execCommand("copy");
+  const copied =
+    document.execCommand("copy");
 
   document.body.removeChild(textarea);
 
   if (!copied) {
-    throw new Error("Не удалось скопировать текст.");
+    throw new Error(
+      "Не удалось скопировать текст."
+    );
   }
 }
 
@@ -106,10 +135,18 @@ function ActionLink({
   return (
     <a
       href={href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
+      target={
+        external ? "_blank" : undefined
+      }
+      rel={
+        external
+          ? "noopener noreferrer"
+          : undefined
+      }
       className={`group min-h-11 items-center justify-center gap-2 rounded-2xl border px-3 py-2.5 text-[0.64rem] font-bold uppercase tracking-[0.12em] transition duration-300 ${
-        mobileOnly ? "inline-flex lg:hidden" : "inline-flex"
+        mobileOnly
+          ? "inline-flex lg:hidden"
+          : "inline-flex"
       } ${
         primary
           ? "border-[#d8b66a]/64 bg-[#d8b66a] text-[#07110f] shadow-[0_12px_30px_rgba(216,182,106,0.14)] hover:-translate-y-0.5 hover:brightness-110"
@@ -135,12 +172,15 @@ function CopyButton({
     return null;
   }
 
-  const isCopied = copiedKey === copyKey;
+  const isCopied =
+    copiedKey === copyKey;
 
   return (
     <button
       type="button"
-      onClick={() => onCopy(copyKey, value)}
+      onClick={() =>
+        onCopy(copyKey, value)
+      }
       className={`group inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/18 bg-black/24 px-3 py-2.5 text-[0.64rem] font-bold uppercase tracking-[0.12em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/52 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] ${
         fullWidth ? "col-span-2" : ""
       }`}
@@ -151,7 +191,11 @@ function CopyButton({
         <Copy className="size-4 shrink-0 transition duration-300 group-hover:scale-110" />
       )}
 
-      <span>{isCopied ? "Скопировано" : label}</span>
+      <span>
+        {isCopied
+          ? "Скопировано"
+          : label}
+      </span>
     </button>
   );
 }
@@ -166,85 +210,121 @@ export default function OrderContactActions({
   compact = false,
 }) {
   const copyTimerRef = useRef(null);
-  const [copiedKey, setCopiedKey] = useState(null);
+  const [copiedKey, setCopiedKey] =
+    useState(null);
 
   useEffect(() => {
     return () => {
       if (copyTimerRef.current) {
-        window.clearTimeout(copyTimerRef.current);
+        window.clearTimeout(
+          copyTimerRef.current
+        );
       }
     };
   }, []);
 
-  const isAdminMode = mode === "admin";
+  const isAdminMode =
+    mode === "admin";
 
-  const orderReference = getOrderReference(orderId);
+  const orderReference =
+    getOrderReference(orderId);
 
-  const visibleOrderNumber = orderReference
-    ? `№${orderReference}`
-    : "без номера";
+  const visibleOrderNumber =
+    orderReference
+      ? `№${orderReference}`
+      : "без номера";
 
-  const adminPhoneContact = findAdminContact("Телефон");
-  const adminWhatsAppContact = findAdminContact("WhatsApp");
-  const adminEmailContact = findAdminContact("E-mail");
+  const adminPhoneContact =
+    findAdminContact("Телефон");
 
-  const adminEmail = extractEmail(adminEmailContact);
+  const adminWhatsAppContact =
+    findAdminContact("WhatsApp");
+
+  const adminEmailContact =
+    findAdminContact("E-mail");
+
+  const adminEmail =
+    extractEmail(adminEmailContact);
 
   const customerQuestionPrefix =
     orderStatus === "CANCELED"
       ? "Здравствуйте! Возник вопрос по отменённому заказу"
       : "Здравствуйте! Подскажите, пожалуйста, по заказу";
 
-  const customerMessage = `${customerQuestionPrefix} ${visibleOrderNumber}.\nID заказа: ${orderId}.`;
+  const customerMessage = `${customerQuestionPrefix} ${visibleOrderNumber}.
+ID заказа: ${orderId}.`;
 
   const safeCustomerName =
-    String(customerName || "").trim() || "клиент";
+    String(customerName || "").trim() ||
+    "клиент";
 
-  const administratorMessage = `Здравствуйте, ${safeCustomerName}! Пишем по вашему заказу ${visibleOrderNumber} в центре APIDARB.\nID заказа: ${orderId}.`;
+  const administratorMessage = `Здравствуйте, ${safeCustomerName}! Пишем по вашему заказу ${visibleOrderNumber} в центре APIDARB.
+ID заказа: ${orderId}.`;
 
-  const customerPhoneDigits = normalizePhoneNumber(customerPhone);
+  const customerPhoneDigits =
+    normalizePhoneNumber(
+      customerPhone
+    );
 
-  const customerWhatsAppHref = customerPhoneDigits
-    ? createWhatsAppLink(
-        `https://wa.me/${customerPhoneDigits}`,
-        administratorMessage
-      )
-    : null;
+  const customerWhatsAppHref =
+    customerPhoneDigits
+      ? createWhatsAppLink(
+          `https://wa.me/${customerPhoneDigits}`,
+          administratorMessage
+        )
+      : null;
 
-  const administratorWhatsAppHref = createWhatsAppLink(
-    adminWhatsAppContact?.href,
-    customerMessage
-  );
+  const administratorWhatsAppHref =
+    createWhatsAppLink(
+      adminWhatsAppContact?.href,
+      customerMessage
+    );
 
-  const administratorEmailHref = createMailLink(
-    adminEmail,
-    `Заказ APIDARB ${visibleOrderNumber}`,
-    customerMessage
-  );
+  const administratorEmailHref =
+    createGmailComposeLink(
+      adminEmail,
+      `Заказ APIDARB ${visibleOrderNumber}`,
+      customerMessage
+    );
 
-  const customerEmailHref = createMailLink(
-    customerEmail,
-    `Заказ APIDARB ${visibleOrderNumber}`,
-    administratorMessage
-  );
+  const customerEmailHref =
+    createGmailComposeLink(
+      customerEmail,
+      `Заказ APIDARB ${visibleOrderNumber}`,
+      administratorMessage
+    );
 
   const customerContactsText = [
-    customerPhone ? `Телефон: ${customerPhone}` : null,
-    customerEmail ? `Email: ${customerEmail}` : null,
+    customerPhone
+      ? `Телефон: ${customerPhone}`
+      : null,
+
+    customerEmail
+      ? `Email: ${customerEmail}`
+      : null,
+
     `Заказ: ${visibleOrderNumber}`,
     `ID заказа: ${orderId}`,
   ]
     .filter(Boolean)
     .join("\n");
 
-  async function handleCopy(copyKey, value) {
+  async function handleCopy(
+    copyKey,
+    value
+  ) {
     if (!value) {
       return;
     }
 
     try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(value);
+      if (
+        navigator.clipboard
+          ?.writeText
+      ) {
+        await navigator.clipboard.writeText(
+          value
+        );
       } else {
         copyWithFallback(value);
       }
@@ -252,32 +332,44 @@ export default function OrderContactActions({
       setCopiedKey(copyKey);
 
       if (copyTimerRef.current) {
-        window.clearTimeout(copyTimerRef.current);
+        window.clearTimeout(
+          copyTimerRef.current
+        );
       }
 
-      copyTimerRef.current = window.setTimeout(() => {
-        setCopiedKey(null);
-      }, 2200);
+      copyTimerRef.current =
+        window.setTimeout(() => {
+          setCopiedKey(null);
+        }, 2200);
     } catch (error) {
-      console.error("Failed to copy contact data:", error);
+      console.error(
+        "Failed to copy contact data:",
+        error
+      );
     }
   }
 
   return (
     <section
       className={`overflow-hidden border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_24px_70px_rgba(0,0,0,0.34)] ${
-        compact ? "rounded-[26px]" : "rounded-[32px]"
+        compact
+          ? "rounded-[26px]"
+          : "rounded-[32px]"
       }`}
     >
       <div
         className={`border-b border-[#d8b66a]/12 ${
-          compact ? "px-4 py-4" : "px-5 py-5"
+          compact
+            ? "px-4 py-4"
+            : "px-5 py-5"
         }`}
       >
         <div className="flex items-center gap-3">
           <div
             className={`flex shrink-0 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d] ${
-              compact ? "size-10" : "size-11"
+              compact
+                ? "size-10"
+                : "size-11"
             }`}
           >
             <MessageCircle className="size-5" />
@@ -285,7 +377,9 @@ export default function OrderContactActions({
 
           <div className="min-w-0">
             <p className="m-0 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]/76">
-              {isAdminMode ? "Контакты клиента" : "Поддержка"}
+              {isAdminMode
+                ? "Контакты клиента"
+                : "Поддержка"}
             </p>
 
             <h3 className="mt-1 text-base font-bold tracking-[-0.04em] text-[#f3d98d]">
@@ -297,7 +391,11 @@ export default function OrderContactActions({
         </div>
       </div>
 
-      <div className={compact ? "p-4" : "p-5"}>
+      <div
+        className={
+          compact ? "p-4" : "p-5"
+        }
+      >
         <div className="rounded-[20px] border border-[#d8b66a]/10 bg-black/22 px-4 py-3">
           <p className="m-0 text-xs leading-5 text-[#f3efe5]/56">
             {isAdminMode
@@ -314,7 +412,9 @@ export default function OrderContactActions({
           {isAdminMode ? (
             <>
               <ActionLink
-                href={customerWhatsAppHref}
+                href={
+                  customerWhatsAppHref
+                }
                 icon={MessageCircle}
                 label="WhatsApp"
                 primary
@@ -322,21 +422,30 @@ export default function OrderContactActions({
               />
 
               <ActionLink
-                href={customerPhone ? `tel:${customerPhone}` : null}
+                href={
+                  customerPhone
+                    ? `tel:${customerPhone}`
+                    : null
+                }
                 icon={Phone}
                 label="Позвонить"
                 mobileOnly
               />
 
               <ActionLink
-                href={customerEmailHref}
+                href={
+                  customerEmailHref
+                }
                 icon={Mail}
                 label="Email"
+                external
               />
 
               <CopyButton
                 copyKey="customer-contacts"
-                value={customerContactsText}
+                value={
+                  customerContactsText
+                }
                 label="Копировать контакты"
                 copiedKey={copiedKey}
                 onCopy={handleCopy}
@@ -346,7 +455,9 @@ export default function OrderContactActions({
           ) : (
             <>
               <ActionLink
-                href={administratorWhatsAppHref}
+                href={
+                  administratorWhatsAppHref
+                }
                 icon={MessageCircle}
                 label="WhatsApp"
                 primary
@@ -354,16 +465,21 @@ export default function OrderContactActions({
               />
 
               <ActionLink
-                href={adminPhoneContact?.href}
+                href={
+                  adminPhoneContact?.href
+                }
                 icon={Phone}
                 label="Позвонить"
                 mobileOnly
               />
 
               <ActionLink
-                href={administratorEmailHref}
+                href={
+                  administratorEmailHref
+                }
                 icon={Mail}
                 label="Email"
+                external
               />
 
               <CopyButton

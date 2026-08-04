@@ -1,6 +1,5 @@
 ﻿"use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -68,45 +67,38 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-x-hidden bg-[#030b0c] px-3 py-4 text-[#f3efe5] sm:px-6 sm:py-6 lg:px-8 lg:py-8">
       <BeesPageBackground />
 
-      <PageLogo
-        variant="auth"
-        className={[
-          "absolute z-20",
-          "left-3 top-3",
-          "sm:left-5 sm:top-5",
-          "md:left-6 md:top-6",
-          "lg:left-8 lg:top-8",
-        ].join(" ")}
-      />
+      <div className="relative z-20 mb-3 flex justify-center sm:mb-4 lg:absolute lg:left-8 lg:top-8 lg:mb-0">
+        <PageLogo variant="auth" />
+      </div>
 
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-64px)] w-full max-w-md items-center justify-center">
-        <div className="w-full overflow-hidden rounded-[32px] border border-[#d8b66a]/20 bg-black/44 shadow-[0_28px_80px_rgba(0,0,0,0.5)]">
-          <div className="relative border-b border-[#d8b66a]/12 px-5 py-7 text-center">
+      <section className="relative z-10 mx-auto flex w-full max-w-md items-start justify-center pb-4 lg:min-h-[calc(100vh-64px)] lg:items-center lg:pb-0">
+        <div className="w-full overflow-hidden rounded-[28px] border border-[#d8b66a]/20 bg-black/44 shadow-[0_28px_80px_rgba(0,0,0,0.5)] sm:rounded-[32px]">
+          <div className="relative border-b border-[#d8b66a]/12 px-4 py-6 text-center sm:px-5 sm:py-7">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(216,182,106,0.14),transparent_42%)]" />
 
-            <div className="relative mx-auto mb-5 flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/20 bg-[#d8b66a]/10 text-[#f3d98d]">
+            <div className="relative mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/20 bg-[#d8b66a]/10 text-[#f3d98d] sm:mb-5 sm:size-14">
               {isSignUp ? (
-                <UserPlus className="size-6" />
+                <UserPlus className="size-5 sm:size-6" />
               ) : (
-                <ShieldCheck className="size-6" />
+                <ShieldCheck className="size-5 sm:size-6" />
               )}
             </div>
 
-            <div className="relative mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-4 py-2 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]">
+            <div className="relative mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-black/24 px-3 py-2 text-[0.6rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a] sm:px-4 sm:text-[0.68rem] sm:tracking-[0.28em]">
               <UserRound className="size-4" />
               Личный кабинет
             </div>
 
-            <h1 className="relative m-0 text-2xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+            <h1 className="relative m-0 text-[1.35rem] font-bold tracking-[-0.05em] text-[#f3d98d] sm:text-2xl">
               {isSignUp
                 ? "Создать аккаунт"
                 : "Войти в профиль"}
             </h1>
 
-            <p className="relative mx-auto mt-3 max-w-sm text-sm leading-6 text-[#f3efe5]/72">
+            <p className="relative mx-auto mt-3 max-w-sm text-[0.8rem] leading-6 text-[#f3efe5]/72 sm:text-sm">
               Войдите, чтобы управлять профилем, корзиной и
               заказами.
             </p>
@@ -114,11 +106,11 @@ export default function LoginPage() {
 
           <form
             onSubmit={handleSubmit}
-            className="space-y-4 px-5 py-6"
+            className="space-y-4 px-4 py-5 sm:px-5 sm:py-6"
           >
             {isSignUp && (
               <label className="block">
-                <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[#d8b66a]/90">
+                <span className="mb-2 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/90 sm:text-xs sm:tracking-[0.24em]">
                   <UserRound className="size-4" />
                   Имя
                 </span>
@@ -137,7 +129,7 @@ export default function LoginPage() {
             )}
 
             <label className="block">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[#d8b66a]/90">
+              <span className="mb-2 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/90 sm:text-xs sm:tracking-[0.24em]">
                 <Mail className="size-4" />
                 Email
               </span>
@@ -155,7 +147,7 @@ export default function LoginPage() {
             </label>
 
             <label className="block">
-              <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[#d8b66a]/90">
+              <span className="mb-2 flex items-center gap-2 text-[0.68rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/90 sm:text-xs sm:tracking-[0.24em]">
                 <KeyRound className="size-4" />
                 Пароль
               </span>
@@ -182,7 +174,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60 sm:px-5 sm:text-sm sm:tracking-[0.22em]"
             >
               {isSignUp ? (
                 <UserPlus className="size-4 transition duration-300 group-hover:scale-110" />
@@ -198,7 +190,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="border-t border-[#d8b66a]/12 px-5 py-5">
+          <div className="border-t border-[#d8b66a]/12 px-4 py-4 sm:px-5 sm:py-5">
             <button
               type="button"
               onClick={() => {
@@ -208,13 +200,15 @@ export default function LoginPage() {
 
                 setErrorMessage("");
               }}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/18 bg-black/24 px-4 py-3 text-center text-sm font-medium text-[#f3efe5]/72 transition duration-300 hover:border-[#d8b66a]/42 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/18 bg-black/24 px-3 py-3 text-center text-[0.78rem] font-medium leading-5 text-[#f3efe5]/72 transition duration-300 hover:border-[#d8b66a]/42 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] sm:px-4 sm:text-sm"
             >
-              {isSignUp
-                ? "Уже есть аккаунт? Войти"
-                : "Нет аккаунта? Зарегистрироваться"}
+              <span>
+                {isSignUp
+                  ? "Уже есть аккаунт? Войти"
+                  : "Нет аккаунта? Зарегистрироваться"}
+              </span>
 
-              <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
+              <ArrowRight className="size-4 shrink-0 transition duration-300 group-hover:translate-x-0.5" />
             </button>
           </div>
         </div>

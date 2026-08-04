@@ -3,7 +3,8 @@ import Image from "next/image";
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
 
 const BRIGHT_BORDER = "rgba(216,182,106,0.62)";
-const BRIGHT_INNER_BORDER = "rgba(216,182,106,0.62)";
+const BRIGHT_INNER_BORDER =
+  "rgba(216,182,106,0.62)";
 
 const PANEL_SHADOW =
   "drop-shadow(0 7px 10px rgba(0,0,0,0.86)) drop-shadow(0 12px 16px rgba(0,0,0,0.68))";
@@ -17,11 +18,14 @@ const ADDRESS_PANEL_SHADOW =
 const FULL_ADDRESS =
   "г. Грозный, Байсангуровский район, Смотровой переулок, 4";
 
-const ADDRESS_QUERY = encodeURIComponent(FULL_ADDRESS);
+const ADDRESS_QUERY =
+  encodeURIComponent(FULL_ADDRESS);
 
-const YANDEX_MAP_URL = `https://yandex.ru/maps/?text=${ADDRESS_QUERY}`;
+const YANDEX_MAP_URL =
+  `https://yandex.ru/maps/?text=${ADDRESS_QUERY}`;
 
-const YANDEX_MAP_WIDGET_URL = `https://yandex.ru/map-widget/v1/?mode=search&text=${ADDRESS_QUERY}&z=17`;
+const YANDEX_MAP_WIDGET_URL =
+  `https://yandex.ru/map-widget/v1/?mode=search&text=${ADDRESS_QUERY}&z=17`;
 
 const contacts = [
   {
@@ -50,9 +54,9 @@ const contacts = [
   },
   {
     title: "E-mail",
-    text: "afelaktitaapi@mail.ru",
+    text: "apidarb_77@mail.ru",
     caption: "Написать на электронную почту",
-    href: "mailto:afelaktitaapi@mail.ru",
+    href: "mailto:apidarb_77@mail.ru",
     icon: "/images/footer/Mail.webp",
     iconAlt: "E-mail",
   },
@@ -194,7 +198,8 @@ function InfoBlockIcon({
       ? "size-[42px] sm:size-[46px] lg:size-[48px]"
       : "size-[50px] sm:size-[56px] lg:size-[60px]";
 
-  const sizes = variant === "address" ? "48px" : "60px";
+  const sizes =
+    variant === "address" ? "48px" : "60px";
 
   return (
     <span
@@ -315,7 +320,8 @@ function MediaFrame({
 }
 
 function ContactCard({ item }) {
-  const isExternal = item.href.startsWith("http");
+  const isExternal =
+    item.href.startsWith("http");
 
   return (
     <a
@@ -332,7 +338,10 @@ function ContactCard({ item }) {
         shadow={PANEL_SHADOW}
       >
         <div className="relative z-10 grid min-h-[64px] grid-cols-[48px_1fr_18px] items-center gap-3 px-3 py-2.5 sm:min-h-[66px] sm:grid-cols-[56px_1fr_20px] sm:px-4">
-          <ContactIcon src={item.icon} alt={item.iconAlt} />
+          <ContactIcon
+            src={item.icon}
+            alt={item.iconAlt}
+          />
 
           <span className="block min-w-0">
             <span className="block text-[8px] font-bold uppercase tracking-[0.3em] text-[#d8b66a] sm:text-[9px] sm:tracking-[0.36em]">
@@ -378,12 +387,17 @@ function InfoCard({ item }) {
       </span>
 
       <div className="relative z-10 flex h-full flex-col px-4 py-4 sm:px-5 sm:py-4">
-        <InfoBlockIcon src={item.icon} alt={item.iconAlt} />
+        <InfoBlockIcon
+          src={item.icon}
+          alt={item.iconAlt}
+        />
 
         <span
           className="contact-step-number absolute right-4 top-10 text-[26px] font-bold leading-none sm:right-5 sm:top-11 sm:text-[30px]"
           style={{
-            animationDelay: `${(Number(item.number) - 1) * 0.8}s`,
+            animationDelay: `${
+              (Number(item.number) - 1) * 0.8
+            }s`,
           }}
         >
           {item.number}
@@ -412,7 +426,8 @@ export default function ContactsPage() {
     <main
       className="min-h-screen overflow-hidden bg-[#020908] text-[#f4edda]"
       style={{
-        fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
+        fontFamily:
+          "var(--font-comfortaa), Arial, Helvetica, sans-serif",
       }}
     >
       <style>{`
@@ -512,13 +527,18 @@ export default function ContactsPage() {
               </h1>
 
               <p className="mx-auto mt-4 max-w-[440px] text-[12px] font-medium leading-6 text-[#eee3cc] drop-shadow-[0_5px_16px_rgba(0,0,0,0.84)] sm:mt-5 sm:text-[13px] sm:leading-7 lg:mx-0">
-                Запишитесь на консультацию, чтобы обсудить курс апитерапии,
-                пчелопродукты и подобрать подходящий формат посещения.
+                Запишитесь на консультацию, чтобы
+                обсудить курс апитерапии,
+                пчелопродукты и подобрать подходящий
+                формат посещения.
               </p>
 
               <div className="mt-5 space-y-2.5 sm:mt-6">
                 {contacts.map((item) => (
-                  <ContactCard key={item.title} item={item} />
+                  <ContactCard
+                    key={item.title}
+                    item={item}
+                  />
                 ))}
               </div>
             </div>
@@ -527,7 +547,10 @@ export default function ContactsPage() {
               <div className="w-full">
                 <div className="grid gap-3 sm:grid-cols-3">
                   {infoCards.map((item) => (
-                    <InfoCard key={item.number} item={item} />
+                    <InfoCard
+                      key={item.number}
+                      item={item}
+                    />
                   ))}
                 </div>
 
@@ -559,8 +582,12 @@ export default function ContactsPage() {
                             cut={9}
                             background="rgba(3,15,12,0.88)"
                             borderColor={BRIGHT_BORDER}
-                            innerBorderColor={BRIGHT_INNER_BORDER}
-                            shadow={ADDRESS_PANEL_SHADOW}
+                            innerBorderColor={
+                              BRIGHT_INNER_BORDER
+                            }
+                            shadow={
+                              ADDRESS_PANEL_SHADOW
+                            }
                           >
                             <div className="relative z-10 flex items-center gap-3 px-3 py-3 sm:px-4 sm:py-3.5">
                               <InfoBlockIcon
@@ -569,10 +596,14 @@ export default function ContactsPage() {
                                 variant="address"
                               />
 
-                              <p className="text-[13px] font-semibold leading-6 text-[#fff7e5] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:text-[14px] sm:leading-7">
-                                г. Грозный,
-                                <br />
-                                Смотровой переулок, 4
+                              <p className="min-w-0 text-[10px] font-semibold leading-5 text-[#fff7e5] drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)] sm:text-[11px] sm:leading-5 lg:text-[12px] lg:leading-6">
+                                <span className="block whitespace-nowrap">
+                                  г. Грозный,
+                                </span>
+
+                                <span className="block whitespace-nowrap">
+                                  Смотровой переулок, 4
+                                </span>
                               </p>
                             </div>
                           </BevelPanel>
@@ -608,7 +639,8 @@ export default function ContactsPage() {
 
           <div className="mt-3 flex justify-center pb-2 sm:mt-5 lg:justify-end lg:pb-0">
             <p className="text-center text-[8px] font-medium leading-4 text-[#d8b66a]/84 lg:text-right">
-              © 2026 Himiko River. Все права защищены.
+              © 2026 Himiko River. Все права
+              защищены.
             </p>
           </div>
         </div>

@@ -1,14 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import LuxuryButton from "@/components/home/shared/LuxuryButton";
+import { PageLogo } from "@/components/shared/PageLogo";
 
 const benefits = [
   {
     title: "Пчелоужаление",
-    subtitle: "Природная стимуляция иммунитета",
+    subtitle:
+      "Природная стимуляция иммунитета",
     icon: "/images/about/icons/11111.webp",
     mobileImageClassName: "",
     tabletImageClassName: "",
@@ -24,7 +30,8 @@ const benefits = [
   },
   {
     title: "Пчелопродукты",
-    subtitle: "Натуральная поддержка организма",
+    subtitle:
+      "Натуральная поддержка организма",
     icon: "/images/about/icons/33333.webp",
     mobileImageClassName: "",
     tabletImageClassName: "",
@@ -102,16 +109,33 @@ function VideoToggleButton({
   isPaused,
   onClick,
   className = "",
-  sizeClassName,
+  size = 60,
 }) {
+  const buttonSize = `${size}px`;
+
   return (
     <LuxuryButton
       type="button"
-      aria-label={isPaused ? "Запустить видео" : "Остановить видео"}
+      aria-label={
+        isPaused
+          ? "Запустить видео"
+          : "Остановить видео"
+      }
       aria-pressed={isPaused}
       onClick={onClick}
-      className={`!flex !min-w-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden ${sizeClassName} ${className}`}
-      icon={isPaused ? <PlayIcon /> : <PauseIcon />}
+      style={{
+        width: buttonSize,
+        height: buttonSize,
+        minWidth: buttonSize,
+        minHeight: buttonSize,
+        maxWidth: buttonSize,
+        maxHeight: buttonSize,
+        aspectRatio: "1 / 1",
+      }}
+      className={`!flex !aspect-square !shrink-0 !translate-y-0 !items-center !justify-center !rounded-full !px-0 !py-0 [&_.luxury-button__content]:!flex [&_.luxury-button__content]:!h-full [&_.luxury-button__content]:!w-full [&_.luxury-button__content]:!items-center [&_.luxury-button__content]:!justify-center [&_.luxury-button__icon]:!m-0 [&_.luxury-button__icon]:!flex [&_.luxury-button__icon]:!h-full [&_.luxury-button__icon]:!w-full [&_.luxury-button__icon]:!items-center [&_.luxury-button__icon]:!justify-center [&_.luxury-button__label]:!hidden ${className}`}
+      icon={
+        isPaused ? <PlayIcon /> : <PauseIcon />
+      }
     />
   );
 }
@@ -137,29 +161,40 @@ function GoldDivider({ tablet = false }) {
   );
 }
 
-function BenefitImage({ benefit, variant = "mobile" }) {
+function BenefitImage({
+  benefit,
+  variant = "mobile",
+}) {
   const settings = {
     mobile: {
-      wrapper: "size-[clamp(26px,7.8vw,34px)]",
+      wrapper:
+        "size-[clamp(26px,7.8vw,34px)]",
       sizes: "34px",
-      imageClassName: benefit.mobileImageClassName || "",
+      imageClassName:
+        benefit.mobileImageClassName || "",
     },
+
     tablet: {
       wrapper: "size-[60px]",
       sizes: "60px",
-      imageClassName: benefit.tabletImageClassName || "",
+      imageClassName:
+        benefit.tabletImageClassName || "",
     },
+
     desktop: {
       wrapper: "size-[82px]",
       sizes: "82px",
-      imageClassName: benefit.desktopImageClassName || "",
+      imageClassName:
+        benefit.desktopImageClassName || "",
     },
   };
 
   const current = settings[variant];
 
   return (
-    <span className={`relative block shrink-0 ${current.wrapper}`}>
+    <span
+      className={`relative block shrink-0 ${current.wrapper}`}
+    >
       <Image
         src={benefit.icon}
         alt=""
@@ -171,7 +206,10 @@ function BenefitImage({ benefit, variant = "mobile" }) {
   );
 }
 
-function BenefitCard({ benefit, tablet = false }) {
+function BenefitCard({
+  benefit,
+  tablet = false,
+}) {
   return (
     <div
       className={`relative overflow-hidden border border-[#d8b66a]/34 bg-[linear-gradient(180deg,rgba(4,22,16,0.82)_0%,rgba(2,12,9,0.94)_100%)] shadow-[0_12px_24px_rgba(0,0,0,0.34)] ${
@@ -204,7 +242,9 @@ function BenefitCard({ benefit, tablet = false }) {
       >
         <BenefitImage
           benefit={benefit}
-          variant={tablet ? "tablet" : "mobile"}
+          variant={
+            tablet ? "tablet" : "mobile"
+          }
         />
 
         <div className="min-w-0 self-center text-left">
@@ -219,11 +259,11 @@ function BenefitCard({ benefit, tablet = false }) {
           </h3>
 
           <p
-className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8b66a]/78 ${
-  tablet
-    ? "mt-[10px] max-w-[280px] text-[0.59rem]"
-    : "mt-[clamp(7px,2vw,10px)] max-w-[185px] text-[clamp(0.38rem,1.72vw,0.44rem)]"
-}`}
+            className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8b66a]/78 ${
+              tablet
+                ? "mt-[10px] max-w-[280px] text-[0.59rem]"
+                : "mt-[clamp(7px,2vw,10px)] max-w-[185px] text-[clamp(0.38rem,1.72vw,0.44rem)]"
+            }`}
           >
             {benefit.subtitle}
           </p>
@@ -232,7 +272,9 @@ className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8
         <span
           aria-hidden="true"
           className={`justify-self-end rounded-full bg-[#e0bb63] shadow-[0_0_10px_rgba(224,187,99,0.72)] ${
-            tablet ? "size-[7px]" : "size-[5px]"
+            tablet
+              ? "size-[7px]"
+              : "size-[5px]"
           }`}
         />
       </div>
@@ -243,7 +285,10 @@ className={`m-0 font-medium uppercase leading-[1.35] tracking-[0.09em] text-[#d8
 function DesktopBenefit({ benefit }) {
   return (
     <div className="grid min-w-0 grid-cols-[82px_minmax(0,1fr)] items-center gap-5">
-      <BenefitImage benefit={benefit} variant="desktop" />
+      <BenefitImage
+        benefit={benefit}
+        variant="desktop"
+      />
 
       <p className="m-0 text-[15px] font-semibold leading-5 text-[#f3e6c8] drop-shadow-[0_4px_12px_rgba(0,0,0,0.72)]">
         {benefit.title}
@@ -277,7 +322,10 @@ function MobileInformationPanel() {
 
         <div className="mt-[clamp(14px,4vw,20px)] grid gap-[clamp(10px,3vw,14px)]">
           {benefits.map((benefit) => (
-            <BenefitCard key={benefit.title} benefit={benefit} />
+            <BenefitCard
+              key={benefit.title}
+              benefit={benefit}
+            />
           ))}
         </div>
       </div>
@@ -314,7 +362,11 @@ function TabletInformationPanel() {
 
         <div className="mx-auto mt-14 grid w-full max-w-[650px] gap-4">
           {benefits.map((benefit) => (
-            <BenefitCard key={benefit.title} benefit={benefit} tablet />
+            <BenefitCard
+              key={benefit.title}
+              benefit={benefit}
+              tablet
+            />
           ))}
         </div>
 
@@ -328,29 +380,51 @@ function TabletInformationPanel() {
 
 export default function AboutHeroSection() {
   const videoRef = useRef(null);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] =
+    useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
 
-    if (!video) return;
+    if (!video) {
+      return;
+    }
 
-    const handlePause = () => setIsPaused(true);
-    const handlePlay = () => setIsPaused(false);
+    const handlePause = () =>
+      setIsPaused(true);
 
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("play", handlePlay);
+    const handlePlay = () =>
+      setIsPaused(false);
+
+    video.addEventListener(
+      "pause",
+      handlePause,
+    );
+
+    video.addEventListener(
+      "play",
+      handlePlay,
+    );
 
     return () => {
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("play", handlePlay);
+      video.removeEventListener(
+        "pause",
+        handlePause,
+      );
+
+      video.removeEventListener(
+        "play",
+        handlePlay,
+      );
     };
   }, []);
 
   const toggleVideo = () => {
     const video = videoRef.current;
 
-    if (!video) return;
+    if (!video) {
+      return;
+    }
 
     if (video.paused) {
       video.play().catch(() => {});
@@ -366,7 +440,8 @@ export default function AboutHeroSection() {
     <section
       className="relative min-h-[100svh] overflow-hidden bg-[#020908] text-[#f4edda] xl:h-[min(100svh,1080px)] xl:min-h-[760px]"
       style={{
-        fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
+        fontFamily:
+          "var(--font-comfortaa), Arial, Helvetica, sans-serif",
       }}
     >
       <video
@@ -378,7 +453,10 @@ export default function AboutHeroSection() {
         playsInline
         preload="metadata"
       >
-        <source src="/videos/about-hero1.mp4" type="video/mp4" />
+        <source
+          src="/videos/about-hero1.mp4"
+          type="video/mp4"
+        />
       </video>
 
       {/* MOBILE OVERLAYS */}
@@ -432,16 +510,14 @@ export default function AboutHeroSection() {
       <div className="relative z-10 md:hidden">
         <div className="relative h-[60svh] min-h-[520px] px-5">
           <div className="absolute left-5 top-[calc(env(safe-area-inset-top)+24px)]">
-            <span className="block text-[1.68rem] font-semibold uppercase leading-none tracking-[0.15em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
-              APIDARB
-            </span>
+            <PageLogo variant="hero" />
           </div>
 
           <div className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 -translate-y-1/2">
             <VideoToggleButton
               isPaused={isPaused}
               onClick={toggleVideo}
-              sizeClassName="!h-[60px] !w-[60px]"
+              size={60}
             />
           </div>
 
@@ -468,9 +544,7 @@ export default function AboutHeroSection() {
       <div className="relative z-10 hidden md:block xl:hidden">
         <div className="relative h-[60svh] min-h-[560px] px-10 py-16 lg:px-14">
           <div className="absolute left-10 top-[calc(env(safe-area-inset-top)+32px)] lg:left-14">
-            <span className="block text-[2.1rem] font-semibold uppercase leading-none tracking-[0.15em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
-              APIDARB
-            </span>
+            <PageLogo variant="hero" />
           </div>
 
           <div className="flex h-full w-[58%] max-w-[590px] flex-col justify-center">
@@ -489,7 +563,7 @@ export default function AboutHeroSection() {
             <VideoToggleButton
               isPaused={isPaused}
               onClick={toggleVideo}
-              sizeClassName="!h-[68px] !w-[68px]"
+              size={68}
             />
           </div>
         </div>
@@ -527,7 +601,10 @@ export default function AboutHeroSection() {
 
           <div className="mt-[clamp(34px,4vh,50px)] grid max-w-[760px] grid-cols-3 items-center gap-8">
             {benefits.map((benefit) => (
-              <DesktopBenefit key={benefit.title} benefit={benefit} />
+              <DesktopBenefit
+                key={benefit.title}
+                benefit={benefit}
+              />
             ))}
           </div>
         </div>
@@ -536,7 +613,7 @@ export default function AboutHeroSection() {
           <VideoToggleButton
             isPaused={isPaused}
             onClick={toggleVideo}
-            sizeClassName="!h-[72px] !w-[72px]"
+            size={72}
           />
         </div>
       </div>

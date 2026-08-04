@@ -38,7 +38,7 @@ const ORDER_STATUS_MESSAGES = {
   COMPLETED:
     "Работа с заказом завершена. Все основные этапы успешно пройдены.",
   CANCELED:
-    "Заказ отменён и больше не находится в обработке.",
+    "Обработка прекращена, товары возвращены на склад.",
 };
 
 const ORDER_STEPS = [
@@ -72,11 +72,14 @@ function formatOrderDate(date) {
 
 function OrderStatusBadge({ status }) {
   const statusStyles = {
-    PENDING: "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
-    PROCESSING: "border-blue-300/22 bg-blue-400/10 text-blue-100",
+    PENDING:
+      "border-[#d8b66a]/22 bg-[#d8b66a]/10 text-[#f3d98d]",
+    PROCESSING:
+      "border-blue-300/22 bg-blue-400/10 text-blue-100",
     COMPLETED:
       "border-emerald-300/22 bg-emerald-400/10 text-emerald-100",
-    CANCELED: "border-red-300/22 bg-red-400/10 text-red-100",
+    CANCELED:
+      "border-red-300/22 bg-red-400/10 text-red-100",
   };
 
   return (
@@ -86,6 +89,7 @@ function OrderStatusBadge({ status }) {
       }`}
     >
       <Clock3 className="size-3.5" />
+
       {ORDER_STATUS_LABELS[status] || status}
     </span>
   );
@@ -191,7 +195,9 @@ function InfoRow({ icon: Icon, label, value }) {
       <Icon className="mt-1 size-4 shrink-0 text-[#d8b66a]/72" />
 
       <span>
-        <span className="text-[#d8b66a]/82">{label}:</span>{" "}
+        <span className="text-[#d8b66a]/82">
+          {label}:
+        </span>{" "}
         {value || "Не указано"}
       </span>
     </p>
@@ -211,11 +217,13 @@ export default async function ProfileOrderPage({ params }) {
         role: true,
       },
     }),
+
     prisma.order.findFirst({
       where: {
         id: orderId,
         userId: sessionUser.id,
       },
+
       include: {
         items: {
           include: {
@@ -240,7 +248,9 @@ export default async function ProfileOrderPage({ params }) {
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
-        <CabinetTopNav showAdminLinks={user?.role === "ADMIN"} />
+        <CabinetTopNav
+          showAdminLinks={user?.role === "ADMIN"}
+        />
 
         <div className="mb-3 overflow-hidden rounded-[34px] border border-[#d8b66a]/16 bg-[#030b0c]/86 shadow-[0_30px_90px_rgba(0,0,0,0.5)]">
           <div className="relative px-5 py-7 sm:px-7 lg:px-8">
@@ -258,8 +268,9 @@ export default async function ProfileOrderPage({ params }) {
                 </h1>
 
                 <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72 sm:text-base">
-                  Здесь отображается состав заказа, текущий этап обработки и
-                  данные, указанные при оформлении.
+                  Здесь отображается состав заказа, текущий
+                  этап обработки и данные, указанные при
+                  оформлении.
                 </p>
               </div>
 
@@ -364,7 +375,9 @@ export default async function ProfileOrderPage({ params }) {
                     <div className="shrink-0 text-left md:text-right">
                       <p className="m-0 text-sm text-[#f3efe5]/62">
                         {item.quantity} ×{" "}
-                        {formatPriceFromKopecks(item.priceKopecks)}
+                        {formatPriceFromKopecks(
+                          item.priceKopecks
+                        )}
                       </p>
 
                       <p className="mt-1 text-base font-bold text-[#d8b66a]">
@@ -377,11 +390,19 @@ export default async function ProfileOrderPage({ params }) {
                 );
 
                 if (!productHref) {
-                  return <div key={item.id}>{content}</div>;
+                  return (
+                    <div key={item.id}>
+                      {content}
+                    </div>
+                  );
                 }
 
                 return (
-                  <Link key={item.id} href={productHref} className="block">
+                  <Link
+                    key={item.id}
+                    href={productHref}
+                    className="block"
+                  >
                     {content}
                   </Link>
                 );
@@ -412,11 +433,14 @@ export default async function ProfileOrderPage({ params }) {
               <div className="p-5">
                 <div className="rounded-[24px] border border-[#d8b66a]/10 bg-black/22 p-4">
                   <p className="m-0 text-3xl font-bold tracking-[-0.05em] text-[#d8b66a]">
-                    {formatPriceFromKopecks(order.totalKopecks)}
+                    {formatPriceFromKopecks(
+                      order.totalKopecks
+                    )}
                   </p>
 
                   <p className="mt-3 text-xs leading-5 text-[#f3efe5]/42">
-                    Последнее изменение: {formatOrderDate(order.updatedAt)}
+                    Последнее изменение:{" "}
+                    {formatOrderDate(order.updatedAt)}
                   </p>
                 </div>
               </div>

@@ -1,15 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-import FooterDesktop from "@/components/home/footer/FooterDesktop";
 import AboutDesktop from "@/components/home/about/AboutDesktop";
-import BeeIcon from "@/components/home/shared/BeeIcon";
-import LuxuryButton from "@/components/home/shared/LuxuryButton";
+import FooterDesktop from "@/components/home/footer/FooterDesktop";
 import HeroInsects from "@/components/home/hero/HeroInsects";
 import HeroIntroPanel from "@/components/home/hero/HeroIntroPanel";
 import ParallaxScene from "@/components/home/hero/ParallaxScene";
+import BeeIcon from "@/components/home/shared/BeeIcon";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
 
 const PARALLAX_SCROLL_DISTANCE = 1050;
 const PROGRESS_UPDATE_THRESHOLD = 0.002;
@@ -28,7 +32,8 @@ function detectStrongZoomOut() {
     window.screen?.width ||
     window.innerWidth;
 
-  const viewportRatio = screenWidth / window.innerWidth;
+  const viewportRatio =
+    screenWidth / window.innerWidth;
 
   return viewportRatio < STATIC_HERO_ZOOM_THRESHOLD;
 }
@@ -40,11 +45,14 @@ export default function HomeDesktop() {
   const staticHeroRef = useRef(false);
 
   const [progress, setProgress] = useState(0);
-  const [isStaticHero, setIsStaticHero] = useState(false);
+  const [isStaticHero, setIsStaticHero] =
+    useState(false);
 
   const centerStoryLift = isStaticHero
     ? 0
-    : Math.round(progress * CENTER_STORY_SCROLL_LIFT);
+    : Math.round(
+        progress * CENTER_STORY_SCROLL_LIFT,
+      );
 
   const heroUiTranslateY = Math.round(
     progress * -HERO_UI_SCROLL_LIFT,
@@ -52,15 +60,19 @@ export default function HomeDesktop() {
 
   useEffect(() => {
     const updateStaticHeroMode = () => {
-      const nextStaticHeroState = detectStrongZoomOut();
+      const nextStaticHeroState =
+        detectStrongZoomOut();
 
       if (
-        staticHeroRef.current === nextStaticHeroState
+        staticHeroRef.current ===
+        nextStaticHeroState
       ) {
         return;
       }
 
-      staticHeroRef.current = nextStaticHeroState;
+      staticHeroRef.current =
+        nextStaticHeroState;
+
       setIsStaticHero(nextStaticHeroState);
 
       if (nextStaticHeroState) {
@@ -111,10 +123,14 @@ export default function HomeDesktop() {
     };
 
     const requestProgressUpdate = () => {
-      if (frameIdRef.current !== null) return;
+      if (frameIdRef.current !== null) {
+        return;
+      }
 
       frameIdRef.current =
-        window.requestAnimationFrame(updateProgress);
+        window.requestAnimationFrame(
+          updateProgress,
+        );
     };
 
     const handleResize = () => {
@@ -212,6 +228,7 @@ export default function HomeDesktop() {
                 <div className="relative flex h-full items-center px-6 py-24 sm:px-10 lg:px-16">
                   <div className="pointer-events-auto max-w-4xl -translate-y-[120px] lg:pl-10">
                     <LuxuryButton
+                      href="/contacts"
                       className="relative top-[340px] min-w-[330px]"
                       icon={<BeeIcon />}
                     >

@@ -26,7 +26,7 @@ export const homeContent = {
     },
     {
       label: "О специалисте",
-      href: "/specialist",
+      href: "/about",
       key: "specialist",
       icon: "/images/footer/cardIcons/about.webp",
     },
@@ -77,15 +77,16 @@ export const homeContent = {
     },
     {
       label: "E-mail",
-      value: "afelaktitaapi@mail.ru",
-      href: "mailto:afelaktitaapi@mail.ru",
+      value: "apidarb_77@mail.ru",
+      href: "mailto:apidarb_77@mail.ru",
       icon: "/images/footer/Mail.webp",
     },
   ],
 
   footer: {
     tagline: "Природная гармония. Научный подход.",
-    copyright: "© {year} Himiko River. Все права защищены.",
+    copyright:
+      "© {year} Himiko River. Все права защищены.",
   },
 };
 

@@ -1,7 +1,10 @@
 import Image from "next/image";
-import LuxuryButton from "@/components/home/shared/LuxuryButton";
 
-const HERO_BACKGROUND = "/images/home/hero/mobile/hero-bg6.webp";
+import LuxuryButton from "@/components/home/shared/LuxuryButton";
+import { PageLogo } from "@/components/shared/PageLogo";
+
+const HERO_BACKGROUND =
+  "/images/home/hero/mobile/hero-bg6.webp";
 
 export default function HeroMobile() {
   return (
@@ -9,7 +12,8 @@ export default function HeroMobile() {
       id="home"
       className="relative isolate min-h-[100svh] overflow-hidden bg-[#020b0b] text-[#f3efe5]"
       style={{
-        fontFamily: "var(--font-comfortaa), Arial, Helvetica, sans-serif",
+        fontFamily:
+          "var(--font-comfortaa), Arial, Helvetica, sans-serif",
       }}
     >
       <Image
@@ -27,9 +31,7 @@ export default function HeroMobile() {
       />
 
       <header className="absolute inset-x-0 top-0 z-20 px-5 pt-[calc(env(safe-area-inset-top)+22px)]">
-        <span className="block text-[1.68rem] font-semibold uppercase leading-none tracking-[0.15em] text-[#e5c56f] drop-shadow-[0_0_12px_rgba(216,182,106,0.25)]">
-          APIDARB
-        </span>
+        <PageLogo variant="hero" />
       </header>
 
       <div
@@ -54,7 +56,10 @@ export default function HeroMobile() {
           </p>
 
           <div className="mx-auto mt-7 max-w-[330px]">
-            <LuxuryButton className="min-h-[58px] w-full justify-center text-[0.9rem]">
+            <LuxuryButton
+              href="/contacts"
+              className="min-h-[58px] w-full justify-center text-[0.9rem]"
+            >
               Записаться на консультацию
             </LuxuryButton>
           </div>

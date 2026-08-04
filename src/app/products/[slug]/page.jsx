@@ -1,14 +1,10 @@
 export const dynamic = "force-dynamic";
 
-import Link from "next/link";
 import Image from "next/image";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
-  ArrowRight,
   BadgeRussianRuble,
-  Boxes,
-  Package,
   PackageCheck,
   ShoppingCart,
 } from "lucide-react";
@@ -35,6 +31,7 @@ async function addProductToCart(formData) {
     },
     select: {
       id: true,
+      slug: true,
       stock: true,
       status: true,
     },
@@ -82,213 +79,150 @@ async function addProductToCart(formData) {
   }
 
   revalidatePath("/products");
+  revalidatePath(`/products/${product.slug}`);
   revalidatePath("/cart");
 
   redirect("/cart");
 }
 
-export default async function ProductsPage() {
-  const products = await prisma.product.findMany({
+export default async function ProductPage({ params }) {
+  const { slug } = await params;
+
+  const product = await prisma.product.findUnique({
     where: {
-      status: "ACTIVE",
+      slug,
     },
-    orderBy: [
-      {
-        isFeatured: "desc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
     include: {
       category: true,
     },
   });
 
-  let isAdmin = false;
-
-  if (products.length === 0) {
-    const session = await getCurrentSession();
-
-    if (session?.user?.id) {
-      const currentUser = await prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-        select: {
-          role: true,
-        },
-      });
-
-      isAdmin = currentUser?.role === "ADMIN";
-    }
+  if (!product || product.status !== "ACTIVE") {
+    notFound();
   }
 
+  const isOutOfStock = product.stock <= 0;
+
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
+    <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-3 py-3 text-[#f3efe5] sm:px-5 sm:py-4 lg:px-8">
       <BeesPageBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav />
 
-        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#d8b66a]/18 bg-[#030b0c] px-4 py-2 text-xs font-bold uppercase tracking-[0.34em] text-[#d8b66a]">
-              <Boxes className="size-4" />
-              Каталог
-            </div>
-
-            <h1 className="m-0 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d] md:text-4xl">
-              Пчелопродукты
-            </h1>
-
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Здесь будут товары, которые можно добавить в корзину и оформить
-              через личный кабинет.
-            </p>
-          </div>
-
-          <Link
-            href="/cart"
-            aria-label="Корзина"
-            title="Корзина"
-            className="group inline-flex size-14 items-center justify-center rounded-2xl border border-[#d8b66a]/35 bg-[#030b0c] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#071b18] hover:text-[#f3d98d] hover:shadow-[0_14px_38px_rgba(216,182,106,0.14)]"
-          >
-            <ShoppingCart className="size-5 transition duration-300 group-hover:scale-110" />
-          </Link>
-        </div>
-
-        {products.length === 0 ? (
-          <div className="rounded-[30px] border border-[#d8b66a]/18 bg-[#030b0c] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-            <div className="mb-4 flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#071b18] text-[#f3d98d]">
-              <Package className="size-5" />
-            </div>
-
-            <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              {isAdmin
-                ? "Пока нет активных товаров. Добавим их через административную панель."
-                : "Пока нет доступных товаров. Каталог скоро будет пополнен."}
-            </p>
-
-            {isAdmin && (
-              <Link
-                href="/admin/products"
-                className="group mt-5 inline-flex items-center gap-2 rounded-2xl border border-[#d8b66a]/35 bg-[#030b0c] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#d8b66a] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#071b18] hover:text-[#f3d98d]"
-              >
-                Перейти в панель
-                <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />
-              </Link>
-            )}
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((product) => {
-              const isOutOfStock = product.stock <= 0;
-              const productHref = `/products/${product.slug}`;
-
-              return (
-                <article
-                  key={product.id}
-                  className="group flex min-h-[360px] flex-col overflow-hidden rounded-[24px] border border-[#d8b66a]/18 bg-[#030b0c] shadow-[0_20px_54px_rgba(0,0,0,0.38)] transition duration-300 hover:-translate-y-1 hover:border-[#d8b66a]/36 hover:bg-[#07120f] hover:shadow-[0_28px_70px_rgba(216,182,106,0.1)]"
-                >
-                  <Link
-                    href={productHref}
-                    aria-label={`Открыть товар ${product.title}`}
-                    className="relative aspect-[4/3] overflow-hidden border-b border-[#d8b66a]/14 bg-[#030b0c]"
-                  >
-                    {product.image ? (
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                        unoptimized={product.image.startsWith(
-                          "/uploads/products/"
-                        )}
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[#030b0c]">
-                        <div className="flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#071b18] text-[#f3d98d]">
-                          <PackageCheck className="size-5" />
-                        </div>
-                      </div>
-                    )}
-
-                    {product.category?.name && (
-                      <p className="absolute left-3 top-3 m-0 rounded-full border border-[#d8b66a]/18 bg-[#030b0c] px-3 py-1 text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#d8b66a]">
-                        {product.category.name}
-                      </p>
-                    )}
-                  </Link>
-
-                  <div className="flex flex-1 flex-col p-4">
-                    <Link
-                      href={productHref}
-                      className="w-fit transition duration-300 hover:text-[#fff1b8]"
-                    >
-                      <h2 className="m-0 text-lg font-bold tracking-[-0.05em] text-[#f3d98d]">
-                        {product.title}
-                      </h2>
-                    </Link>
-
-                    {product.shortDescription && (
-                      <p className="mt-2 text-[0.8rem] leading-6 text-[#f3efe5]/72">
-                        {product.shortDescription}
-                      </p>
-                    )}
-
-                    <div className="mt-auto pt-4">
-                      <div className="flex items-end justify-between gap-2">
-                        <div className="min-w-0">
-                          {product.oldPriceKopecks && (
-                            <p className="m-0 text-xs text-[#f3efe5]/42 line-through">
-                              {formatPriceFromKopecks(
-                                product.oldPriceKopecks
-                              )}
-                            </p>
-                          )}
-
-                          <p className="m-0 flex items-center gap-1.5 text-lg font-bold text-[#d8b66a]">
-                            <BadgeRussianRuble className="size-4.5" />
-                            {formatPriceFromKopecks(product.priceKopecks)}
-                          </p>
-
-                          <p className="mt-1.5 inline-flex rounded-full border border-[#d8b66a]/14 bg-black/18 px-2.5 py-1 text-[0.68rem] text-[#f3efe5]/58">
-                            Остаток: {product.stock}
-                          </p>
-                        </div>
-
-                        <form action={addProductToCart} className="shrink-0">
-                          <input
-                            type="hidden"
-                            name="productId"
-                            value={product.id}
-                          />
-
-                          <button
-                            type="submit"
-                            disabled={isOutOfStock}
-                            aria-label={
-                              isOutOfStock
-                                ? `${product.title} нет в наличии`
-                                : `Добавить ${product.title} в корзину`
-                            }
-                            title={isOutOfStock ? "Нет в наличии" : "Купить"}
-                            className="group/button inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[#d8b66a]/30 bg-[#d8b66a]/10 px-3 text-[0.62rem] font-bold uppercase tracking-[0.13em] text-[#f3d98d] transition duration-300 hover:-translate-y-0.5 hover:border-[#d8b66a]/70 hover:bg-[#d8b66a] hover:text-[#07110f] disabled:cursor-not-allowed disabled:border-[#d8b66a]/12 disabled:bg-[#d8b66a]/8 disabled:text-[#d8b66a]/36"
-                          >
-                            <ShoppingCart className="size-3.5 transition duration-300 group-hover/button:scale-110" />
-                            {isOutOfStock ? "Нет" : "Купить"}
-                          </button>
-                        </form>
-                      </div>
-                    </div>
+        <article className="overflow-hidden rounded-[26px] border border-[#d8b66a]/18 bg-black/42 shadow-[0_24px_70px_rgba(0,0,0,0.48)] sm:rounded-[28px]">
+          <div className="grid gap-0 md:grid-cols-[40%_60%]">
+            <div className="relative aspect-square w-full self-start overflow-hidden border-b border-[#d8b66a]/14 bg-black/28 md:border-b-0 md:border-r">
+              {product.image ? (
+                <Image
+                  src={product.image}
+                  alt={product.title}
+                  fill
+                  priority
+                  sizes="(max-width: 767px) 100vw, 40vw"
+                  unoptimized={product.image.startsWith(
+                    "/uploads/products/"
+                  )}
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center">
+                  <div className="flex size-16 items-center justify-center rounded-[22px] border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+                    <PackageCheck className="size-7" />
                   </div>
-                </article>
-              );
-            })}
+                </div>
+              )}
+
+              {product.category?.name && (
+                <p className="absolute left-3 top-3 m-0 rounded-full border border-[#d8b66a]/18 bg-black/62 px-3 py-1.5 text-[0.54rem] font-bold uppercase tracking-[0.16em] text-[#d8b66a] backdrop-blur-sm sm:left-4 sm:top-4 sm:text-[0.6rem]">
+                  {product.category.name}
+                </p>
+              )}
+            </div>
+
+            <div className="flex min-w-0 flex-col p-4 sm:p-5 md:p-4 lg:p-6">
+              <div>
+                <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[#d8b66a]/18 bg-black/24 px-3 py-1.5 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a] sm:text-[0.62rem]">
+                  <PackageCheck className="size-3.5" />
+                  Товар
+                </div>
+
+                <h1 className="m-0 text-2xl font-bold leading-[1.12] tracking-[-0.055em] text-[#f3d98d] sm:text-3xl md:text-[1.7rem] lg:text-[2.35rem]">
+                  {product.title}
+                </h1>
+
+                {product.shortDescription && (
+                  <p className="mt-3 max-w-3xl text-[0.78rem] leading-5 text-[#f3efe5]/74 sm:text-[0.82rem] md:text-[0.72rem] md:leading-5 lg:text-sm lg:leading-6">
+                    {product.shortDescription}
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-4 rounded-[20px] border border-[#d8b66a]/14 bg-black/24 p-3.5 sm:mt-5 sm:rounded-[22px] sm:p-4 md:mt-4 md:p-3.5 lg:mt-5 lg:p-4">
+                <p className="m-0 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/82 sm:text-[0.64rem]">
+                  Стоимость
+                </p>
+
+                <div className="mt-2.5 flex flex-wrap items-end gap-2 sm:mt-3 sm:gap-2.5">
+                  <p className="m-0 flex items-center gap-1.5 text-xl font-bold tracking-[-0.05em] text-[#d8b66a] sm:text-2xl md:text-xl lg:text-2xl">
+                    <BadgeRussianRuble className="size-4.5 sm:size-5" />
+
+                    {formatPriceFromKopecks(product.priceKopecks)}
+                  </p>
+
+                  {product.oldPriceKopecks && (
+                    <p className="mb-0.5 text-xs text-[#f3efe5]/40 line-through sm:text-sm md:text-xs lg:text-sm">
+                      {formatPriceFromKopecks(
+                        product.oldPriceKopecks
+                      )}
+                    </p>
+                  )}
+                </div>
+
+                <p className="mt-2.5 inline-flex rounded-full border border-[#d8b66a]/18 bg-black/20 px-2.5 py-1 text-[0.62rem] text-[#f3efe5]/64 sm:mt-3 sm:text-[0.68rem]">
+                  Остаток: {product.stock}
+                </p>
+              </div>
+            </div>
           </div>
-        )}
+
+          <div className="border-t border-[#d8b66a]/14 p-4 sm:p-5 lg:p-6">
+            {product.description && (
+              <div className="rounded-[20px] border border-[#d8b66a]/14 bg-black/24 p-4 sm:rounded-[22px] sm:p-5">
+                <p className="m-0 text-[0.58rem] font-bold uppercase tracking-[0.2em] text-[#d8b66a]/82 sm:text-[0.64rem]">
+                  Описание
+                </p>
+
+                <p className="mt-3 whitespace-pre-line text-[0.78rem] leading-5 text-[#f3efe5]/70 sm:text-[0.82rem] sm:leading-6 lg:text-sm">
+                  {product.description}
+                </p>
+              </div>
+            )}
+
+            <form
+              action={addProductToCart}
+              className={`${
+                product.description ? "mt-4 sm:mt-5" : ""
+              } flex justify-center md:justify-end`}
+            >
+              <input
+                type="hidden"
+                name="productId"
+                value={product.id}
+              />
+
+              <button
+                type="submit"
+                disabled={isOutOfStock}
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-2.5 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:cursor-not-allowed disabled:border-[#d8b66a]/14 disabled:bg-[#d8b66a]/18 disabled:text-[#d8b66a]/44 sm:w-auto sm:min-w-[200px] sm:px-6 sm:py-3 sm:text-xs lg:min-w-[220px]"
+              >
+                <ShoppingCart className="size-4 transition duration-300 group-hover:scale-110" />
+
+                {isOutOfStock ? "Нет в наличии" : "В корзину"}
+              </button>
+            </form>
+          </div>
+        </article>
       </section>
     </main>
   );

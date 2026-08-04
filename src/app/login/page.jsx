@@ -1,6 +1,5 @@
 ﻿"use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,6 +13,7 @@ import {
   UserRound,
 } from "lucide-react";
 import BeesPageBackground from "@/components/shared/BeesPageBackground";
+import { PageLogo } from "@/components/shared/PageLogo";
 import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
@@ -49,15 +49,19 @@ export default function LoginPage() {
 
       if (response?.error) {
         setErrorMessage(
-          response.error.message || "Не удалось выполнить действие."
+          response.error.message ||
+            "Не удалось выполнить действие."
         );
+
         return;
       }
 
       router.push("/profile");
       router.refresh();
     } catch {
-      setErrorMessage("Произошла ошибка. Попробуйте ещё раз.");
+      setErrorMessage(
+        "Произошла ошибка. Попробуйте ещё раз."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -67,20 +71,16 @@ export default function LoginPage() {
     <main className="relative min-h-screen overflow-hidden bg-[#030b0c] px-4 py-8 text-[#f3efe5] sm:px-6 lg:px-8">
       <BeesPageBackground />
 
-      <Link
-        href="/"
-        aria-label="На главную"
-        className="group absolute left-4 top-4 z-20 inline-flex items-center justify-center transition duration-300 hover:-translate-y-0.5 sm:left-6 sm:top-6 lg:left-8 lg:top-8"
-      >
-        <Image
-          src="/images/logo1.webp"
-          alt="APIDARB"
-          width={112}
-          height={112}
-          priority
-          className="h-20 w-20 rounded-full object-contain opacity-92 transition duration-300 group-hover:scale-105 group-hover:opacity-100 group-hover:drop-shadow-[0_0_22px_rgba(216,182,106,0.32)] sm:h-24 sm:w-24"
-        />
-      </Link>
+      <PageLogo
+        variant="auth"
+        className={[
+          "absolute z-20",
+          "left-3 top-3",
+          "sm:left-5 sm:top-5",
+          "md:left-6 md:top-6",
+          "lg:left-8 lg:top-8",
+        ].join(" ")}
+      />
 
       <section className="relative z-10 mx-auto flex min-h-[calc(100vh-64px)] w-full max-w-md items-center justify-center">
         <div className="w-full overflow-hidden rounded-[32px] border border-[#d8b66a]/20 bg-black/44 shadow-[0_28px_80px_rgba(0,0,0,0.5)]">
@@ -101,15 +101,21 @@ export default function LoginPage() {
             </div>
 
             <h1 className="relative m-0 text-2xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-              {isSignUp ? "Создать аккаунт" : "Войти в профиль"}
+              {isSignUp
+                ? "Создать аккаунт"
+                : "Войти в профиль"}
             </h1>
 
             <p className="relative mx-auto mt-3 max-w-sm text-sm leading-6 text-[#f3efe5]/72">
-              Войдите, чтобы управлять профилем, корзиной и заказами.
+              Войдите, чтобы управлять профилем, корзиной и
+              заказами.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4 px-5 py-6">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 px-5 py-6"
+          >
             {isSignUp && (
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[#d8b66a]/90">
@@ -120,7 +126,9 @@ export default function LoginPage() {
                 <input
                   type="text"
                   value={name}
-                  onChange={(event) => setName(event.target.value)}
+                  onChange={(event) =>
+                    setName(event.target.value)
+                  }
                   required
                   className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
                   placeholder="Ваше имя"
@@ -137,7 +145,9 @@ export default function LoginPage() {
               <input
                 type="email"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(event) =>
+                  setEmail(event.target.value)
+                }
                 required
                 className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
                 placeholder="example@mail.ru"
@@ -153,7 +163,9 @@ export default function LoginPage() {
               <input
                 type="password"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) =>
+                  setPassword(event.target.value)
+                }
                 required
                 minLength={8}
                 className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
@@ -190,7 +202,10 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => {
-                setMode(isSignUp ? "sign-in" : "sign-up");
+                setMode(
+                  isSignUp ? "sign-in" : "sign-up"
+                );
+
                 setErrorMessage("");
               }}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/18 bg-black/24 px-4 py-3 text-center text-sm font-medium text-[#f3efe5]/72 transition duration-300 hover:border-[#d8b66a]/42 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d]"

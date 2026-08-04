@@ -14,13 +14,37 @@ const LOGO_VARIANTS = {
     text: "text-[clamp(1.55rem,3.2vh,2.8rem)] tracking-[0.12em]",
     divider: "mt-3",
   },
+
   hero: {
     text: "text-[30px] tracking-[0.18em]",
     divider: "mt-2 scale-[0.82]",
   },
+
+  auth: {
+    text: [
+      "text-[1.05rem]",
+      "tracking-[0.18em]",
+      "sm:text-[1.25rem]",
+      "md:text-[1.45rem]",
+      "lg:text-[1.75rem]",
+    ].join(" "),
+
+    divider: [
+      "mt-1",
+      "scale-[0.62]",
+      "sm:mt-1.5",
+      "sm:scale-[0.72]",
+      "md:mt-2",
+      "md:scale-[0.84]",
+      "lg:scale-100",
+    ].join(" "),
+  },
 };
 
-export function PageLogo({ className = "", variant = "default" }) {
+export function PageLogo({
+  className = "",
+  variant = "default",
+}) {
   const variantClasses =
     LOGO_VARIANTS[variant] ?? LOGO_VARIANTS.default;
 
@@ -40,7 +64,7 @@ export function PageLogo({ className = "", variant = "default" }) {
       </span>
 
       <span
-        className={`${variantClasses.divider} transition duration-300 group-hover:brightness-125`}
+        className={`${variantClasses.divider} origin-top transition duration-300 group-hover:brightness-125`}
       >
         <DecorativeDivider compact />
       </span>
@@ -52,7 +76,9 @@ export default function RoutePageLogo() {
   const pathname = usePathname();
   const positionClassName = LOGO_ROUTES[pathname];
 
-  if (!positionClassName) return null;
+  if (!positionClassName) {
+    return null;
+  }
 
   return (
     <div

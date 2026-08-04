@@ -336,6 +336,9 @@ export default async function ProfileOrderPage({ params }) {
                             alt={item.productTitle}
                             fill
                             sizes="64px"
+                            unoptimized={item.product.image.startsWith(
+                              "/uploads/products/"
+                            )}
                             className="object-cover"
                           />
                         ) : (

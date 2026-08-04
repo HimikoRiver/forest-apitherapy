@@ -364,7 +364,13 @@ function PrimaryButton({ children }) {
   );
 }
 
-function StatusActionButton({ status, currentStatus, children, icon: Icon, danger }) {
+function StatusActionButton({
+  status,
+  currentStatus,
+  children,
+  icon: Icon,
+  danger,
+}) {
   return (
     <form action={updateProductStatus}>
       <input type="hidden" name="status" value={status} />
@@ -395,7 +401,10 @@ function DeleteProductBlock({ productId }) {
         Удалить товар
       </summary>
 
-      <form action={deleteProduct} className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <form
+        action={deleteProduct}
+        className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+      >
         <input type="hidden" name="productId" value={productId} />
 
         <p className="m-0 max-w-xl text-sm leading-6 text-[#f3efe5]/62">
@@ -641,6 +650,9 @@ export default async function AdminProductsPage() {
                             alt={product.title}
                             width={84}
                             height={84}
+                            unoptimized={product.image.startsWith(
+                              "/uploads/products/"
+                            )}
                             className="h-20 w-20 shrink-0 rounded-2xl border border-[#d8b66a]/12 object-cover"
                           />
                         ) : (
@@ -781,7 +793,9 @@ export default async function AdminProductsPage() {
                           label="Категория"
                           name="categoryName"
                           required
-                          defaultValue={product.category?.name || "Пчелопродукты"}
+                          defaultValue={
+                            product.category?.name || "Пчелопродукты"
+                          }
                         />
 
                         <label className="block">
@@ -826,7 +840,9 @@ export default async function AdminProductsPage() {
                             min="1"
                             step="1"
                             required
-                            defaultValue={kopecksToRubles(product.priceKopecks)}
+                            defaultValue={kopecksToRubles(
+                              product.priceKopecks
+                            )}
                           />
 
                           <AdminTextField

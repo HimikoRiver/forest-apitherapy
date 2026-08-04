@@ -182,10 +182,7 @@ async function createOrder(formData) {
       }
 
       const totalKopecks = cartItems.reduce((sum, item) => {
-        return (
-          sum +
-          item.product.priceKopecks * item.quantity
-        );
+        return sum + item.product.priceKopecks * item.quantity;
       }, 0);
 
       /*
@@ -300,13 +297,9 @@ async function createOrder(formData) {
   revalidatePath("/profile");
   revalidatePath("/admin/products");
   revalidatePath("/admin/orders");
-  revalidatePath(
-    `/profile/orders/${transactionResult.orderId}`
-  );
+  revalidatePath(`/profile/orders/${transactionResult.orderId}`);
 
-  redirect(
-    `/profile/orders/${transactionResult.orderId}`
-  );
+  redirect(`/profile/orders/${transactionResult.orderId}`);
 }
 
 function CheckoutTextField({
@@ -361,20 +354,15 @@ function CheckoutTextarea({
   );
 }
 
-export default async function CheckoutPage({
-  searchParams,
-}) {
+export default async function CheckoutPage({ searchParams }) {
   const user = await requireUser();
   const resolvedSearchParams = await searchParams;
 
-  const noticeValue = Array.isArray(
-    resolvedSearchParams?.notice
-  )
+  const noticeValue = Array.isArray(resolvedSearchParams?.notice)
     ? resolvedSearchParams.notice[0]
     : resolvedSearchParams?.notice;
 
-  const noticeMessage =
-    CHECKOUT_NOTICES[noticeValue] || null;
+  const noticeMessage = CHECKOUT_NOTICES[noticeValue] || null;
 
   const cartItems = await prisma.cartItem.findMany({
     where: {
@@ -393,10 +381,7 @@ export default async function CheckoutPage({
   });
 
   const totalKopecks = cartItems.reduce((sum, item) => {
-    return (
-      sum +
-      item.product.priceKopecks * item.quantity
-    );
+    return sum + item.product.priceKopecks * item.quantity;
   }, 0);
 
   const checkoutToken =
@@ -423,8 +408,7 @@ export default async function CheckoutPage({
             </h1>
 
             <p className="mt-4 max-w-2xl text-sm leading-7 text-[#f3efe5]/72">
-              Проверьте состав корзины и оставьте контактные
-              данные для связи.
+              Проверьте состав корзины и оставьте контактные данные для связи.
             </p>
           </div>
 
@@ -442,9 +426,7 @@ export default async function CheckoutPage({
           <div className="mb-3 flex items-start gap-3 rounded-[22px] border border-amber-300/24 bg-amber-300/10 px-4 py-3 text-sm leading-6 text-amber-100">
             <AlertTriangle className="mt-0.5 size-5 shrink-0 text-[#f3d98d]" />
 
-            <p className="m-0">
-              {noticeMessage}
-            </p>
+            <p className="m-0">{noticeMessage}</p>
           </div>
         )}
 
@@ -455,8 +437,7 @@ export default async function CheckoutPage({
             </div>
 
             <p className="m-0 text-sm leading-7 text-[#f3efe5]/72">
-              Корзина пустая. Сначала добавьте товары из
-              каталога.
+              Корзина пустая. Сначала добавьте товары из каталога.
             </p>
 
             <Link
@@ -574,6 +555,9 @@ export default async function CheckoutPage({
                             alt={item.product.title}
                             fill
                             sizes="80px"
+                            unoptimized={item.product.image.startsWith(
+                              "/uploads/products/"
+                            )}
                             className="object-cover"
                           />
                         ) : (
@@ -607,9 +591,7 @@ export default async function CheckoutPage({
                   </p>
 
                   <p className="mt-3 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d]">
-                    {formatPriceFromKopecks(
-                      totalKopecks
-                    )}
+                    {formatPriceFromKopecks(totalKopecks)}
                   </p>
                 </div>
               </div>

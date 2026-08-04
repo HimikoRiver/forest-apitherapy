@@ -168,6 +168,9 @@ export default async function CartPage() {
                             alt={item.product.title}
                             fill
                             sizes="(max-width: 639px) calc(100vw - 72px), 128px"
+                            unoptimized={item.product.image.startsWith(
+                              "/uploads/products/"
+                            )}
                             className="object-contain p-2 transition duration-500 group-hover:scale-[1.03] sm:p-1"
                           />
                         ) : (

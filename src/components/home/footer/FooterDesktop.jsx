@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import FooterCards from "@/components/home/footer/FooterCards";
+import { legalLinks } from "@/data/legalLinks";
 
 const copyright = "© 2026 Himiko River. Все права защищены.";
 
@@ -68,7 +70,22 @@ export default function FooterDesktop() {
           <span className="h-px bg-gradient-to-r from-[#d8b66a]/22 via-[#d8b66a]/76 to-transparent shadow-[0_0_14px_rgba(216,182,106,0.3)]" />
         </div>
 
-        <p className="absolute bottom-[1.7%] right-[6.7%] z-10 m-0 max-w-[420px] text-right text-[clamp(0.54rem,0.64vw,0.76rem)] font-medium leading-[1.45] tracking-[0.02em] text-[#d8b66a]/88 drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)]">
+        <nav
+          aria-label="Юридические документы"
+          className="absolute bottom-[1.7%] left-[6.7%] z-20 flex max-w-[52%] flex-wrap items-center gap-x-[clamp(12px,1.5vw,26px)] gap-y-1"
+        >
+          {legalLinks.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-[clamp(0.54rem,0.64vw,0.76rem)] font-medium leading-[1.45] tracking-[0.02em] text-[#d8b66a]/78 drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)] transition duration-300 hover:text-[#f3d98d]"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <p className="absolute bottom-[1.7%] right-[6.7%] z-10 m-0 max-w-[38%] text-right text-[clamp(0.54rem,0.64vw,0.76rem)] font-medium leading-[1.45] tracking-[0.02em] text-[#d8b66a]/88 drop-shadow-[0_3px_12px_rgba(0,0,0,0.8)]">
           {copyright}
         </p>
       </div>

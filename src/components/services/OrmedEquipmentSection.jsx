@@ -415,9 +415,22 @@ function OrmedVideo() {
 
   return (
     <div className="relative aspect-video overflow-hidden rounded-[17px] border border-[#d0a34a]/45 bg-[#020706] shadow-[0_18px_42px_rgba(0,0,0,0.36)] sm:rounded-[19px] lg:rounded-none lg:shadow-[0_18px_42px_rgba(0,0,0,0.32)]">
+      <style>{`
+        @media (max-width: 1023px) {
+          .ormed-native-controls-video::-webkit-media-controls-overlay-play-button,
+          .ormed-native-controls-video::-webkit-media-controls-start-playback-button,
+          .ormed-native-controls-video::-webkit-media-controls-play-button {
+            display: none !important;
+            -webkit-appearance: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+          }
+        }
+      `}</style>
+
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="ormed-native-controls-video absolute inset-0 h-full w-full object-cover"
         poster="/videos/prev.webp"
         preload="none"
         playsInline
@@ -448,7 +461,7 @@ function OrmedVideo() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(216,173,86,0.045),transparent_42%)] lg:hidden" />
 
       {(!hasStarted || isPaused) && (
-        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-[42%] z-20 -translate-x-1/2 -translate-y-1/2 sm:top-[43%] lg:top-1/2">
           <div className="lg:hidden">
             <CircleVideoButton
               onClick={toggleVideo}
@@ -482,14 +495,13 @@ function OrmedVideo() {
       )}
 
       {hasStarted && !isPaused && (
-        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 hover:opacity-100">
+        <div className="absolute left-1/2 top-[42%] z-20 -translate-x-1/2 -translate-y-1/2 opacity-100 transition-opacity duration-300 sm:top-[43%] lg:top-1/2 lg:opacity-0 lg:hover:opacity-100">
           <div className="lg:hidden">
             <CircleVideoButton
               onClick={toggleVideo}
               ariaLabel="Остановить видео"
               pressed
               icon={<PauseIcon />}
-              hiddenOnDesktopHover
             />
           </div>
 

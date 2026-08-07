@@ -99,8 +99,11 @@ export default function OrmedBookSliderTablet() {
       return;
     }
 
+    const fromIndex = currentIndex;
+
+    setCurrentIndex(toIndex);
     setTransition({
-      fromIndex: currentIndex,
+      fromIndex,
       toIndex,
       direction,
     });
@@ -142,7 +145,6 @@ export default function OrmedBookSliderTablet() {
       return;
     }
 
-    setCurrentIndex(transition.toIndex);
     setTransition(null);
   };
 
@@ -316,7 +318,7 @@ export default function OrmedBookSliderTablet() {
                           isNextDirection
                             ? "tabletSlideOutLeft"
                             : "tabletSlideOutRight"
-                        } ${SLIDE_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                        } ${SLIDE_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
                       }
                     : undefined
                 }
@@ -336,13 +338,21 @@ export default function OrmedBookSliderTablet() {
                 <div
                   className="absolute inset-0 will-change-transform"
                   style={{
+                    transform: isNextDirection
+                      ? "translate3d(100%, 0, 0) scale(0.99)"
+                      : "translate3d(-100%, 0, 0) scale(0.99)",
+                    opacity: 0.76,
                     animation: `${
                       isNextDirection
                         ? "tabletSlideInRight"
                         : "tabletSlideInLeft"
-                    } ${SLIDE_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+                    } ${SLIDE_DURATION}ms cubic-bezier(0.22, 1, 0.36, 1) both`,
                   }}
-                  onAnimationEnd={finishTransition}
+                  onAnimationEnd={(event) => {
+                    if (event.currentTarget === event.target) {
+                      finishTransition();
+                    }
+                  }}
                 >
                   <Image
                     src={incomingPhoto.src}

@@ -136,7 +136,7 @@ export default function LegalPageLayout({
                   {eyebrow}
                 </div>
 
-                <h1 className="m-0 text-3xl font-bold tracking-[-0.055em] text-[#f3d98d] sm:text-4xl lg:text-5xl">
+                <h1 className="m-0 min-w-0 max-w-full break-words text-[clamp(1.5rem,7vw,1.85rem)] font-bold leading-[1.08] tracking-[-0.055em] text-[#f3d98d] [overflow-wrap:anywhere] sm:text-4xl sm:leading-tight lg:text-5xl">
                   {title}
                 </h1>
 

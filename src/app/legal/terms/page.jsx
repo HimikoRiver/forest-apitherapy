@@ -22,6 +22,12 @@ export default function TermsPage() {
           Сайт APIDARB принадлежит и администрируется {legalOperator.status} <strong>{legalOperator.name}</strong>, ИНН {legalOperator.inn}, ОГРНИП {legalOperator.ogrnip}.
         </p>
         <p>
+          Юридический адрес оператора: {legalOperator.legalAddress}. Фактический адрес: {legalOperator.actualAddress}.
+        </p>
+        <p>
+          Основной вид деятельности: {legalOperator.primaryOkved}. Применяемая система налогообложения: {legalOperator.taxSystem}.
+        </p>
+        <p>
           Используя сайт, пользователь обязуется соблюдать настоящие Условия и применимое законодательство Российской Федерации. Если пользователь не согласен с Условиями, он должен прекратить использование функций сайта, требующих их принятия.
         </p>
       </LegalSection>
@@ -142,9 +148,24 @@ export default function TermsPage() {
         </p>
       </LegalSection>
 
-      <LegalSection id="contacts" title="14. Контакты">
+      <LegalSection id="requisites" title="14. Реквизиты и контакты оператора">
         <p>
-          По вопросам использования сайта и заказов можно обратиться по email <a href={`mailto:${legalOperator.email}`}>{legalOperator.email}</a> или телефону <a href="tel:+79667271771">{legalOperator.phone}</a>.
+          {legalOperator.status} <strong>{legalOperator.name}</strong>.
+        </p>
+        <p>
+          ИНН: {legalOperator.inn}. ОГРНИП: {legalOperator.ogrnip}.
+        </p>
+        <p>
+          Юридический адрес: {legalOperator.legalAddress}.
+        </p>
+        <p>
+          Фактический адрес: {legalOperator.actualAddress}.
+        </p>
+        <p>
+          Основной ОКВЭД: {legalOperator.primaryOkved}. Система налогообложения: {legalOperator.taxSystem}.
+        </p>
+        <p>
+          Email: <a href={`mailto:${legalOperator.email}`}>{legalOperator.email}</a>. Телефон: <a href="tel:+79667271771">{legalOperator.phone}</a>.
         </p>
       </LegalSection>
     </LegalPageLayout>

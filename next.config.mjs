@@ -10,7 +10,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
   "media-src 'self' blob:",
-  "connect-src 'self'",
+  "connect-src 'self' blob:",
   "frame-src 'self' https://yandex.ru https://yandex.com",
   "object-src 'none'",
   "base-uri 'self'",

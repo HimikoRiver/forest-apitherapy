@@ -1,4 +1,5 @@
 ﻿import { betterAuth } from "better-auth";
+import { createAuthMiddleware, APIError } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import {
   haveIBeenPwned,
@@ -14,6 +15,8 @@ const trustedOrigins = [
   process.env.BETTER_AUTH_URL,
 ].filter(Boolean);
 
+const MIN_NEW_PASSWORD_LENGTH = 12;
+
 export const auth = betterAuth({
   appName: "APIDARB",
 
@@ -27,9 +30,30 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
-    minPasswordLength: 12,
+    // Не повышаем глобальный минимум выше прежних 8 символов,
+    // чтобы не заблокировать вход существующим аккаунтам.
+    minPasswordLength: 8,
     maxPasswordLength: 128,
     revokeSessionsOnPasswordReset: true,
+  },
+
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== "/sign-up/email") {
+        return;
+      }
+
+      const password =
+        typeof ctx.body?.password === "string"
+          ? ctx.body.password
+          : "";
+
+      if (password.length < MIN_NEW_PASSWORD_LENGTH) {
+        throw new APIError("BAD_REQUEST", {
+          message: `Новый пароль должен содержать не менее ${MIN_NEW_PASSWORD_LENGTH} символов.`,
+        });
+      }
+    }),
   },
 
   rateLimit: {

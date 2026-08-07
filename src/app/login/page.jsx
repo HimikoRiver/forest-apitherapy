@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -15,6 +16,20 @@ import BeesPageBackground from "@/components/shared/BeesPageBackground";
 import { PageLogo } from "@/components/shared/PageLogo";
 import { authClient } from "@/lib/auth-client";
 
+function getAuthErrorMessage(error, isSignUp) {
+  if (error?.status === 429) {
+    return "Слишком много попыток. Повторите позже.";
+  }
+
+  if (error?.code === "PASSWORD_COMPROMISED") {
+    return "Этот пароль найден в известных утечках. Выберите другой пароль.";
+  }
+
+  return isSignUp
+    ? "Не удалось создать аккаунт. Проверьте данные или попробуйте позже."
+    : "Неверный email или пароль.";
+}
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -24,6 +39,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const isSignUp = mode === "sign-up";
@@ -32,6 +48,7 @@ export default function LoginPage() {
     event.preventDefault();
 
     setErrorMessage("");
+    setSuccessMessage("");
     setIsLoading(true);
 
     try {
@@ -48,10 +65,18 @@ export default function LoginPage() {
 
       if (response?.error) {
         setErrorMessage(
-          response.error.message ||
-            "Не удалось выполнить действие."
+          getAuthErrorMessage(response.error, isSignUp)
         );
+        return;
+      }
 
+      if (isSignUp) {
+        setMode("sign-in");
+        setName("");
+        setPassword("");
+        setSuccessMessage(
+          "Аккаунт создан. Теперь войдите с вашим паролем."
+        );
         return;
       }
 
@@ -122,6 +147,8 @@ export default function LoginPage() {
                     setName(event.target.value)
                   }
                   required
+                  maxLength={100}
+                  autoComplete="name"
                   className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
                   placeholder="Ваше имя"
                 />
@@ -141,6 +168,8 @@ export default function LoginPage() {
                   setEmail(event.target.value)
                 }
                 required
+                maxLength={254}
+                autoComplete="email"
                 className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
                 placeholder="example@mail.ru"
               />
@@ -159,15 +188,25 @@ export default function LoginPage() {
                   setPassword(event.target.value)
                 }
                 required
-                minLength={8}
+                minLength={12}
+                maxLength={128}
+                autoComplete={
+                  isSignUp ? "new-password" : "current-password"
+                }
                 className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
-                placeholder="Минимум 8 символов"
+                placeholder="Минимум 12 символов"
               />
             </label>
 
             {errorMessage && (
               <p className="rounded-2xl border border-red-400/24 bg-red-500/10 px-4 py-3 text-sm leading-6 text-red-100">
                 {errorMessage}
+              </p>
+            )}
+
+            {successMessage && (
+              <p className="rounded-2xl border border-emerald-300/20 bg-emerald-300/8 px-4 py-3 text-sm leading-6 text-emerald-100">
+                {successMessage}
               </p>
             )}
 
@@ -188,6 +227,26 @@ export default function LoginPage() {
                   ? "Зарегистрироваться"
                   : "Войти"}
             </button>
+
+            {isSignUp && (
+              <p className="m-0 text-center text-[0.68rem] leading-5 text-[#f3efe5]/48">
+                Регистрируясь, вы принимаете{" "}
+                <Link
+                  href="/legal/terms"
+                  className="text-[#d8b66a] underline decoration-[#d8b66a]/32 underline-offset-4 transition hover:text-[#f3d98d]"
+                >
+                  Условия пользования
+                </Link>{" "}
+                и подтверждаете ознакомление с{" "}
+                <Link
+                  href="/legal/privacy-policy"
+                  className="text-[#d8b66a] underline decoration-[#d8b66a]/32 underline-offset-4 transition hover:text-[#f3d98d]"
+                >
+                  Политикой конфиденциальности
+                </Link>
+                .
+              </p>
+            )}
           </form>
 
           <div className="border-t border-[#d8b66a]/12 px-4 py-4 sm:px-5 sm:py-5">
@@ -197,8 +256,9 @@ export default function LoginPage() {
                 setMode(
                   isSignUp ? "sign-in" : "sign-up"
                 );
-
                 setErrorMessage("");
+                setSuccessMessage("");
+                setPassword("");
               }}
               className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/18 bg-black/24 px-3 py-3 text-center text-[0.78rem] font-medium leading-5 text-[#f3efe5]/72 transition duration-300 hover:border-[#d8b66a]/42 hover:bg-[#d8b66a]/10 hover:text-[#f3d98d] sm:px-4 sm:text-sm"
             >

@@ -31,11 +31,16 @@ export async function requireAdmin() {
       name: true,
       email: true,
       role: true,
+      twoFactorEnabled: true,
     },
   });
 
   if (!user || user.role !== "ADMIN") {
     redirect("/profile");
+  }
+
+  if (!user.twoFactorEnabled) {
+    redirect("/profile/security?required=admin");
   }
 
   return user;

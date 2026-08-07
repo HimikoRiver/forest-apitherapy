@@ -70,6 +70,10 @@ export default function LoginPage() {
         return;
       }
 
+      if (response?.data?.twoFactorRedirect) {
+        return;
+      }
+
       if (isSignUp) {
         setMode("sign-in");
         setName("");

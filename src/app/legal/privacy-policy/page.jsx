@@ -22,7 +22,7 @@ export default function PrivacyPolicyPage() {
           Настоящая Политика разработана в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных» и иными применимыми требованиями законодательства Российской Федерации.
         </p>
         <p>
-          Оператором персональных данных является {legalOperator.status} <strong>{legalOperator.name}</strong>, ИНН {legalOperator.inn}, ОГРНИП {legalOperator.ogrnip}. Сайт оператора: <a href={legalOperator.website}>{legalOperator.website}</a>.
+          Оператором персональных данных является {legalOperator.status} <strong>{legalOperator.name}</strong>, ИНН {legalOperator.inn}, ОГРНИП {legalOperator.ogrnip}. Юридический адрес: {legalOperator.legalAddress}. Сайт оператора: <a href={legalOperator.website}>{legalOperator.website}</a>.
         </p>
         <p>
           Политика размещена в свободном доступе и применяется к обработке персональных данных, полученных при использовании сайта, регистрации личного кабинета, добавлении товаров в корзину, оформлении заказов и обращении к оператору.
@@ -152,6 +152,15 @@ export default function PrivacyPolicyPage() {
       </LegalSection>
 
       <LegalSection id="contacts" title="12. Контакты оператора">
+        <p>
+          {legalOperator.status} <strong>{legalOperator.name}</strong>, ИНН {legalOperator.inn}, ОГРНИП {legalOperator.ogrnip}.
+        </p>
+        <p>
+          Юридический адрес: {legalOperator.legalAddress}.
+        </p>
+        <p>
+          Фактический адрес: {legalOperator.actualAddress}.
+        </p>
         <p>
           По вопросам обработки персональных данных: <a href={`mailto:${legalOperator.email}`}>{legalOperator.email}</a>, телефон <a href="tel:+79667271771">{legalOperator.phone}</a>.
         </p>

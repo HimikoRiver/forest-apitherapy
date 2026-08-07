@@ -1,6 +1,8 @@
-﻿import {
+﻿import Link from "next/link";
+import {
   LayoutDashboard,
   Mail,
+  ShieldCheck,
   UserRound,
 } from "lucide-react";
 
@@ -53,6 +55,7 @@ export default async function ProfilePage({
           name: true,
           email: true,
           role: true,
+          twoFactorEnabled: true,
         },
       }),
 
@@ -169,7 +172,8 @@ export default async function ProfilePage({
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CabinetTopNav
           showAdminLinks={
-            user?.role === "ADMIN"
+            user?.role === "ADMIN" &&
+            Boolean(user?.twoFactorEnabled)
           }
         />
 
@@ -257,6 +261,30 @@ export default async function ProfilePage({
                   </p>
                 </div>
               </div>
+
+              <Link
+                href="/profile/security"
+                className="group flex items-center justify-between gap-3 rounded-[22px] border border-[#d8b66a]/14 bg-black/24 px-4 py-3 transition duration-300 hover:border-[#d8b66a]/38 hover:bg-[#d8b66a]/8"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-xl border border-[#d8b66a]/16 bg-[#d8b66a]/8 text-[#d8b66a] transition group-hover:text-[#f3d98d]">
+                    <ShieldCheck className="size-4" />
+                  </span>
+
+                  <span>
+                    <span className="block text-sm font-bold text-[#f3efe5]/86 transition group-hover:text-[#f3d98d]">
+                      Безопасность
+                    </span>
+                    <span className="mt-0.5 block text-[0.68rem] text-[#f3efe5]/46">
+                      2FA: {user?.twoFactorEnabled ? "включена" : "выключена"}
+                    </span>
+                  </span>
+                </span>
+
+                <span className="text-lg text-[#d8b66a] transition group-hover:translate-x-0.5">
+                  ›
+                </span>
+              </Link>
 
               <SignOutButton />
             </div>

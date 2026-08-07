@@ -22,11 +22,17 @@ async function updateCartItemQuantity(formData) {
 
   const user = await requireUser();
 
-  const cartItemId = String(formData.get("cartItemId") || "");
-  const requestedQuantity = Math.max(
-    1,
-    Number(formData.get("quantity") || 1)
-  );
+  const cartItemId = String(formData.get("cartItemId") || "").trim();
+  const rawQuantity = Number(formData.get("quantity"));
+
+  if (
+    !cartItemId ||
+    !Number.isSafeInteger(rawQuantity) ||
+    rawQuantity < 1 ||
+    rawQuantity > 999
+  ) {
+    return;
+  }
 
   const cartItem = await prisma.cartItem.findFirst({
     where: {
@@ -42,11 +48,11 @@ async function updateCartItemQuantity(formData) {
     },
   });
 
-  if (!cartItem) {
+  if (!cartItem || cartItem.product.stock < 1) {
     return;
   }
 
-  const quantity = Math.min(requestedQuantity, cartItem.product.stock);
+  const quantity = Math.min(rawQuantity, cartItem.product.stock);
 
   await prisma.cartItem.update({
     where: {
@@ -65,7 +71,11 @@ async function removeCartItem(formData) {
 
   const user = await requireUser();
 
-  const cartItemId = String(formData.get("cartItemId") || "");
+  const cartItemId = String(formData.get("cartItemId") || "").trim();
+
+  if (!cartItemId) {
+    return;
+  }
 
   await prisma.cartItem.deleteMany({
     where: {
@@ -223,9 +233,9 @@ export default async function CartPage() {
 
                         <button
                           type="submit"
-                          className="group/button inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-red-400/24 bg-red-950/10 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-red-100 transition duration-300 hover:-translate-y-0.5 hover:border-red-300/60 hover:bg-red-400/10"
+                          className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-red-300/18 bg-red-400/8 px-4 py-3 text-sm font-medium text-red-100/82 transition duration-300 hover:border-red-300/34 hover:bg-red-400/12 hover:text-red-100"
                         >
-                          <Trash2 className="size-4 transition duration-300 group-hover/button:scale-110" />
+                          <Trash2 className="size-4 transition duration-300 group-hover:scale-110" />
                           Удалить
                         </button>
                       </form>
@@ -235,26 +245,27 @@ export default async function CartPage() {
               ))}
             </div>
 
-            <aside className="h-fit rounded-[30px] border border-[#d8b66a]/18 bg-black/40 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.42)]">
-              <div className="mb-4 flex size-12 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
+            <aside className="h-fit rounded-[28px] border border-[#d8b66a]/18 bg-black/40 p-5 shadow-[0_20px_54px_rgba(0,0,0,0.38)] lg:sticky lg:top-6">
+              <div className="mb-4 flex size-11 items-center justify-center rounded-2xl border border-[#d8b66a]/18 bg-[#d8b66a]/10 text-[#f3d98d]">
                 <ShoppingBag className="size-5" />
               </div>
 
-              <p className="m-0 text-xs font-bold uppercase tracking-[0.28em] text-[#d8b66a]/88">
+              <p className="m-0 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-[#d8b66a]/78">
                 Итого
               </p>
 
-              <p className="mt-4 text-3xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+              <p className="mt-3 flex items-center gap-2 text-2xl font-bold tracking-[-0.05em] text-[#f3d98d]">
+                <BadgeRussianRuble className="size-5" />
                 {formatPriceFromKopecks(totalKopecks)}
               </p>
 
-              <p className="mt-3 text-sm leading-7 text-[#f3efe5]/66">
-                Проверьте товары и перейдите к оформлению заказа.
+              <p className="mt-3 text-sm leading-7 text-[#f3efe5]/58">
+                Финальная стоимость и наличие будут повторно проверены при оформлении заказа.
               </p>
 
               <Link
                 href="/checkout"
-                className="group mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.22em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
+                className="group mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-[#d8b66a]/40 bg-[#d8b66a] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-[#07110f] transition duration-300 hover:-translate-y-0.5 hover:brightness-110"
               >
                 Оформить заказ
                 <ArrowRight className="size-4 transition duration-300 group-hover:translate-x-0.5" />

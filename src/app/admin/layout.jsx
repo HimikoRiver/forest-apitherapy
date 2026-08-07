@@ -1,6 +1,9 @@
 import CabinetTopNav from "@/components/shared/CabinetTopNav";
+import { requireAdmin } from "@/lib/auth-guards";
 
-export default function AdminLayout({ children }) {
+export default async function AdminLayout({ children }) {
+  await requireAdmin();
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#030b0c] [&_main]:relative [&_main]:z-10 [&_main]:bg-transparent">
       <div

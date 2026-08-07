@@ -20,6 +20,39 @@ function readTotpSecret(totpURI) {
   }
 }
 
+function copyTextWithSelection(value) {
+  if (typeof document === "undefined") {
+    return false;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = value;
+  textarea.setAttribute("readonly", "");
+  textarea.setAttribute("aria-hidden", "true");
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+  textarea.style.top = "0";
+  textarea.style.opacity = "0";
+  textarea.style.pointerEvents = "none";
+
+  document.body.appendChild(textarea);
+  textarea.focus({ preventScroll: true });
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+
+  let copied = false;
+
+  try {
+    copied = document.execCommand("copy");
+  } catch {
+    copied = false;
+  } finally {
+    textarea.remove();
+  }
+
+  return copied;
+}
+
 function SecurityStatus({ enabled, isAdmin }) {
   return (
     <div
@@ -88,13 +121,24 @@ export default function ProfileSecurityPanel({
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(value);
+    let copied = copyTextWithSelection(value);
+
+    if (!copied && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(value);
+        copied = true;
+      } catch {
+        copied = false;
+      }
+    }
+
+    if (copied) {
       setSuccessMessage("Скопировано.");
       setErrorMessage("");
-    } catch {
-      setErrorMessage("Не удалось скопировать. Скопируйте значение вручную.");
+      return;
     }
+
+    setErrorMessage("Не удалось скопировать. Скопируйте значение вручную.");
   }
 
   async function enableTwoFactor(event) {
@@ -236,7 +280,7 @@ export default function ProfileSecurityPanel({
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            minLength={12}
+            minLength={8}
             maxLength={128}
             placeholder="Текущий пароль"
             className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
@@ -369,7 +413,7 @@ export default function ProfileSecurityPanel({
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
-            minLength={12}
+            minLength={8}
             maxLength={128}
             placeholder="Текущий пароль"
             className="mt-4 w-full rounded-2xl border border-red-300/14 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition placeholder:text-[#f3efe5]/34 focus:border-red-300/38"

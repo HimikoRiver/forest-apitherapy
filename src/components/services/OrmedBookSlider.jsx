@@ -1144,6 +1144,7 @@ function OrmedBookSliderDesktop() {
   const settleFrameTwoRef = useRef(null);
 
   const nextTurnFrameRef = useRef(null);
+  const underlayFrameRef = useRef(null);
 
   const settleHoldTimeoutRef = useRef(null);
   const settleTimeoutRef = useRef(null);
@@ -1223,6 +1224,10 @@ function OrmedBookSliderDesktop() {
         cancelAnimationFrame(nextTurnFrameRef.current);
       }
 
+      if (underlayFrameRef.current) {
+        cancelAnimationFrame(underlayFrameRef.current);
+      }
+
       if (settleHoldTimeoutRef.current) {
         clearTimeout(settleHoldTimeoutRef.current);
       }
@@ -1266,6 +1271,7 @@ function OrmedBookSliderDesktop() {
       sourceIndex,
       targetIndex,
       phase: "preparing",
+      underlayReady: false,
     });
   };
 
@@ -1306,7 +1312,24 @@ function OrmedBookSliderDesktop() {
           return {
             ...currentState,
             phase: "turning",
+            underlayReady: false,
           };
+        });
+
+        underlayFrameRef.current = requestAnimationFrame(() => {
+          setTurnState((currentState) => {
+            if (
+              !currentState ||
+              currentState.phase !== "turning"
+            ) {
+              return currentState;
+            }
+
+            return {
+              ...currentState,
+              underlayReady: true,
+            };
+          });
         });
       });
     });
@@ -1394,7 +1417,10 @@ function OrmedBookSliderDesktop() {
   }
 
   if (turnState?.phase === "turning") {
-    if (turnState.direction === "next") {
+    if (!turnState.underlayReady) {
+      visibleLeft = source.left;
+      visibleRight = source.right;
+    } else if (turnState.direction === "next") {
       visibleLeft = source.left;
       visibleRight = target.right;
     } else {

@@ -192,13 +192,15 @@ export default function LoginPage() {
                   setPassword(event.target.value)
                 }
                 required
-                minLength={12}
+                minLength={isSignUp ? 12 : 8}
                 maxLength={128}
                 autoComplete={
                   isSignUp ? "new-password" : "current-password"
                 }
                 className="w-full rounded-2xl border border-[#d8b66a]/18 bg-black/34 px-4 py-3 text-sm text-[#f3efe5] outline-none transition duration-300 placeholder:text-[#f3efe5]/34 focus:border-[#d8b66a]/60 focus:bg-black/48 focus:shadow-[0_0_0_3px_rgba(216,182,106,0.08)]"
-                placeholder="Минимум 12 символов"
+                placeholder={
+                  isSignUp ? "Минимум 12 символов" : "Введите пароль"
+                }
               />
             </label>
 

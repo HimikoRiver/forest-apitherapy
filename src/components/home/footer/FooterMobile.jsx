@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useId } from "react";
 import { usePathname } from "next/navigation";
 import { homeContent } from "@/data/homeContent";
+import { legalLinks } from "@/data/legalLinks";
 
 const menuItems = homeContent.menuItems;
 const contactItems = homeContent.contactItems;
@@ -298,6 +299,36 @@ export default function FooterMobile() {
             </div>
           </FooterMobilePanel>
         </div>
+
+        <nav
+          aria-label="Юридические документы"
+          className="mt-5 rounded-[24px] border border-[#d8b66a]/20 bg-[#03130f] p-3 md:mt-6 md:p-4"
+          style={{
+            backgroundImage: `url("${PANEL_TEXTURE_PATH}")`,
+            backgroundPosition: "center top",
+            backgroundRepeat: "repeat",
+            backgroundSize: "auto",
+          }}
+        >
+          <p className="m-0 px-2 pb-2 text-center text-[0.66rem] font-bold uppercase tracking-[0.3em] text-[#d8b66a]/82">
+            Документы
+          </p>
+
+          <div className="grid gap-2 md:grid-cols-2">
+            {legalLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group flex min-h-[48px] items-center justify-between gap-3 rounded-2xl border border-[#d8b66a]/16 bg-black/44 px-4 text-[0.78rem] font-medium text-[#f3efe5]/76 transition duration-300 hover:border-[#d8b66a]/36 hover:bg-[#d8b66a]/8 hover:text-[#f3d98d]"
+              >
+                <span>{item.label}</span>
+                <span className="text-lg leading-none text-[#d8b66a] transition group-hover:translate-x-0.5">
+                  ›
+                </span>
+              </Link>
+            ))}
+          </div>
+        </nav>
 
         <div className="mt-7 grid grid-cols-[1fr_38px_1fr] items-center gap-3 md:mt-9">
           <span className="h-px bg-gradient-to-r from-transparent via-[#d8b66a]/70 to-[#d8b66a]/20" />

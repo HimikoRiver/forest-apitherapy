@@ -26,19 +26,21 @@ enum OrderStatus {
 }
 
 model User {
-  id            String   @id
-  name          String
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  image         String?
-  role          UserRole @default(USER)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String   @id
+  name             String
+  email            String   @unique
+  emailVerified    Boolean  @default(false)
+  image            String?
+  role             UserRole @default(USER)
+  twoFactorEnabled Boolean? @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  sessions  Session[]
-  accounts  Account[]
-  cartItems CartItem[]
-  orders    Order[]
+  sessions   Session[]
+  accounts   Account[]
+  cartItems  CartItem[]
+  orders     Order[]
+  twoFactors TwoFactor[]
 
   @@map("user")
 }
@@ -89,6 +91,30 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@map("verification")
+}
+
+model TwoFactor {
+  id                      String   @id
+  secret                  String
+  backupCodes             String
+  verified                Boolean  @default(false)
+  failedVerificationCount Int      @default(0)
+  lockedUntil             DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("twoFactor")
+}
+
+model RateLimit {
+  id          String @id
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("rateLimit")
 }
 
 model Category {

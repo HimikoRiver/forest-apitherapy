@@ -1,5 +1,9 @@
 ﻿import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import {
+  haveIBeenPwned,
+  twoFactor,
+} from "better-auth/plugins";
 import { prisma } from "@/lib/prisma";
 
 const trustedOrigins = [
@@ -11,6 +15,8 @@ const trustedOrigins = [
 ].filter(Boolean);
 
 export const auth = betterAuth({
+  appName: "APIDARB",
+
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
@@ -20,7 +26,46 @@ export const auth = betterAuth({
 
   emailAndPassword: {
     enabled: true,
+    autoSignIn: false,
+    minPasswordLength: 12,
+    maxPasswordLength: 128,
+    revokeSessionsOnPasswordReset: true,
   },
+
+  rateLimit: {
+    enabled: true,
+    storage: "database",
+    modelName: "rateLimit",
+    window: 60,
+    max: 60,
+    customRules: {
+      "/sign-in/email": {
+        window: 60,
+        max: 5,
+      },
+      "/sign-up/email": {
+        window: 300,
+        max: 5,
+      },
+    },
+  },
+
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["x-real-ip"],
+    },
+  },
+
+  plugins: [
+    haveIBeenPwned({
+      enabled: true,
+      customPasswordCompromisedMessage:
+        "Этот пароль найден в известных утечках. Используйте другой пароль.",
+    }),
+    twoFactor({
+      issuer: "APIDARB",
+    }),
+  ],
 
   trustedOrigins: [...new Set(trustedOrigins)],
 });

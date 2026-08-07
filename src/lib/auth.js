@@ -57,7 +57,9 @@ export const auth = betterAuth({
   },
 
   rateLimit: {
-    enabled: true,
+    // В development Better Auth не должен блокировать локальную отладку.
+    // На production защита остаётся включённой и хранится в PostgreSQL.
+    enabled: process.env.NODE_ENV === "production",
     storage: "database",
     modelName: "rateLimit",
     window: 60,
